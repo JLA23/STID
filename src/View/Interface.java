@@ -1,29 +1,35 @@
 package View;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public class Interface{
+public class Interface extends JFrame{
 	
-	private JFrame f;
+	private static final long serialVersionUID = 1L;
 	private Dimension screenSize;
 	
 	public Interface(){
-		f = new JFrame("STID");
+		this.setTitle("STID Gestion 2.0");
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		screenSize.width -= 42;
-		screenSize.height -= 42;
-		f.setIconImage(new ImageIcon("icone.png").getImage());
-	    f.setPreferredSize(screenSize);
-	    f.setLocation(20, 20);
-	    MenuBar menubar = new MenuBar(f);
-
-		f.setJMenuBar(menubar);
-		f.pack();
-	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    f.setVisible(true);
+		screenSize.width -= 120;
+		screenSize.height -= 120;
+		this.setIconImage(new ImageIcon("icone.png").getImage());
+	    this.setPreferredSize(screenSize);
+	    this.setLocation(20, 20);
+	    MenuBar menubar = new MenuBar(this);
+	    JPanel pane = new JPanel();
+	    JLabel image = new JLabel(new ImageIcon("STID.png"));
+	    pane.add(image, BorderLayout.CENTER);
+	    this.add(pane);
+		this.setJMenuBar(menubar);
+		this.pack();
+	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    this.setVisible(true);
 	}
 	
 }
