@@ -2,13 +2,11 @@ package View;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Interface{
 	
-	private MenuBar menuBar;
 	private JFrame f;
 	private Dimension screenSize;
 	
@@ -20,8 +18,9 @@ public class Interface{
 		f.setIconImage(new ImageIcon("icone.png").getImage());
 	    f.setPreferredSize(screenSize);
 	    f.setLocation(20, 20);
-		menuBar = new MenuBar(f);
-		f.setJMenuBar(menuBar);
+	    MenuBar menubar = new MenuBar(f);
+
+		f.setJMenuBar(menubar);
 		f.pack();
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    f.setVisible(true);
