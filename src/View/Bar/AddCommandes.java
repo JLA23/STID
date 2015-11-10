@@ -8,12 +8,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import BDD.Base;
+
 public class AddCommandes{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddCommandes(){
+	public AddCommandes(Base bdd){
 		menu = new JMenu("Commandes");
 		menu.getAccessibleContext().setAccessibleDescription("Devis");
 		ImageIcon icon = new ImageIcon(new ImageIcon("pannier-commande.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));

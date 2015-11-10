@@ -1,5 +1,6 @@
 package View.Bar;
 
+import java.awt.GraphicsConfiguration;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,13 +9,18 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import BDD.Base;
+import View.Devis.NewDevis;
+
 public class AddDevis{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	private JFrame frame;
+	private Base bdd;
 	
-	public AddDevis(JFrame f){
+	public AddDevis(JFrame f, Base base){
+		this.bdd = base;
 		this.frame = f;
 		menu = new JMenu("Devis");
 		menu.getAccessibleContext().setAccessibleDescription("Devis");
@@ -27,7 +33,7 @@ public class AddDevis{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new Devis();
+					new NewDevis(bdd);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Creation d'un nouveau devis");

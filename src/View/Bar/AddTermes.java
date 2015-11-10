@@ -5,12 +5,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import BDD.Base;
+
 public class AddTermes{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddTermes(){
+	public AddTermes(Base bdd){
 		menu = new JMenu("Termes");
 		menu.getAccessibleContext().setAccessibleDescription("Termes");		
 		

@@ -7,12 +7,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import BDD.Base;
+
 public class AddClients{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddClients(){
+	public AddClients(Base bdd){
 		menu = new JMenu("Clients");
 		menu.getAccessibleContext().setAccessibleDescription("Clients");
 		ImageIcon icon = new ImageIcon(new ImageIcon("Client.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));

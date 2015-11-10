@@ -5,12 +5,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import BDD.Base;
+
 public class AddFacturation{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddFacturation(){
+	public AddFacturation(Base bdd){
 		menu = new JMenu("Facturation");
 		menu.getAccessibleContext().setAccessibleDescription("Facturation");		
 		

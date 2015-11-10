@@ -5,12 +5,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import BDD.Base;
+
 public class AddParametres{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddParametres(){
+	public AddParametres(Base bdd){
 		menu = new JMenu("Paramètres");
 		menu.getAccessibleContext().setAccessibleDescription("Clients");		
 		

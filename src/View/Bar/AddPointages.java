@@ -5,12 +5,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import BDD.Base;
+
 public class AddPointages{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddPointages(){
+	public AddPointages(Base bdd){
 		menu = new JMenu("Pointages");
 		menu.getAccessibleContext().setAccessibleDescription("Pointages");		
 		

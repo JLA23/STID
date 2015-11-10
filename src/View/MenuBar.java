@@ -1,6 +1,8 @@
 package View;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+
+import BDD.Base;
 import View.Bar.AddClients;
 import View.Bar.AddCommandes;
 import View.Bar.AddDevis;
@@ -20,16 +22,16 @@ import View.Bar.AddTermes;
 		 * @param i l'Item3D sur lequel affecter la MBar
 		 * @param ifo 
 		 */
-		public MenuBar(JFrame frame) {
+		public MenuBar(JFrame frame, Base bdd) {
 			//this.setLayout(new GridLayout());
-			this.add(new AddDevis(frame).getMenu());
-			this.add(new AddCommandes().getMenu());
-			this.add(new AddClients().getMenu());
-			this.add(new AddTermes().getMenu());
-			this.add(new AddFacturation().getMenu());
-			this.add(new AddPointages().getMenu());
-			this.add(new AddParametres().getMenu());
-			this.add(new AddPropos().getMenu());
+			this.add(new AddDevis(frame, bdd).getMenu());
+			this.add(new AddCommandes(bdd).getMenu());
+			this.add(new AddClients(bdd).getMenu());
+			this.add(new AddTermes(bdd).getMenu());
+			this.add(new AddFacturation(bdd).getMenu());
+			this.add(new AddPointages(bdd).getMenu());
+			this.add(new AddParametres(bdd).getMenu());
+			this.add(new AddPropos(bdd).getMenu());
 
 		}
 		
