@@ -26,7 +26,7 @@ public class Identification extends JFrame{
 		this.setLayout(new GridLayout(3, 1));
 		this.setTitle("STID Gestion 2.0");
 		screenSize.setSize(300, 150);
-		this.setIconImage(new ImageIcon("icone.png").getImage());
+		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setPreferredSize(screenSize);
 	    
 	    JPanel pane = new JPanel();

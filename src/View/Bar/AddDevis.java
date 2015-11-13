@@ -24,7 +24,7 @@ public class AddDevis{
 		this.frame = f;
 		menu = new JMenu("Devis");
 		menu.getAccessibleContext().setAccessibleDescription("Devis");
-		ImageIcon icon = new ImageIcon(new ImageIcon("bouton-devis.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/bouton-devis.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		menu.setIcon(icon);
 		
 		if(typeCompte.equals("Admin")){

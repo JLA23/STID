@@ -22,12 +22,12 @@ public class Interface extends JFrame{
 		this.setTitle("STID Gestion 2.0 ("+ this.typeCompte +")");
 		screenSize.width = 750;
 		screenSize.height = 400;
-		this.setIconImage(new ImageIcon("icone.png").getImage());
+		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setPreferredSize(screenSize);
 	    this.setLocation(20, 20);
 	    MenuBar menubar = new MenuBar(this, bdd, typeCompte);
 	    JPanel pane = new JPanel();
-	    JLabel image = new JLabel(new ImageIcon("STID.png"));
+	    JLabel image = new JLabel(new ImageIcon("lib/images/STID.png"));
 	    pane.add(image, BorderLayout.CENTER);
 	    this.add(pane);
 	    this.setResizable(false);

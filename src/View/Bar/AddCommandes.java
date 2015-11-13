@@ -18,7 +18,7 @@ public class AddCommandes{
 	public AddCommandes(Base bdd, String typeCompte){
 		menu = new JMenu("Commandes");
 		menu.getAccessibleContext().setAccessibleDescription("Devis");
-		ImageIcon icon = new ImageIcon(new ImageIcon("pannier-commande.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/pannier-commande.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		menu.setIcon(icon);
 		
 		if(typeCompte.equals("Admin")){
