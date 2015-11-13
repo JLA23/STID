@@ -12,7 +12,7 @@ public class AddPointages{
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddPointages(Base bdd){
+	public AddPointages(Base bdd, String typeCompte){
 		menu = new JMenu("Pointages");
 		menu.getAccessibleContext().setAccessibleDescription("Pointages");		
 		

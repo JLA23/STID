@@ -1,6 +1,5 @@
 package View.Bar;
 
-import java.awt.GraphicsConfiguration;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Identification;
 import View.Devis.NewDevis;
 
 public class AddDevis{
@@ -19,7 +19,7 @@ public class AddDevis{
 	private JFrame frame;
 	private Base bdd;
 	
-	public AddDevis(JFrame f, Base base){
+	public AddDevis(JFrame f, Base base, String typeCompte){
 		this.bdd = base;
 		this.frame = f;
 		menu = new JMenu("Devis");
@@ -27,46 +27,46 @@ public class AddDevis{
 		ImageIcon icon = new ImageIcon(new ImageIcon("bouton-devis.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		menu.setIcon(icon);
 		
-		
-		//Nouveau Devis
-		menuItem = new JMenuItem("Nouveau Devis");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		if(typeCompte.equals("Admin")){
+			//Nouveau Devis
+			menuItem = new JMenuItem("Nouveau Devis");
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 					new NewDevis(bdd);
-			}
-		});
-		menuItem.getAccessibleContext().setAccessibleDescription("Creation d'un nouveau devis");
-		menu.add(menuItem);
+				}
+			});
+			menuItem.getAccessibleContext().setAccessibleDescription("Creation d'un nouveau devis");
+			menu.add(menuItem);
 		
-		//Modifier Devis
-		menuItem = new JMenuItem("Modifier Devis");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			//Modifier Devis
+			menuItem = new JMenuItem("Modifier Devis");
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 					//new ModifDevis();
-			}
-		});
-		menuItem.getAccessibleContext().setAccessibleDescription("Modifie un devis existant");
-		menu.add(menuItem);
+				}
+			});
+			menuItem.getAccessibleContext().setAccessibleDescription("Modifie un devis existant");
+			menu.add(menuItem);
 		
 		
 		
-		//Supprimer Devis
-		menuItem = new JMenuItem("Supprimer Devis");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//new SupprDevis();
-			}
-		});
-		menuItem.getAccessibleContext().setAccessibleDescription("Supprime un devis existant");
-		menu.add(menuItem);
+			//Supprimer Devis
+			menuItem = new JMenuItem("Supprimer Devis");
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//new SupprDevis();
+				}
+			});
+			menuItem.getAccessibleContext().setAccessibleDescription("Supprime un devis existant");
+			menu.add(menuItem);
 		
 		
 		
-		menu.addSeparator();
-		
+			menu.addSeparator();
+		}
 		
 		//Devis en cours
 		menuItem = new JMenuItem("Devis en cours");
@@ -91,7 +91,18 @@ public class AddDevis{
 		menu.add(menuItem);
 		
 		menu.addSeparator();
-			
+		
+		//Déconnexion
+		
+		menuItem = new JMenuItem("Déconnexion");
+		menuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				frame.dispose();
+				new Identification(bdd);
+			}
+		});	
+		menuItem.getAccessibleContext().setAccessibleDescription("Déconnexion de l'utilisateur");
+		menu.add(menuItem);
 		
 		//Quitter
 		menuItem = new JMenuItem("Quitter");

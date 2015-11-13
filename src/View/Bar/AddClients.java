@@ -14,7 +14,7 @@ public class AddClients{
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddClients(Base bdd){
+	public AddClients(Base bdd, String typeCompte){
 		menu = new JMenu("Clients");
 		menu.getAccessibleContext().setAccessibleDescription("Clients");
 		ImageIcon icon = new ImageIcon(new ImageIcon("Client.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));

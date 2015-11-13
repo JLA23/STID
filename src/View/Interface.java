@@ -14,12 +14,10 @@ public class Interface extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
 	private String typeCompte;
-	private Base bdd;
 	
 	public Interface(Base bdd, String typeCompte){
 		
 		this.typeCompte = typeCompte;
-		this.bdd = bdd;
 		
 		this.setTitle("STID Gestion 2.0 ("+ this.typeCompte +")");
 		screenSize.width = 750;
@@ -27,7 +25,7 @@ public class Interface extends JFrame{
 		this.setIconImage(new ImageIcon("icone.png").getImage());
 	    this.setPreferredSize(screenSize);
 	    this.setLocation(20, 20);
-	    MenuBar menubar = new MenuBar(this, bdd);
+	    MenuBar menubar = new MenuBar(this, bdd, typeCompte);
 	    JPanel pane = new JPanel();
 	    JLabel image = new JLabel(new ImageIcon("STID.png"));
 	    pane.add(image, BorderLayout.CENTER);

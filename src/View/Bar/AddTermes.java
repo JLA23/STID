@@ -12,7 +12,7 @@ public class AddTermes{
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddTermes(Base bdd){
+	public AddTermes(Base bdd, String typeCompte){
 		menu = new JMenu("Termes");
 		menu.getAccessibleContext().setAccessibleDescription("Termes");		
 		

@@ -15,36 +15,35 @@ public class AddCommandes{
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddCommandes(Base bdd){
+	public AddCommandes(Base bdd, String typeCompte){
 		menu = new JMenu("Commandes");
 		menu.getAccessibleContext().setAccessibleDescription("Devis");
 		ImageIcon icon = new ImageIcon(new ImageIcon("pannier-commande.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		menu.setIcon(icon);
 		
-		
-		//Nouvelle Commande
-		menuItem = new JMenuItem("Nouvelle Commande");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		if(typeCompte.equals("Admin")){
+			//Nouvelle Commande
+			menuItem = new JMenuItem("Nouvelle Commande");
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 					//new Devis();
-			}
-		});
-		menuItem.getAccessibleContext().setAccessibleDescription("Creation d'une nouvelle commande");
-		menu.add(menuItem);
+				}
+			});
+			menuItem.getAccessibleContext().setAccessibleDescription("Creation d'une nouvelle commande");
+			menu.add(menuItem);
 		
-		//Modifier Commande
-		menuItem = new JMenuItem("Modifier Commande");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			//Modifier Commande
+			menuItem = new JMenuItem("Modifier Commande");
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 					//new ModifDevis();
-			}
-		});
-		menuItem.getAccessibleContext().setAccessibleDescription("Modifie commande");
-		menu.add(menuItem);
-		
-		
+				}
+			});
+			menuItem.getAccessibleContext().setAccessibleDescription("Modifie commande");
+			menu.add(menuItem);
+		}
 		
 		//Recherche sur CDe commande
 		menuItem = new JMenuItem("Recherche sur le CDe Commande Client");

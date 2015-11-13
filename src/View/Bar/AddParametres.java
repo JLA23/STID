@@ -12,7 +12,7 @@ public class AddParametres{
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddParametres(Base bdd){
+	public AddParametres(Base bdd, String typeCompte){
 		menu = new JMenu("Paramètres");
 		menu.getAccessibleContext().setAccessibleDescription("Clients");		
 		

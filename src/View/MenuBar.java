@@ -22,15 +22,14 @@ import View.Bar.AddTermes;
 		 * @param i l'Item3D sur lequel affecter la MBar
 		 * @param ifo 
 		 */
-		public MenuBar(JFrame frame, Base bdd) {
-			//this.setLayout(new GridLayout());
-			this.add(new AddDevis(frame, bdd).getMenu());
-			this.add(new AddCommandes(bdd).getMenu());
-			this.add(new AddClients(bdd).getMenu());
-			this.add(new AddTermes(bdd).getMenu());
-			this.add(new AddFacturation(bdd).getMenu());
-			this.add(new AddPointages(bdd).getMenu());
-			this.add(new AddParametres(bdd).getMenu());
+		public MenuBar(JFrame frame, Base bdd, String typeCompte) {
+			this.add(new AddDevis(frame, bdd, typeCompte).getMenu());
+			this.add(new AddCommandes(bdd, typeCompte).getMenu());
+			this.add(new AddClients(bdd, typeCompte).getMenu());
+			this.add(new AddTermes(bdd, typeCompte).getMenu());
+			this.add(new AddFacturation(bdd, typeCompte).getMenu());
+			this.add(new AddPointages(bdd, typeCompte).getMenu());
+			this.add(new AddParametres(bdd, typeCompte).getMenu());
 			this.add(new AddPropos(bdd).getMenu());
 
 		}

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,6 +49,7 @@ public class Identification extends JFrame{
 	    pane3.setPreferredSize(new Dimension(100, 300));
 	    this.setLocationRelativeTo(null);
 	    JButton bouton = new JButton("Valider");
+	    bouton.setMnemonic(KeyEvent.VK_ENTER);
 	    pane3.add(bouton);
 	    
 	    bouton.addActionListener(new ActionValider(bdd, pseudo, mdp, this));
@@ -79,24 +81,28 @@ public class Identification extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getActionCommand().equals("Valider")) {
-		      String [] res = bdd.connection(pseudo.getText());
-		      motdepasse = new String(mdp.getPassword());
-		      if(res.length == 1 && res[0].equals("Error")){
-		    	  JOptionPane.showMessageDialog(null, "Attention ! Erreur\nVeuillez réesayer plutard");
-		      }
-		      else if(res[0].equals("vide")){
-		    	  JOptionPane.showMessageDialog(null, "Erreur d'Utilisateur / Mots de passe");
-		      }
-		      else {
-		    	  if(!res[0].equals(pseudo.getText()) || !res[1].equals(motdepasse)){
-		    		  JOptionPane.showMessageDialog(null, "Erreur d'Utilisateur / Mots de passe");
-		    	  }
-		    	  
-		    	  else if (res[0].equals(pseudo.getText()) && res[1].equals(motdepasse)){
-		    		  frame.dispose();
-		    		  new Interface(bdd, res[2]);
-		    	  }
-		      }
+				motdepasse = new String(mdp.getPassword());
+				if(!pseudo.getText().equals("")&& !motdepasse.equals("")){
+					String [] res = bdd.connection(pseudo.getText());
+					if(res.length == 2 && res[0].equals("Error")){
+						if(res[1] != "null"){
+							JOptionPane.showMessageDialog(null, "Attention ! Erreur inattendu\nVeuillez réesayer plutard", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Erreur d'Utilisateur / Mots de passe", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+					else if(res[0].equals("vide") || !res[0].equals(pseudo.getText()) || !res[1].equals(motdepasse)){
+						JOptionPane.showMessageDialog(null, "Erreur d'Utilisateur / Mots de passe", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+					}
+					else if (res[0].equals(pseudo.getText()) && res[1].equals(motdepasse)){
+						frame.dispose();
+						new Interface(bdd, res[2]);
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Attention !\nL'un des champs est vide", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		}
 	}

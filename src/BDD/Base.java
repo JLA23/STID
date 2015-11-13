@@ -102,9 +102,14 @@ public class Base  {
 			}
 		}
 		catch(Exception e){
-			user = new String [1];
+			user = new String [2];
 			user[0] = "Error";
-			System.out.println(e.getMessage());
+			if(e.getMessage() == null){
+				user[1] = "null";
+			}
+			else{
+				user[1] = e.getMessage();
+			}
 		}
 		return user;
 	}

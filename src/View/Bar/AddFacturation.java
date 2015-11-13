@@ -12,7 +12,7 @@ public class AddFacturation{
 	private JMenu menu;
 	private JMenuItem menuItem;
 	
-	public AddFacturation(Base bdd){
+	public AddFacturation(Base bdd, String typeCompte){
 		menu = new JMenu("Facturation");
 		menu.getAccessibleContext().setAccessibleDescription("Facturation");		
 		
