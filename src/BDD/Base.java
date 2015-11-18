@@ -8,63 +8,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Base  {
-	protected String url, mdp, nom, pseudo, typeCompte;
-	protected boolean connecte;
+	protected String url, mdp, nom, pseudo, typeCompte, adresse, base;
 	protected Connection con;
 	protected Statement stmt;
 	
 	public Base(String adresse, String base, String user, String motdepasse){
-		con = null;
+		con = null;		
+		nom = user;
+		mdp = motdepasse;
+		url = "jdbc:mysql://" + adresse + "/" + base;
+		this.adresse = adresse;
+		this.base = base;
+	}
+	
+	public String connect(){
+		String message = null;
 			try{
 				Class.forName("com.mysql.jdbc.Driver");
-				url = "jdbc:mysql://"+adresse+"/"+base;
-				nom = user;
-				mdp = motdepasse;
 				con = DriverManager.getConnection(this.url,this.nom,this.mdp);
 				stmt = con.createStatement();
-				connecte = true;
+				message = "Connexion ètablie";
 			}
 			catch(Exception e){
-				connecte = false;
+				message = e.getMessage();
 			}
-	}
-	
-	public boolean isConnecte() {
-		return connecte;
+		return message;	
 	}
 
-	public void setConnecte(boolean connecte) {
-		this.connecte = connecte;
-	}
-
-	/**
-	 * Renvoie l'url de la base
-	 * @return l'url de la base sous forme de String
-	 */
-	public String getUrl(){
-		return url;
-	}
-	
-	/**
-	 * Renvoie le mot de passe de l'utilisateur sous forme de string
-	 * @return le mot de passe en String
-	 */
-	public String getMdp(){
-		return mdp;
-	}
-	
-	/**
-	 * Renvoie le nom de l'utilisateur sous forme de string
-	 * @return le nom en String
-	 */
-	public String getNom(){
-		return nom;
-	}
-	
-	/**
-	 * Renvoie la connexion a la base
-	 * @return Connection a la base
-	 */
 	public Connection getCon(){
 		return con;
 	}
@@ -77,37 +47,30 @@ public class Base  {
 	 * Renvoie toutes les informations de la Base de donnee
 	 * @return une hasmap de hasmap ayant comme cle le nom du fichier.
 	 */
-	public String [] connection(String pseudo){
-		String [] user;
+	public String typeCompte(String pseudo){
+		String user = null;
 		try{
-			String query = "Select u.pseudo, u.mdp, c.type from Users as u, Compte as c where u.TypeCompte = c.id and u.pseudo = '" + pseudo+ "'";
+			String query = "Select c.type from Users as u, Compte as c where u.TypeCompte = c.id and u.pseudo = '" + pseudo+ "'";
 			ResultSet rs = stmt.executeQuery(query);
 			ResultSetMetaData metadata = rs.getMetaData();
-			int nombreColonnes = metadata.getColumnCount();
-			user = new String [nombreColonnes];
 			while(rs.next()){
-				for(int i = 0; i < nombreColonnes ; i++){
-					String nameColone = metadata.getColumnName(i+1);
-					user[i] = rs.getString(nameColone);
-				}
+					String nameColone = metadata.getColumnName(1);
+					user = rs.getString(nameColone);
 			}
-			if(user[0].isEmpty()){
-				user[0] = "vide";
+			if(user.isEmpty()){
+				user = "vide";
 			}
 			else{
-				this.pseudo = user[0];
-				this.typeCompte = user[2];
+				this.pseudo = pseudo;
+				this.typeCompte = user;
 			}
 		}
 		catch(Exception e){
-			System.out.println(e.getMessage());
-			user = new String [2];
-			user[0] = "Error";
 			if(e.getMessage() == null){
-				user[1] = "null";
+				user = "null";
 			}
 			else{
-				user[1] = e.getMessage();
+				user = e.getMessage();
 			}
 		}
 		return user;
@@ -167,8 +130,131 @@ public class Base  {
 		return message;
 	}
 	
+	public String modifierMDP(String newMdp){
+		String message = null;
+		try{
+			String query = "SET PASSWORD FOR " + pseudo + "@'%' = PASSWORD('" + newMdp + "')";
+			stmt.executeUpdate(query); 
+			message = "Mot de passe modifié avec succés !";
+		}
+		catch(Exception e){message = "Error : " + e.getMessage();}
+		
+		return message;
+	}
+	
+	public String newUtilisateur(String newPseudo, String newMdp, String typeCompte){
+		String message = null;
+		try{
+			String query = null;
+			String query2 = null;
+			if(typeCompte.equals("Admin")){
+				query = "GRANT ALL PRIVILEGES ON *.* TO '" + newPseudo + "'@'%' IDENTIFIED BY '" + newMdp + "' WITH GRANT OPTION";
+				query2 = "Insert into Users values('" + newPseudo + "', 1)";
+			}
+			else{
+				query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + newPseudo + "'@'%' IDENTIFIED BY '" + newMdp + "'";
+				query2 = "Insert into Users values('" + newPseudo + "', 2)";;
+			}
+				stmt.executeUpdate(query); 
+				stmt.executeUpdate(query2);
+				message = "Utilisateur ajouté avec succés !";
+		}
+		catch(Exception e){message = "Error : " + e.getMessage(); System.out.println(e.getMessage());}
+		
+		return message;
+	}
+	
+	public String getPseudo() {
+		return pseudo;
+	}
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
+	}
+
+	public String supprUtilisateur(String pseudo){
+		String message = null;
+		try{
+			String query = "DROP USER '" + pseudo + "'@'%'";
+			stmt.executeUpdate(query); 
+			String res = delete("Users", "pseudo = '" + pseudo +"'");
+			if(res.equals("Suppression effectué avec succée !")){
+				message = "Utilisateur supprimés !";
+			}
+			
+			else{
+				message = "Error : suppression de compte échoué";
+			}
+			
+		}
+		catch(Exception e){message = "Error : " + e.getMessage();}
+		
+		return message;
+	}
+	
+	public String modifPseudo(String newPseudo){
+		String message = null;
+		try{
+			String query = "RENAME USER '"+ pseudo + "'@'%' TO '" + newPseudo + "'@'%'";
+			stmt.executeUpdate(query); 
+			String res = update("Users", "pseudo = '" + newPseudo + "'", "pseudo = '" + pseudo + "'");
+			if(res.equals("Modification effectué avec succée !")){
+				message = "Nom utilisateur modifié !";
+			}
+			else{
+				message = "Error : modification compte échoué";
+			}
+		}
+		catch(Exception e){message = "Error : " + e.getMessage();}
+		
+		return message;
+	}
+	
+	public String modifTypeCompte(String pseudo, String compte){
+		String message = null;
+		try{
+			String query = "GRANT ALL PRIVILEGE ON *.* TO '" + pseudo + "'@'%' WITH GRANT OPTION";
+			stmt.executeUpdate(query);
+			String res = update("Users", "typecompte = 1", "pseudo = '" + pseudo + "'");
+			if(res.equals("Ajout effectué avec succée !")){
+				message = "Compte utilisateur modifié !";
+			}
+			else{
+				message = "Error : modification compte échoué";
+			}
+			
+		}
+		catch(Exception e){message = "Error : " + e.getMessage();}
+		
+		return message;
+	}
+	
 	public void close(){
 		try{con.close();} 
 		catch (Exception e){System.out.println(e.getMessage());}
+	}
+	
+	public String getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+
+	public String getBase() {
+		return base;
+	}
+
+	public void setBase(String base) {
+		this.base = base;
+	}
+	
+	public String getTypeCompte() {
+		return typeCompte;
+	}
+
+	public void setTypeCompte(String typeCompte) {
+		this.typeCompte = typeCompte;
 	}
 }

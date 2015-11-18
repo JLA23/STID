@@ -2,13 +2,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
 import javax.swing.JOptionPane;
-
 import BDD.Base;
 import View.ConfigurationConnexion;
 import View.Identification;
-import components.Decryptage;
 
 public class STID {
 	
@@ -20,7 +17,7 @@ public class STID {
 	        		new ConfigurationConnexion();
 	        	}
 	        	else{			
-	        		String [] line = new String [4];
+	        		String [] line = new String [2];
 	        		try{
 	        			BufferedReader buff = new BufferedReader(new FileReader("Configuration.conf"));
 	        			
@@ -35,14 +32,18 @@ public class STID {
 	        		} catch (IOException ioe) {
 						JOptionPane.showMessageDialog(null, "Erreur --" + ioe.toString());
 	        		}
-	        		String base = new Decryptage().decryptage(line[2]);
-					String motdepasse = new Decryptage().decryptage(line[3]);
-					Base bdd = new Base(line[0], line[1], base, motdepasse);
-	        		if(bdd.isConnecte()){
-	        			new Identification(bdd);
+	        		Base bdd = new Base(line[0],line[1], "test", "test");
+					String message = bdd.connect();
+					if(message.equals("Connexion ètablie")){
+						bdd.close();
+						new Identification(line[0],line[1]);
+					}
+	        		else if (message.contains("Communications link failure")){
+	        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Communications link failure");
+	        			new ConfigurationConnexion();
 	        		}
-	        		else{
-	        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données");
+	        		else if(message.contains("Unknown database")){
+	        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Unknown database");
 	        			new ConfigurationConnexion();
 	        		}
 	        	}

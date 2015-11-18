@@ -10,6 +10,7 @@ import View.Bar.AddFacturation;
 import View.Bar.AddParametres;
 import View.Bar.AddPointages;
 import View.Bar.AddPropos;
+import View.Bar.AddSTID;
 import View.Bar.AddTermes;
 	
 	public class MenuBar extends JMenuBar{
@@ -23,7 +24,8 @@ import View.Bar.AddTermes;
 		 * @param ifo 
 		 */
 		public MenuBar(JFrame frame, Base bdd, String typeCompte) {
-			this.add(new AddDevis(frame, bdd, typeCompte).getMenu());
+			this.add(new AddSTID(bdd, frame).getMenu());
+			this.add(new AddDevis(bdd, typeCompte).getMenu());
 			this.add(new AddCommandes(bdd, typeCompte).getMenu());
 			this.add(new AddClients(bdd, typeCompte).getMenu());
 			this.add(new AddTermes(bdd, typeCompte).getMenu());

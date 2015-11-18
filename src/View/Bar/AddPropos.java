@@ -14,7 +14,7 @@ public class AddPropos{
 	
 	public AddPropos(Base bdd){
 		menu = new JMenu("A propos");
-		menu.getAccessibleContext().setAccessibleDescription("Clients");		
+		menu.getAccessibleContext().setAccessibleDescription("Description");		
 		
 		
 		//Crèdits
