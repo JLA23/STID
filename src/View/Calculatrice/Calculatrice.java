@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 	    this.addWindowListener(new WindowAdapter(){
 	             public void windowClosing(WindowEvent e){
 	                  valeur = ecran.getText();
+	                  valeur = ((double)Math.round((Double.parseDouble(valeur) + 0.004) * 100) / 100) + "";
+	                  valeur = valeur.replaceAll("\\.", ",");
 	             }
 	    });
 	    this.setLocationRelativeTo(null);
@@ -242,7 +244,7 @@ import javax.swing.JPanel;
 	      update = true;
 	      chiffre1 = 0;
 	      operateur = "";
-	      ecran.setText("");
+	      ecran.setText("0");
 	    }
 	  }
 		public String getValeur() {

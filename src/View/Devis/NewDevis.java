@@ -3,6 +3,7 @@ package View.Devis;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
@@ -18,6 +19,10 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import com.toedter.calendar.JDateChooser;
 import BDD.Base;
 import View.Calculatrice.Calculatrice;
@@ -42,15 +47,17 @@ public class NewDevis extends JFrame{
     private JLabel AteUnit;
     private JLabel jLabel8;
     private JLabel coutMO;
+    private JLabel totalDevisdevise;
+    private JLabel devise;
     private JPanel jPanel1;
     private JPanel jPanel2;
     private JPanel jPanel3;
     private JPanel JPanelTemps;
     private JPanel jPanel6;
     private JSeparator jSeparator1, jSeparator2;
-    private JTextField jTextField1, jTextField10, jTextField11, jPrevu, jTextField13, jTextField14, jCommande, jTextField16;
+    private JFormattedTextField jTextFieldTotal, jTextField11, jTextField7, jTextField8, jTextField9, jTextField10, jPrevu, jTextField13, jTextField14, jCommande, jTextField16;
+    private JTextField jTextField1, jTextField4, jTextField5, jTextField6;
     private JDateChooser jDate;
-    private JTextField jTextField4, jTextField5, jTextField6, jTextField7, jTextField8, jTextField9;
 
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
@@ -58,7 +65,7 @@ public class NewDevis extends JFrame{
 	public NewDevis(Base bdd){
 		this.setTitle("Nouveau Devis");
 		screenSize.width = 800;
-		screenSize.height = 630;
+		screenSize.height = 600;
 		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setPreferredSize(screenSize);
 		
@@ -98,26 +105,45 @@ public class NewDevis extends JFrame{
         prevu = new JLabel("Prévu");
         commande = new JLabel("Commandé");
         resteCommande = new JLabel("Reste à commander");
+        totalDevisdevise = new JLabel("Total (Devise)");
+		devise = new JLabel();
         
         jTextField1 = new JTextField();
         jTextField4 = new JTextField();
         jTextField5 = new JTextField();
         jTextField6 = new JTextField();
-        jTextField11 = new JTextField("0,00");
-        jTextField13 = new JTextField("0,00");
-        jTextField14 = new JTextField("0,00");
-        jTextField7 = new JFormattedTextField(NumberFormat.getNumberInstance());
+
+        NumberFormat nf = new DecimalFormat("#0.00");
+        nf.setGroupingUsed(false);
+        jTextField7 = new JFormattedTextField(nf);
+        //((DefaultFormatter) jTextField7.getFormatter ()).setAllowsInvalid (false);
+        jTextField8 = new JFormattedTextField(nf);
+        jTextField9 = new JFormattedTextField(nf);
+        jTextField10 = new JFormattedTextField(nf);
+        jTextField11 = new JFormattedTextField(nf);
+        jTextField13 = new JFormattedTextField(nf);
+        jTextField14 = new JFormattedTextField(nf);
+        jPrevu = new JFormattedTextField(nf);
+        jCommande = new JFormattedTextField(nf);
+
+        jTextField16 = new JFormattedTextField(NumberFormat.getInstance());
         jTextField7.setText("0,00");
-        jTextField8 = new JTextField("0,00");
-        jTextField9 = new JTextField("0,00");
-        jTextField10 = new JTextField();
-        jPrevu = new JTextField();
-        jCommande = new JTextField();
-        jTextField16 = new JTextField("0,00");
+        jTextField8.setText("0,00");
+        jTextField9.setText("0,00");
+        jTextField10.setText("0,00");
+        jTextField11.setText("0,00");
+        jTextField13.setText("0,00");
+        jTextField14.setText("0,00");
+        jTextField16.setText("0,00");
+        jPrevu.setText("0,00");
+        jCommande.setText("0,00");
+		jTextFieldTotal = new JFormattedTextField(NumberFormat.getNumberInstance());
+        jTextFieldTotal.setText("0,00");
         
         jTextField10.setEditable(false);
         jTextField14.setEditable(false);
         jTextField16.setEditable(false);
+        jTextFieldTotal.setEditable(false);
         
         numClient = new JComboBox<>();
         devises = new JComboBox<>();
@@ -134,7 +160,17 @@ public class NewDevis extends JFrame{
         valider = new JButton("Valider");
         fermer = new JButton("Fermer");
         
-        jButton7.addActionListener(new ActionCalculatrice(jTextField7, this));
+        jTextField7.getDocument().addDocumentListener(new EcouteKey(jTextField7));
+        jTextField8.getDocument().addDocumentListener(new EcouteKey(jTextField8));
+        
+        
+        jButton1.addActionListener(new ActionCalculatrice(jTextField7, this));
+        jButton3.addActionListener(new ActionCalculatrice(jTextField8, this));
+        jButton4.addActionListener(new ActionCalculatrice(jTextField9, this));
+        jButton5.addActionListener(new ActionCalculatrice(jTextField13, this));
+        calcul6.addActionListener(new ActionCalculatrice(jPrevu, this));
+        jButton7.addActionListener(new ActionCalculatrice(jTextField11, this));
+        jButton8.addActionListener(new ActionCalculatrice(jCommande, this));
         
         jSeparator2 = new JSeparator();
         jSeparator1 = new JSeparator();
@@ -152,12 +188,13 @@ public class NewDevis extends JFrame{
         jTextField14.setBackground(new java.awt.Color(204, 204, 204));
         jTextField10.setBackground(new java.awt.Color(204, 204, 204));
         jTextField16.setBackground(new java.awt.Color(204, 204, 204));
+        jTextFieldTotal.setBackground(new java.awt.Color(204, 204, 204));
         
         jPanel6.setBorder(BorderFactory.createTitledBorder("Montants"));
         jPanel6.setPreferredSize(new java.awt.Dimension(350, 200));
         jPanel3.setBorder(BorderFactory.createTitledBorder("Achat Matières"));
-
-
+        
+        devise.setText(devises.getSelectedItem().toString());
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -254,7 +291,7 @@ public class NewDevis extends JFrame{
 
         GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
+		jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -294,6 +331,14 @@ public class NewDevis extends JFrame{
                 .addGap(20, 20, 20)
                 .addComponent(euro4)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGap(15, 15, 15)
+                    .addComponent(totalDevisdevise)
+                    .addGap(20, 20, 20)
+                    .addComponent(jTextFieldTotal, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                    .addGap(20, 20, 20)
+                    .addComponent(devise)
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -323,8 +368,11 @@ public class NewDevis extends JFrame{
                     .addComponent(jTextField10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(euro4)
                     .addComponent(totalDevis))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextFieldTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(devise)
+                        .addComponent(totalDevisdevise))));
 
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -397,7 +445,7 @@ public class NewDevis extends JFrame{
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                            .addComponent(service)
+                            /*.addComponent(service)*/
                             .addComponent(jLabel5))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -406,12 +454,12 @@ public class NewDevis extends JFrame{
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton2)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            /*.addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(AteUnit)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField6))))
+                                .addComponent(jTextField6))*/))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
@@ -427,8 +475,7 @@ public class NewDevis extends JFrame{
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        //.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(30, 30, 30)
+                        .addGap(40, 40, 40)
                         .addComponent(JPanelTemps, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -445,11 +492,11 @@ public class NewDevis extends JFrame{
                             .addComponent(jLabel5))
                         .addComponent(jButton2))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    /*.addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(service)
                         .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(AteUnit)
-                        .addComponent(jTextField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))*/
                     .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGap(18, 18, 18)
@@ -520,8 +567,59 @@ public class NewDevis extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			Calculatrice c = new Calculatrice(f, "Calculatrice", true);
 			casse.setText(c.getValeur());
-			f.revalidate();
+			//f.revalidate();
 		}
+	}
+	
+	private void calculer(){
+		double calcule = Double.parseDouble((jTextField7.getText().toString().replaceAll(" ", "")).replaceAll(",", "\\."));
+		calcule = calcule + Double.parseDouble(jTextField8.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = calcule + Double.parseDouble(jTextField9.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
+		jTextField10.setText((calcule +"").replaceAll("\\.", ","));
+	}
+	
+	private void testContenu(JFormattedTextField jtext){
+		System.out.println("jtext : " + jtext.getText());
+		if(jtext.getText().toString().isEmpty() || jtext.getText().toString().equals("")){
+			jtext.setText("0,00");
+			calculer();
+		}
+		/*else if(!jtext.getText().toString().isEmpty()){
+			jtext.setText(",00");
+			calculer();
+		}*/
+		
+	}
+	
+	private class EcouteKey implements DocumentListener{
+		private JFormattedTextField jtext;
+		EcouteKey(JFormattedTextField j){
+			this.jtext = j;
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent arg0) {
+			/*SwingUtilities.invokeLater(new Runnable(){
+		    	   public void run(){testContenu(jtext);}
+			 });*/
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent arg0) {
+			SwingUtilities.invokeLater(new Runnable(){
+		    	   public void run(){testContenu(jtext);}
+			 });
+			
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent arg0) {
+			SwingUtilities.invokeLater(new Runnable(){
+		    	   public void run(){testContenu(jtext);}
+			 });
+			
+		}
+   	
 	}
 }
 

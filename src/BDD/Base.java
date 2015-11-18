@@ -1,27 +1,25 @@
 package BDD;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Base  {
-	protected String url, mdp, nom;
+	protected String url, mdp, nom, pseudo, typeCompte;
 	protected boolean connecte;
 	protected Connection con;
 	protected Statement stmt;
 	
-	public Base(String Fichier){
+	public Base(String adresse, String base, String user, String motdepasse){
 		con = null;
-		File fichier = new File("bdd/"+Fichier);
-		if(fichier.exists()){
 			try{
-				Class.forName("org.sqlite.JDBC");
-				url = "jdbc:sqlite:bdd/"+Fichier;
-				nom = null;
-				mdp = null;
+				Class.forName("com.mysql.jdbc.Driver");
+				url = "jdbc:mysql://"+adresse+"/"+base;
+				nom = user;
+				mdp = motdepasse;
 				con = DriverManager.getConnection(this.url,this.nom,this.mdp);
 				stmt = con.createStatement();
 				connecte = true;
@@ -29,10 +27,6 @@ public class Base  {
 			catch(Exception e){
 				connecte = false;
 			}
-		}
-		else{
-			connecte = false;
-		}
 	}
 	
 	public boolean isConnecte() {
@@ -100,8 +94,13 @@ public class Base  {
 			if(user[0].isEmpty()){
 				user[0] = "vide";
 			}
+			else{
+				this.pseudo = user[0];
+				this.typeCompte = user[2];
+			}
 		}
 		catch(Exception e){
+			System.out.println(e.getMessage());
 			user = new String [2];
 			user[0] = "Error";
 			if(e.getMessage() == null){
@@ -112,6 +111,60 @@ public class Base  {
 			}
 		}
 		return user;
+	}
+	
+	public ResultSet Select(String colonnes, String tables, String conditions){
+		ResultSet rs = null;
+		String query = "Select " + colonnes + " from " + tables;
+		if(conditions != null){
+			query += " where " + conditions;
+		}
+		try {
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		return rs;
+	}
+	
+	public String insert(String table, String valeurs){
+		String message = null;
+		try{
+			String query = "Insert into " + table + " values (" + valeurs + ")";
+			stmt.executeUpdate(query); 
+			message = "Ajout effectué avec succée !";
+		}
+		catch(Exception e){message = "Error : " + e.getMessage();}
+		
+		return message;
+	}
+	
+	public String update(String table, String colValeurs, String conditions){
+		String message = null;
+		try{
+			String query = "Update " + table + " SET " + colValeurs;
+			if(conditions != null){
+				query += " where " + conditions;
+			}
+			stmt.executeUpdate(query); 
+			message = "Modification effectué avec succée !";
+		}
+		catch(Exception e){message = "Error : " + e.getMessage();}
+		
+		return message;
+	}
+	
+	public String delete(String table, String conditions){
+		String message = null;
+		try{
+			String query = "Delete from " + table + " where " + conditions;
+			stmt.executeUpdate(query); 
+			message = "Suppression effectué avec succée !";
+		}
+		catch(Exception e){message = "Error : " + e.getMessage();}
+		
+		return message;
 	}
 	
 	public void close(){
