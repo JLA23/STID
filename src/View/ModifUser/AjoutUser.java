@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,8 +19,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import BDD.Base;
+import Controller.Donnees;
 import Controller.PasswordCreate;
-import View.Identification;
+import View.Options.ClickDroit;
 
 public class AjoutUser extends JDialog{
 
@@ -66,7 +66,7 @@ public class AjoutUser extends JDialog{
 	    bouton.setMnemonic(KeyEvent.VK_ENTER);
 	    pane3.add(bouton);
 	    
-	    bouton.addActionListener(new ActionValider(base, pseudo, box.getSelectedItem().toString(), this));
+	    bouton.addActionListener(new ActionValider(base, pseudo, box, this));
 	    
 	    
 	    this.add(pane);
@@ -80,30 +80,40 @@ public class AjoutUser extends JDialog{
 	
 	private class ActionValider implements ActionListener {
 	private JTextField pseudo;
-	private JFrame frame;
 	private JDialog dialog;
 	private Base base;
-	private String typeComptes;
+	private JComboBox<String> typeComptes;
 	
-	ActionValider(Base bdd, JTextField pseudo, String typeCompte, JDialog dialog){
+	ActionValider(Base bdd, JTextField pseudo, JComboBox<String>typeCompte, JDialog dialog){
 		this.pseudo = pseudo;
 		this.dialog = dialog;
 		this.base = bdd;
 		this.typeComptes = typeCompte;
 	}
 		public void actionPerformed(ActionEvent e) {
-			String mdp = new PasswordCreate().create();
-			String res = base.newUtilisateur(pseudo.getText(), mdp, typeComptes);
-			dialog.dispose();
-			if(res.equals("Utilisateur ajouté avec succés !")){
-				dialog.dispose();
-				JTextArea text = new JTextArea(res + "\n\nPseudo : " + pseudo.getText() +"\n\nMot de passe : " + mdp);
-				JOptionPane.showMessageDialog(null, text);
+			Donnees donnees = new Donnees(base);
+			if(!pseudo.getText().equals("root") && !pseudo.getText().equals("test")){
+				if(!donnees.existPseudo(pseudo.getText())){
+					String mdp = new PasswordCreate().create();
+					String res = base.newUtilisateur(pseudo.getText(), mdp, typeComptes.getSelectedItem().toString());
+					dialog.dispose();
+					if(res.equals("Utilisateur ajouté avec succés !")){
+						dialog.dispose();
+						JTextArea text = new JTextArea(res + "\n\nPseudo : " + pseudo.getText() +"\n\nMot de passe : " + mdp);
+						new ClickDroit(text, true, false);
+						JOptionPane.showMessageDialog(null, text);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Attention !\nUne erreur s'est produite,\n Veuillez réessayer ultérieurement", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Attention !\nLe pseudo est déjà utilisé", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+				}
 			}
-			else{
-				JOptionPane.showMessageDialog(null, "Attention !\nUne erreur s'est produite,\n Veuillez réessayer ultérieurement", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			else {
+				JOptionPane.showMessageDialog(null, "Attention !\nPseudo interdit !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 			}
-		
 		}
 	}
 }

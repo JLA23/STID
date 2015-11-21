@@ -25,12 +25,15 @@ import javax.swing.event.DocumentListener;
 
 import com.toedter.calendar.JDateChooser;
 import BDD.Base;
+import Controller.Donnees;
 import View.Calculatrice.Calculatrice;
+import View.Clients.SearchClient;
+import View.Options.ClickDroit;
 
 
 public class NewDevis extends JFrame{
 	
-    private JButton jButton1, valider, fermer, jButton2, jButton3, jButton4, jButton5, calcul6, jButton7, jButton8, nouveau;
+    private JButton jButton1, valider, fermer, jButton2, jButton3, jButton4, jButton5, calcul6, jButton7, jButton8, nouveau, search;
     private JComboBox<String> numClient, devises;
     private JLabel jLabel1, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, dateLabel, euro5;
     private JLabel hrs2;
@@ -43,8 +46,6 @@ public class NewDevis extends JFrame{
     private JLabel jLabel3;
     private JLabel jLabel4;
     private JLabel jLabel5;
-    private JLabel service;
-    private JLabel AteUnit;
     private JLabel jLabel8;
     private JLabel coutMO;
     private JLabel totalDevisdevise;
@@ -56,13 +57,17 @@ public class NewDevis extends JFrame{
     private JPanel jPanel6;
     private JSeparator jSeparator1, jSeparator2;
     private JFormattedTextField jTextFieldTotal, jTextField11, jTextField7, jTextField8, jTextField9, jTextField10, jPrevu, jTextField13, jTextField14, jCommande, jTextField16;
-    private JTextField jTextField1, jTextField4, jTextField5, jTextField6;
+    private JTextField jTextField1, jTextField4;
     private JDateChooser jDate;
 
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
 	
 	public NewDevis(Base bdd){
+		
+		Donnees donnees = new Donnees(bdd);
+		int nbDevis = donnees.newNumDevis() + 1;
+		
 		this.setTitle("Nouveau Devis");
 		screenSize.width = 800;
 		screenSize.height = 600;
@@ -83,8 +88,6 @@ public class NewDevis extends JFrame{
         jLabel3 = new JLabel("Devise");
         jLabel4 = new JLabel("Libellé");
         jLabel5 = new JLabel("N° Client");
-        service = new JLabel("Service");
-        AteUnit = new JLabel("Atelier ou Unité");
         hrsAtelier = new JLabel("Heures d'Atelier");
         hrsSite = new JLabel("Heures sur Site");
         hrs1 = new JLabel("Hrs");
@@ -109,14 +112,12 @@ public class NewDevis extends JFrame{
 		devise = new JLabel();
         
         jTextField1 = new JTextField();
+        jTextField1.setText(nbDevis + "");
         jTextField4 = new JTextField();
-        jTextField5 = new JTextField();
-        jTextField6 = new JTextField();
 
         NumberFormat nf = new DecimalFormat("#0.00");
         nf.setGroupingUsed(false);
-        jTextField7 = new JFormattedTextField(nf);
-        //((DefaultFormatter) jTextField7.getFormatter ()).setAllowsInvalid (false);
+        jTextField7 = new JFormattedTextField(nf);;
         jTextField8 = new JFormattedTextField(nf);
         jTextField9 = new JFormattedTextField(nf);
         jTextField10 = new JFormattedTextField(nf);
@@ -125,8 +126,8 @@ public class NewDevis extends JFrame{
         jTextField14 = new JFormattedTextField(nf);
         jPrevu = new JFormattedTextField(nf);
         jCommande = new JFormattedTextField(nf);
-
-        jTextField16 = new JFormattedTextField(NumberFormat.getInstance());
+        jTextField16 = new JFormattedTextField(nf);
+        
         jTextField7.setText("0,00");
         jTextField8.setText("0,00");
         jTextField9.setText("0,00");
@@ -137,8 +138,21 @@ public class NewDevis extends JFrame{
         jTextField16.setText("0,00");
         jPrevu.setText("0,00");
         jCommande.setText("0,00");
-		jTextFieldTotal = new JFormattedTextField(NumberFormat.getNumberInstance());
+        
+		jTextFieldTotal = new JFormattedTextField(nf);
         jTextFieldTotal.setText("0,00");
+        
+        new ClickDroit(jTextField7, true, true);
+        new ClickDroit(jTextField8, true, true);
+        new ClickDroit(jTextField9, true, true);
+        new ClickDroit(jTextField10, true, false);
+        new ClickDroit(jTextField11, true, true);
+        new ClickDroit(jTextField13, true, true);
+        new ClickDroit(jTextField14, true, false);
+        new ClickDroit(jTextField16, true, false);
+        new ClickDroit(jTextFieldTotal, true, false);
+        new ClickDroit(jPrevu, true, true);
+        new ClickDroit(jCommande, true, true);
         
         jTextField10.setEditable(false);
         jTextField14.setEditable(false);
@@ -159,6 +173,9 @@ public class NewDevis extends JFrame{
         nouveau = new JButton("Nouveau");
         valider = new JButton("Valider");
         fermer = new JButton("Fermer");
+        search = new JButton("Chercher Client");
+        
+        search.addActionListener(new ActionSearch(bdd, numClient, this));
         
         jTextField7.getDocument().addDocumentListener(new EcouteKey(jTextField7));
         jTextField8.getDocument().addDocumentListener(new EcouteKey(jTextField8));
@@ -180,7 +197,7 @@ public class NewDevis extends JFrame{
         jDate.setDate(new Date());
   
         jPanel2.setBorder(BorderFactory.createEtchedBorder());
-        numClient.setModel(new DefaultComboBoxModel<>(new String[] { "1", "2" }));
+        numClient.setModel(new DefaultComboBoxModel<>(new String[] { "1", "2", "3255666", "3255665" }));
         devises.setModel(new DefaultComboBoxModel<>(new String[] { "EUR", "FR" }));
         JPanelTemps.setBorder(BorderFactory.createTitledBorder("Temps"));
         JPanelTemps.setPreferredSize(new java.awt.Dimension(350, 200));
@@ -452,6 +469,8 @@ public class NewDevis extends JFrame{
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(numClient, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(search)
+                                .addGap(10, 10, 10)
                                 .addComponent(jButton2)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             /*.addGroup(jPanel2Layout.createSequentialGroup()
@@ -490,7 +509,7 @@ public class NewDevis extends JFrame{
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(numClient, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
-                        .addComponent(jButton2))
+                        .addComponent(search).addComponent(jButton2))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     /*.addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(service)
@@ -571,6 +590,22 @@ public class NewDevis extends JFrame{
 		}
 	}
 	
+	private class ActionSearch implements ActionListener {
+		private JComboBox<String> casse;
+		private Base bdd;
+		private JFrame frame;
+		
+		ActionSearch(Base bdd, JComboBox<String> j, JFrame fr){
+			this.casse = j;
+			this.bdd = bdd;
+			this.frame = fr;
+
+		}
+		public void actionPerformed(ActionEvent e) {
+			new SearchClient(bdd, casse, frame, true).searchClientNum();
+		}
+	}
+	
 	private void calculer(){
 		double calcule = Double.parseDouble((jTextField7.getText().toString().replaceAll(" ", "")).replaceAll(",", "\\."));
 		calcule = calcule + Double.parseDouble(jTextField8.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
@@ -579,7 +614,6 @@ public class NewDevis extends JFrame{
 	}
 	
 	private void testContenu(JFormattedTextField jtext){
-		System.out.println("jtext : " + jtext.getText());
 		if(jtext.getText().toString().isEmpty() || jtext.getText().toString().equals("")){
 			jtext.setText("0,00");
 			calculer();

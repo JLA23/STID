@@ -10,7 +10,10 @@ import javax.swing.JMenuItem;
 import BDD.Base;
 import View.Identification;
 import View.ModifUser.AjoutUser;
+import View.ModifUser.ModifMDP;
 import View.ModifUser.ModifPseudo;
+import View.ModifUser.ModifUser;
+import View.ModifUser.SupprUser;
 
 public class AddSTID{
 	
@@ -31,7 +34,7 @@ public class AddSTID{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					
+				new ModifMDP(base, frame);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Modifier le Mot de Passe");
@@ -67,11 +70,7 @@ public class AddSTID{
 		menuItem = new JMenuItem("Supprimer Utilisateur");
 		menuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				/*frame.dispose();
-				String addr = base.getAdresse();
-				String basebdd = base.getBase();
-				base.close();
-				new Identification(addr, basebdd);*/
+				new SupprUser(base);
 			}
 		});	
 		menuItem.getAccessibleContext().setAccessibleDescription("Suppresion d'un utilisateur");
@@ -82,11 +81,7 @@ public class AddSTID{
 		menuItem = new JMenuItem("Modifier Utilisateur");
 		menuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				/*frame.dispose();
-				String addr = base.getAdresse();
-				String basebdd = base.getBase();
-				base.close();
-				new Identification(addr, basebdd);*/
+				new ModifUser(base);
 			}
 		});	
 		menuItem.getAccessibleContext().setAccessibleDescription("Modifier utilisateur");

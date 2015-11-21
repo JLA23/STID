@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import BDD.Base;
+import View.Options.ClickDroit;
 
 public class Identification extends JFrame{
 
@@ -35,6 +36,7 @@ public class Identification extends JFrame{
 	    pane.add(label);
 	    JTextField pseudo = new JTextField();
 	    pseudo.setPreferredSize(new Dimension(100, 25));
+	    new ClickDroit(pseudo, true, true);
 	    pane.add(pseudo);
 	    
 	    JPanel pane2 = new JPanel();
@@ -43,6 +45,7 @@ public class Identification extends JFrame{
 	    pane2.add(label2);
 	    JPasswordField mdp = new JPasswordField();
 	    mdp.setPreferredSize(new Dimension(100, 25));
+	    new ClickDroit(mdp, true, true);
 	    pane2.add(mdp);
 	    
 	    JPanel pane3 = new JPanel();
@@ -50,6 +53,7 @@ public class Identification extends JFrame{
 	    this.setLocationRelativeTo(null);
 	    JButton bouton = new JButton("Valider");
 	    bouton.setMnemonic(KeyEvent.VK_ENTER);
+	    this.getRootPane().setDefaultButton(bouton); 
 	    pane3.add(bouton);
 	    
 	    bouton.addActionListener(new ActionValider(adresse, base, pseudo, mdp, this));
@@ -82,7 +86,7 @@ public class Identification extends JFrame{
 			
 			if (e.getActionCommand().equals("Valider")) {
 				motdepasse = new String(mdp.getPassword());
-				if(!pseudo.getText().equals("")&& !motdepasse.equals("")){
+				if(!pseudo.getText().equals("") && !motdepasse.equals("")){
 					Base bdd = new Base(this.adresse, this.base, this.pseudo.getText(), this.motdepasse);
 					String reponse = bdd.connect();
 					if(reponse.equals("Connexion ètablie")){

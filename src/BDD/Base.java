@@ -163,14 +163,6 @@ public class Base  {
 		
 		return message;
 	}
-	
-	public String getPseudo() {
-		return pseudo;
-	}
-
-	public void setPseudo(String pseudo) {
-		this.pseudo = pseudo;
-	}
 
 	public String supprUtilisateur(String pseudo){
 		String message = null;
@@ -212,11 +204,19 @@ public class Base  {
 	
 	public String modifTypeCompte(String pseudo, String compte){
 		String message = null;
+		String res = null;
 		try{
-			String query = "GRANT ALL PRIVILEGE ON *.* TO '" + pseudo + "'@'%' WITH GRANT OPTION";
-			stmt.executeUpdate(query);
-			String res = update("Users", "typecompte = 1", "pseudo = '" + pseudo + "'");
-			if(res.equals("Ajout effectué avec succée !")){
+			if(compte.equals("Admin")){
+				String query = "GRANT ALL PRIVILEGES ON *.* TO '" + pseudo + "'@'%' WITH GRANT OPTION";
+				stmt.executeUpdate(query);
+				res = update("Users", "typecompte = 1", "pseudo = '" + pseudo + "'");
+			}
+			else{
+				String query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + pseudo + "'@'%'";
+				stmt.executeUpdate(query);
+				res = update("Users", "typecompte = 2", "pseudo = '" + pseudo + "'");
+			}
+			if(res.equals("Modification effectué avec succée !")){
 				message = "Compte utilisateur modifié !";
 			}
 			else{
@@ -256,5 +256,21 @@ public class Base  {
 
 	public void setTypeCompte(String typeCompte) {
 		this.typeCompte = typeCompte;
+	}
+	
+	public String getMdp() {
+		return mdp;
+	}
+
+	public void setMdp(String mdp) {
+		this.mdp = mdp;
+	}
+	
+	public String getPseudo() {
+		return pseudo;
+	}
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
 	}
 }
