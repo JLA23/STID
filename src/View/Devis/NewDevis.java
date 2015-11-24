@@ -1,10 +1,18 @@
 package View.Devis;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -15,58 +23,52 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import com.toedter.calendar.JDateChooser;
 import BDD.Base;
 import Controller.Donnees;
 import View.Calculatrice.Calculatrice;
 import View.Clients.SearchClient;
 import View.Options.ClickDroit;
-
+import fr.julien.autocomplete.model.AutoCompleteModel;
+import fr.julien.autocomplete.view.AutoComplete;
 
 public class NewDevis extends JFrame{
 	
-    private JButton jButton1, valider, fermer, jButton2, jButton3, jButton4, jButton5, calcul6, jButton7, jButton8, nouveau, search;
-    private JComboBox<String> numClient, devises;
-    private JLabel jLabel1, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, dateLabel, euro5;
-    private JLabel hrs2;
-    private JLabel hrs3;
-    private JLabel totalHeures;
-    private JLabel commande;
-    private JLabel euro6;
-    private JLabel resteCommande;
-    private JLabel euro7;
-    private JLabel jLabel3;
-    private JLabel jLabel4;
-    private JLabel jLabel5;
-    private JLabel jLabel8;
-    private JLabel coutMO;
-    private JLabel totalDevisdevise;
-    private JLabel devise;
-    private JPanel jPanel1;
-    private JPanel jPanel2;
-    private JPanel jPanel3;
-    private JPanel JPanelTemps;
-    private JPanel jPanel6;
+    private JButton calcul1, valider, fermer, newClient, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7, nouveau, search;
+    private JComboBox<String> devises;
+    private JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, dateLabel, euro5;
+    private JLabel hrs2, hrs3, totalHeures, commande, euro6, resteCommande, euro7, deviselabel, libelle, numClientLabel, fournitures;
+    private JLabel coutMO, totalDevisdevise, devise;
+    private JPanel jPanel1, jPanel2, jPanel3, JPanelTemps, jPanel6;
     private JSeparator jSeparator1, jSeparator2;
-    private JFormattedTextField jTextFieldTotal, jTextField11, jTextField7, jTextField8, jTextField9, jTextField10, jPrevu, jTextField13, jTextField14, jCommande, jTextField16;
-    private JTextField jTextField1, jTextField4;
+    private JFormattedTextField jTotalDevisDevise, jHeureSite, jFournitures, jCout, jPrefabrication, jTotalDevis, jPrevu, jHeureAtelier, jTotalHeure, jCommande, jResteCommande, jNumDevis;
+    private JTextField jLibelle;
     private JDateChooser jDate;
+    private double valeurDevise;
+    private Donnees donnees;
+    private AutoComplete numClient;
+    private Base base;
 
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
 	
 	public NewDevis(Base bdd){
 		
-		Donnees donnees = new Donnees(bdd);
+		this.base= bdd;
+		NumberFormat num =  NumberFormat.getIntegerInstance();
+        NumberFormat nf = new DecimalFormat("#0.00");
+        nf.setGroupingUsed(false);
+		donnees = new Donnees(bdd);
 		int nbDevis = donnees.newNumDevis() + 1;
+        AutoCompleteModel model = new AutoCompleteModel();
+        model.addAll(donnees.listNumClient());
+        numClient = new AutoComplete(model);
 		
 		this.setTitle("Nouveau Devis");
 		screenSize.width = 800;
@@ -83,18 +85,18 @@ public class NewDevis extends JFrame{
 	    
 	    jDate = new JDateChooser();
 	    
-        jLabel1 = new JLabel("Numéro");
+        numero = new JLabel("Numéro");
 	    dateLabel = new JLabel("Date");
-        jLabel3 = new JLabel("Devise");
-        jLabel4 = new JLabel("Libellé");
-        jLabel5 = new JLabel("N° Client");
+        deviselabel = new JLabel("Devise");
+        libelle = new JLabel("Libellé");
+        numClientLabel = new JLabel("N° Client");
         hrsAtelier = new JLabel("Heures d'Atelier");
         hrsSite = new JLabel("Heures sur Site");
         hrs1 = new JLabel("Hrs");
         hrs2 = new JLabel("Hrs");
         hrs3 = new JLabel("Hrs");
         totalHeures = new JLabel("Total des Heures");
-        jLabel8 = new JLabel("Fournitures");
+        fournitures = new JLabel("Fournitures");
         coutMO = new JLabel("Coût MO");
         prefabrication = new JLabel("Préfabrication");
         euro1 = new JLabel("EUR");
@@ -111,83 +113,94 @@ public class NewDevis extends JFrame{
         totalDevisdevise = new JLabel("Total (Devise)");
 		devise = new JLabel();
         
-        jTextField1 = new JTextField();
-        jTextField1.setText(nbDevis + "");
-        jTextField4 = new JTextField();
-
-        NumberFormat nf = new DecimalFormat("#0.00");
-        nf.setGroupingUsed(false);
-        jTextField7 = new JFormattedTextField(nf);;
-        jTextField8 = new JFormattedTextField(nf);
-        jTextField9 = new JFormattedTextField(nf);
-        jTextField10 = new JFormattedTextField(nf);
-        jTextField11 = new JFormattedTextField(nf);
-        jTextField13 = new JFormattedTextField(nf);
-        jTextField14 = new JFormattedTextField(nf);
+        jNumDevis = new JFormattedTextField(num);
+        jNumDevis.setText(nbDevis + "");
+        jLibelle = new JTextField();
+        jFournitures = new JFormattedTextField(nf);;
+        jCout = new JFormattedTextField(nf);
+        jPrefabrication = new JFormattedTextField(nf);
+        jTotalDevis = new JFormattedTextField(nf);
+        jHeureSite = new JFormattedTextField(nf);
+        jHeureAtelier = new JFormattedTextField(nf);
+        jTotalHeure = new JFormattedTextField(nf);
         jPrevu = new JFormattedTextField(nf);
         jCommande = new JFormattedTextField(nf);
-        jTextField16 = new JFormattedTextField(nf);
+        jResteCommande = new JFormattedTextField(nf);
         
-        jTextField7.setText("0,00");
-        jTextField8.setText("0,00");
-        jTextField9.setText("0,00");
-        jTextField10.setText("0,00");
-        jTextField11.setText("0,00");
-        jTextField13.setText("0,00");
-        jTextField14.setText("0,00");
-        jTextField16.setText("0,00");
+        jFournitures.setText("0,00");
+        jCout.setText("0,00");
+        jPrefabrication.setText("0,00");
+        jTotalDevis.setText("0,00");
+        jHeureSite.setText("0,00");
+        jHeureAtelier.setText("0,00");
+        jTotalHeure.setText("0,00");
+        jResteCommande.setText("0,00");
         jPrevu.setText("0,00");
         jCommande.setText("0,00");
         
-		jTextFieldTotal = new JFormattedTextField(nf);
-        jTextFieldTotal.setText("0,00");
+		jTotalDevisDevise = new JFormattedTextField(nf);
+        jTotalDevisDevise.setText("0,00");
         
-        new ClickDroit(jTextField7, true, true);
-        new ClickDroit(jTextField8, true, true);
-        new ClickDroit(jTextField9, true, true);
-        new ClickDroit(jTextField10, true, false);
-        new ClickDroit(jTextField11, true, true);
-        new ClickDroit(jTextField13, true, true);
-        new ClickDroit(jTextField14, true, false);
-        new ClickDroit(jTextField16, true, false);
-        new ClickDroit(jTextFieldTotal, true, false);
+        new ClickDroit(jFournitures, true, true);
+        new ClickDroit(jCout, true, true);
+        new ClickDroit(jPrefabrication, true, true);
+        new ClickDroit(jTotalDevis, true, false);
+        new ClickDroit(jHeureSite, true, true);
+        new ClickDroit(jHeureAtelier, true, true);
+        new ClickDroit(jTotalHeure, true, false);
+        new ClickDroit(jResteCommande, true, false);
+        new ClickDroit(jTotalDevisDevise, true, false);
         new ClickDroit(jPrevu, true, true);
         new ClickDroit(jCommande, true, true);
         
-        jTextField10.setEditable(false);
-        jTextField14.setEditable(false);
-        jTextField16.setEditable(false);
-        jTextFieldTotal.setEditable(false);
+        jTotalDevis.setEditable(false);
+        jTotalHeure.setEditable(false);
+        jResteCommande.setEditable(false);
+        jTotalDevisDevise.setEditable(false);
         
-        numClient = new JComboBox<>();
         devises = new JComboBox<>();
         
-        jButton2 = new JButton("Crèer Client");
-        jButton5 = new JButton(icon);
-        jButton7 = new JButton(icon);
-        jButton1 = new JButton(icon);
-        jButton3 = new JButton(icon);
-        jButton4 = new JButton(icon);
+        newClient = new JButton("Crèer Client");
+        calcul4 = new JButton(icon);
         calcul6 = new JButton(icon);
-        jButton8 = new JButton(icon);
+        calcul1 = new JButton(icon);
+        calcul2 = new JButton(icon);
+        calcul3 = new JButton(icon);
+        calcul5 = new JButton(icon);
+        calcul7 = new JButton(icon);
         nouveau = new JButton("Nouveau");
         valider = new JButton("Valider");
         fermer = new JButton("Fermer");
         search = new JButton("Chercher Client");
         
+        valider.addActionListener(new ActionValider(this));
+        
         search.addActionListener(new ActionSearch(bdd, numClient, this));
         
-        jTextField7.getDocument().addDocumentListener(new EcouteKey(jTextField7));
-        jTextField8.getDocument().addDocumentListener(new EcouteKey(jTextField8));
+        jFournitures.addFocusListener(new FocusPosition(jFournitures, 1));
+        jCout.addFocusListener(new FocusPosition(jCout, 1));
+        jPrefabrication.addFocusListener(new FocusPosition(jPrefabrication, 1));
+        jHeureSite.addFocusListener(new FocusPosition(jHeureSite, 2));
+        jHeureAtelier.addFocusListener(new FocusPosition(jHeureAtelier, 2));
+        jPrevu.addFocusListener(new FocusPosition(jPrevu, 3));
+        jCommande.addFocusListener(new FocusPosition(jCommande, 3));
         
+        jFournitures.addKeyListener(new EcouteAction());
+        jCout.addKeyListener(new EcouteAction());
+        jPrefabrication.addKeyListener(new EcouteAction());
+        jHeureSite.addKeyListener(new EcouteAction());
+        jHeureAtelier.addKeyListener(new EcouteAction());
+        jPrevu.addKeyListener(new EcouteAction());
+        jCommande.addKeyListener(new EcouteAction());
+        jFournitures.addKeyListener(new EcouteAction());
         
-        jButton1.addActionListener(new ActionCalculatrice(jTextField7, this));
-        jButton3.addActionListener(new ActionCalculatrice(jTextField8, this));
-        jButton4.addActionListener(new ActionCalculatrice(jTextField9, this));
-        jButton5.addActionListener(new ActionCalculatrice(jTextField13, this));
-        calcul6.addActionListener(new ActionCalculatrice(jPrevu, this));
-        jButton7.addActionListener(new ActionCalculatrice(jTextField11, this));
-        jButton8.addActionListener(new ActionCalculatrice(jCommande, this));
+        calcul1.addActionListener(new ActionCalculatrice(jFournitures, this));
+        calcul2.addActionListener(new ActionCalculatrice(jCout, this));
+        calcul3.addActionListener(new ActionCalculatrice(jPrefabrication, this));
+        calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier, this));
+        calcul5.addActionListener(new ActionCalculatrice(jPrevu, this));
+        calcul6.addActionListener(new ActionCalculatrice(jHeureSite, this));
+        calcul7.addActionListener(new ActionCalculatrice(jCommande, this));
         
         jSeparator2 = new JSeparator();
         jSeparator1 = new JSeparator();
@@ -197,18 +210,19 @@ public class NewDevis extends JFrame{
         jDate.setDate(new Date());
   
         jPanel2.setBorder(BorderFactory.createEtchedBorder());
-        numClient.setModel(new DefaultComboBoxModel<>(new String[] { "1", "2", "3255666", "3255665" }));
-        devises.setModel(new DefaultComboBoxModel<>(new String[] { "EUR", "FR" }));
+        devises.setModel(new DefaultComboBoxModel<>(donnees.devises()));
+        valeurDevise = donnees.valeurDevise(devises.getSelectedItem().toString());
+        devises.addItemListener(new ItemChange(this));
         JPanelTemps.setBorder(BorderFactory.createTitledBorder("Temps"));
-        JPanelTemps.setPreferredSize(new java.awt.Dimension(350, 200));
+        JPanelTemps.setPreferredSize(new Dimension(350, 200));
 
-        jTextField14.setBackground(new java.awt.Color(204, 204, 204));
-        jTextField10.setBackground(new java.awt.Color(204, 204, 204));
-        jTextField16.setBackground(new java.awt.Color(204, 204, 204));
-        jTextFieldTotal.setBackground(new java.awt.Color(204, 204, 204));
+        jTotalHeure.setBackground(new Color(204, 204, 204));
+        jTotalDevis.setBackground(new Color(204, 204, 204));
+        jResteCommande.setBackground(new Color(204, 204, 204));
+        jTotalDevisDevise.setBackground(new Color(204, 204, 204));
         
         jPanel6.setBorder(BorderFactory.createTitledBorder("Montants"));
-        jPanel6.setPreferredSize(new java.awt.Dimension(350, 200));
+        jPanel6.setPreferredSize(new Dimension(350, 200));
         jPanel3.setBorder(BorderFactory.createTitledBorder("Achat Matières"));
         
         devise.setText(devises.getSelectedItem().toString());
@@ -218,15 +232,15 @@ public class NewDevis extends JFrame{
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(numero)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                .addGap(202, 202, 202)
+                .addComponent(jNumDevis, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+                .addGap(162, 162, 162)
                 .addComponent(dateLabel)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDate, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+                .addComponent(deviselabel)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(devises, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -234,12 +248,12 @@ public class NewDevis extends JFrame{
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(numero, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+                .addComponent(jNumDevis, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deviselabel, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
                     .addComponent(devises, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
         );
 
@@ -260,22 +274,22 @@ public class NewDevis extends JFrame{
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(JPanelTempsLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                     .addGroup(JPanelTempsLayout.createSequentialGroup()
-                                        .addComponent(jTextField11, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jHeureSite, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(hrs1))
                                     .addGroup(JPanelTempsLayout.createSequentialGroup()
-                                        .addComponent(jTextField13, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jHeureAtelier, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(hrs2)))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(JPanelTempsLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton7 , GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton5, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(calcul6 , GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(calcul4, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)))
                             .addGroup(JPanelTempsLayout.createSequentialGroup()
                             	.addGap(10, 10, 10)
                             	.addComponent(totalHeures)
                                 .addGap(16, 16, 16)
-                                .addComponent(jTextField14, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTotalHeure, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(hrs3)))
                         .addGap(0, 16, Short.MAX_VALUE)))
@@ -286,21 +300,21 @@ public class NewDevis extends JFrame{
             .addGroup(JPanelTempsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(JPanelTempsLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jHeureAtelier, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calcul4, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
                     .addComponent(hrsAtelier)
                     .addComponent(hrs2))
                 .addGap(44, 44, 44)
                 .addGroup(JPanelTempsLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jHeureSite, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calcul6, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
                     .addComponent(hrsSite)
                     .addComponent(hrs1))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(JPanelTempsLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTotalHeure, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(hrs3)
                     .addComponent(totalHeures))
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -316,35 +330,35 @@ public class NewDevis extends JFrame{
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8)
+                            .addComponent(fournitures)
                             .addComponent(coutMO)
                             .addComponent(prefabrication))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jTextField9, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPrefabrication, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(euro3))
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jTextField7, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jFournitures, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(euro1))
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jTextField8, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jCout, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(euro2)))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(calcul3, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(calcul1, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(calcul2, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 21, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(totalDevis)
                 .addGap(20, 20, 20)
-                .addComponent(jTextField10, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTotalDevis, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(euro4)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -352,7 +366,7 @@ public class NewDevis extends JFrame{
                     .addGap(15, 15, 15)
                     .addComponent(totalDevisdevise)
                     .addGap(20, 20, 20)
-                    .addComponent(jTextFieldTotal, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTotalDevisDevise, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                     .addGap(20, 20, 20)
                     .addComponent(devise)
                     .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -362,32 +376,32 @@ public class NewDevis extends JFrame{
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8)
+                    .addComponent(jFournitures, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calcul1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fournitures)
                     .addComponent(euro1))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCout, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calcul2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
                     .addComponent(coutMO)
                     .addComponent(euro2))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPrefabrication, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calcul3, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
                     .addComponent(prefabrication)
                     .addComponent(euro3))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTotalDevis, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(euro4)
                     .addComponent(totalDevis))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextFieldTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTotalDevisDevise, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(devise)
                         .addComponent(totalDevisdevise))));
 
@@ -403,7 +417,7 @@ public class NewDevis extends JFrame{
                         .addComponent(resteCommande)
                         //.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(15, 15, 15)
-                        .addComponent(jTextField16, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jResteCommande, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(euro7)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -412,25 +426,26 @@ public class NewDevis extends JFrame{
                     	.addComponent(prevu)
                         //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                     	.addGap(17, 17, 17)
-                        .addComponent(jPrevu, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPrevu, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         //.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED
                         .addComponent(euro5)
                         .addGap(10, 10, 10)
                       //  .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(calcul6, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(calcul5, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
                         .addGap(155, 155, 155)
                         .addComponent(commande)
                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
-                        .addComponent(jCommande, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCommande, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         //.addGap(20, 20, 20)
                         .addComponent(euro6)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-                        .addGap(73, 73, 73))
+                        .addComponent(calcul7, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)
+                        )
                         )));
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -438,16 +453,16 @@ public class NewDevis extends JFrame{
                 .addGap(20, 20, 20)
                 .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jPrevu, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calcul6, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calcul5, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
                     .addComponent(prevu)
                     .addComponent(euro5)
                     .addComponent(jCommande, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calcul7, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
                     .addComponent(commande)
                     .addComponent(euro6))
                 .addGap(20, 20, 20)
                 .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField16, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jResteCommande, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(euro7)
                     .addComponent(resteCommande))
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -463,7 +478,7 @@ public class NewDevis extends JFrame{
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                             /*.addComponent(service)*/
-                            .addComponent(jLabel5))
+                            .addComponent(numClientLabel))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -471,7 +486,7 @@ public class NewDevis extends JFrame{
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(search)
                                 .addGap(10, 10, 10)
-                                .addComponent(jButton2)
+                                .addComponent(newClient)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             /*.addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
@@ -481,10 +496,10 @@ public class NewDevis extends JFrame{
                                 .addComponent(jTextField6))*/))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(libelle, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGap(4, 4, 4)
-                        .addComponent(jTextField4)))
+                        .addComponent(jLibelle)))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
@@ -502,14 +517,14 @@ public class NewDevis extends JFrame{
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(jTextField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(libelle)
+                        .addComponent(jLibelle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(numClient, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addComponent(search).addComponent(jButton2))
+                        .addComponent(numClientLabel)
+                            .addComponent(numClient)                    
+                        .addComponent(search).addComponent(newClient)))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     /*.addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(service)
@@ -569,7 +584,6 @@ public class NewDevis extends JFrame{
 
         pack();
         this.setResizable(false);
-	    //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setVisible(true);
 	    this.setLocationRelativeTo(null);
 		}
@@ -591,70 +605,166 @@ public class NewDevis extends JFrame{
 	}
 	
 	private class ActionSearch implements ActionListener {
-		private JComboBox<String> casse;
 		private Base bdd;
 		private JFrame frame;
+		private AutoComplete auto;
 		
-		ActionSearch(Base bdd, JComboBox<String> j, JFrame fr){
-			this.casse = j;
+		ActionSearch(Base bdd, AutoComplete lo, JFrame fr){
 			this.bdd = bdd;
 			this.frame = fr;
+			this.auto = lo;
 
 		}
 		public void actionPerformed(ActionEvent e) {
-			new SearchClient(bdd, casse, frame, true).searchClientNum();
+			new SearchClient(bdd, auto, frame, true).searchClientNum();
 		}
 	}
 	
-	private void calculer(){
-		double calcule = Double.parseDouble((jTextField7.getText().toString().replaceAll(" ", "")).replaceAll(",", "\\."));
-		calcule = calcule + Double.parseDouble(jTextField8.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
-		calcule = calcule + Double.parseDouble(jTextField9.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
-		jTextField10.setText((calcule +"").replaceAll("\\.", ","));
+	private void calculerDevis(){
+		double calcule = Double.parseDouble(jFournitures.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = calcule + Double.parseDouble(jCout.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = calcule + Double.parseDouble(jPrefabrication.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = ((double)Math.round((calcule + 0.004) * 100) / 100);
+		jTotalDevis.setText((calcule +"").replaceAll("\\.", ","));
+		calcule = (Double)(calcule * valeurDevise);
+		jTotalDevisDevise.setText((calcule + "").replaceAll("\\.", ","));
 	}
 	
-	private void testContenu(JFormattedTextField jtext){
+	private void calculerHeures(){
+		double calcule = Double.parseDouble(jHeureSite.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = calcule + Double.parseDouble(jHeureAtelier.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = ((double)Math.round((calcule + 0.004) * 100) / 100);
+		jTotalHeure.setText((calcule +"").replaceAll("\\.", ","));
+	}
+	
+	private void calculerResteCommande(){
+		double calcule = Double.parseDouble(jPrevu.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = calcule - Double.parseDouble(jCommande.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
+		if(calcule < 0) {
+			JOptionPane.showMessageDialog(null, " Valeur de Prèvu < Valeur de Commandé", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			calcule = 0.00;
+		}
+		calcule = ((double)Math.round((calcule + 0.004) * 100) / 100);
+		jResteCommande.setText((calcule +"").replaceAll("\\.", ","));
+	}
+	
+	private void testContenu(JFormattedTextField jtext, int methode){
 		if(jtext.getText().toString().isEmpty() || jtext.getText().toString().equals("")){
 			jtext.setText("0,00");
-			calculer();
 		}
-		/*else if(!jtext.getText().toString().isEmpty()){
-			jtext.setText(",00");
-			calculer();
-		}*/
+		else if(!jtext.getText().contains(",")){
+			jtext.setText(jtext.getText()+",00");
+		}
+		if(methode == 1){
+			calculerDevis();
+		}
+		else if(methode == 2){
+			calculerHeures();
+		}
+		else if(methode == 3){
+			calculerResteCommande();
+		}
 		
 	}
 	
-	private class EcouteKey implements DocumentListener{
+	private class FocusPosition implements FocusListener{
 		private JFormattedTextField jtext;
-		EcouteKey(JFormattedTextField j){
+		private int met;
+		FocusPosition(JFormattedTextField j, int methode){
 			this.jtext = j;
+			this.met = methode;
 		}
 
 		@Override
-		public void insertUpdate(DocumentEvent arg0) {
-			/*SwingUtilities.invokeLater(new Runnable(){
-		    	   public void run(){testContenu(jtext);}
-			 });*/
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent arg0) {
-			SwingUtilities.invokeLater(new Runnable(){
-		    	   public void run(){testContenu(jtext);}
-			 });
+		public void focusGained(FocusEvent arg0) {
 			
 		}
 
 		@Override
-		public void removeUpdate(DocumentEvent arg0) {
+		public void focusLost(FocusEvent arg0) {
 			SwingUtilities.invokeLater(new Runnable(){
-		    	   public void run(){testContenu(jtext);}
-			 });
-			
+		    	   public void run(){testContenu(jtext, met);}
+			 });	
 		}
-   	
 	}
+	
+	private class EcouteAction implements KeyListener{
+		EcouteAction(){
+		}
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+	
+			
+		}
+		@Override
+		public void keyTyped(KeyEvent e) {
+			if(e.getKeyChar() == '.'){
+				e.setKeyChar(',');
+				System.out.println(e.getKeyChar());
+			}
+			
+		}
+			
+	}
+	
+	private class ItemChange implements ItemListener{
+
+		private JFrame dialog;
+	
+		ItemChange(JFrame dialog){
+			this.dialog = dialog;
+		}
+
+		@Override
+		public void itemStateChanged(ItemEvent arg0) {
+			valeurDevise = donnees.valeurDevise(devises.getSelectedItem().toString());
+			devise.setText(devises.getSelectedItem().toString());
+			dialog.repaint();
+			calculerDevis();
+			
+		}
+	
+			
+	}
+	
+    private	class ActionValider implements ActionListener {
+    		
+    		private JFrame fenetre;
+    	
+    		public ActionValider(JFrame frame){
+    			this.fenetre = frame;
+    		}
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(!donnees.existNumDevis(jNumDevis.getText())){
+				if(donnees.existClient(numClient.getText())){
+					System.out.println(base.insert("Devis", "'"  + jNumDevis.getText() + "', '" + new SimpleDateFormat("dd/MM/yy").format(jDate.getDate()) + "', '" + jLibelle.getText()
+					+  "', " + jFournitures.getText().replaceAll(",", "\\.")
+					+ ", " + jCout.getText().replaceAll(",", "\\.")
+					+ ", " + jHeureAtelier.getText().replaceAll(",", "\\.")
+					+ ", " + jHeureSite.getText().replaceAll(",", "\\.")
+					+ ", " + jPrefabrication.getText().replaceAll(",", "\\.")
+					+ ", " + jPrevu.getText().replaceAll(",", "\\.")
+					+ ", " + jCommande.getText().replaceAll(",", "\\.")));
+					String codeDevise = donnees.codeDevise(devises.getSelectedItem().toString());
+					System.out.println(base.insert("commandesdevisfacture", jNumDevis.getText() + ", null, null, null, " + codeDevise + ", " + numClient.getText()));
+					JOptionPane.showMessageDialog(null, "Devis validé !");
+					fenetre.dispose();
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Numèro de Client inconnu", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Numèro de Devis existant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			}	
+		}
+    }
+	
 }
 
 

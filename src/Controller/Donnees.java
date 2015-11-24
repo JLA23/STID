@@ -2,6 +2,7 @@ package Controller;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import BDD.Base;
 
@@ -15,6 +16,40 @@ public class Donnees {
 	
 	public boolean existPseudo(String pseudo){
 		ResultSet rs = base.Select("pseudo", "users", "pseudo = '" + pseudo + "'");
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while(rs.next()){
+				i ++;
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if(i != 0){
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public boolean existClient(String numero){
+		ResultSet rs = base.Select("NumClient", "Clients", "NumClient = " + numero);
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while(rs.next()){
+				i ++;
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if(i != 0){
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public boolean existNumDevis(String num){
+		ResultSet rs = base.Select("numDevis", "Devis", "numDevis = " + num);
 		boolean resultat = false;
 		int i = 0;
 		try {
@@ -63,6 +98,66 @@ public class Donnees {
 		}
 		return list;
 		 
+	}
+	
+	public String [] devises(){
+		ResultSet rs = base.Select("Symbole", "Devises", null);
+		String [] resultat = null;
+		try {
+			rs.last();
+			int nombreLignes = rs.getRow(); 
+			rs.beforeFirst();
+			if(nombreLignes > 0){
+				resultat = new String [nombreLignes];
+				int i = 0;
+				while(rs.next() && i < nombreLignes){
+					resultat[i] = rs.getString(1);
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			resultat = new String [] {e.getMessage()};
+		} 
+		return resultat;
+	}
+	
+	public ArrayList<String> listNumClient(){
+		ResultSet rs = base.Select("NumCLient", "Clients", null);
+		ArrayList<String> resultat = null;
+		try {
+				resultat = new ArrayList<String>();
+				while(rs.next()){
+					resultat.add(rs.getString(1));
+				}
+		} catch (SQLException e) {
+		} 
+		return resultat;
+	}
+	
+	public double valeurDevise(String symbole){
+		ResultSet rs = base.Select("Valeur", "Devises", "symbole = '" + symbole + "'");
+		double res = -1;
+		try {
+			while(rs.next()){
+				res = rs.getDouble(1);
+			}
+		} catch (SQLException e) {
+			res = -1;
+		} 
+		return res;
+	}
+	
+	public String codeDevise(String symbole){
+		ResultSet rs = base.Select("CodeDevise", "Devises", "symbole = '" + symbole + "'");
+		String resultat = null;
+		try {
+			while(rs.next()){
+				resultat = rs.getString(1);
+			}
+		} catch (SQLException e) {
+			resultat = e.getMessage();
+		} 
+		return resultat;
 	}
 
 }
