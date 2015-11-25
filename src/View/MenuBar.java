@@ -25,7 +25,7 @@ import View.Bar.AddTermes;
 		 */
 		public MenuBar(JFrame frame, Base bdd, String typeCompte) {
 			this.add(new AddSTID(bdd, frame).getMenu());
-			this.add(new AddDevis(bdd, typeCompte).getMenu());
+			this.add(new AddDevis(bdd, typeCompte, frame).getMenu());
 			this.add(new AddCommandes(bdd, typeCompte).getMenu());
 			this.add(new AddClients(bdd, typeCompte).getMenu());
 			this.add(new AddTermes(bdd, typeCompte).getMenu());

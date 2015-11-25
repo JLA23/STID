@@ -1,4 +1,4 @@
-package View.Clients;
+package View.Devis;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,29 +20,25 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import BDD.Base;
 import Controller.Donnees;
-import fr.julien.autocomplete.view.AutoComplete;
 
-public class SearchClient extends JDialog {
+
+public class SearchDevisList extends JDialog {
 	
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension(500, 500);
 	protected Base bdd;
-	protected AutoComplete auto;
-	protected JFrame fenetre;
 	
-	public SearchClient(Base bdd, AutoComplete auto, JFrame frame, boolean modale){
+	public SearchDevisList(Base bdd, JFrame frame, boolean modale){
 		super(frame, null, modale);
 		this.bdd = bdd;
-		this.auto = auto;
-		this.fenetre = frame;
 	}
 	
 	@SuppressWarnings("serial")
-	public void searchClientNum(){
+	public void searchDevisNum(){
 		Donnees donnees = new Donnees(bdd);
-		Object[][] data = donnees.listeClient();
+		Object[][] data = donnees.listeDevis();
 		this.setPreferredSize(screenSize);
-		this.setTitle("STID Gestion 2.0 (Chercher Client)");
+		this.setTitle("STID Gestion 2.0 (Chercher Devis)");
 		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
         JPanel layerPanel = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
@@ -49,7 +47,7 @@ public class SearchClient extends JDialog {
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0; c.gridy = 0;
 
-        String[] columns = { "Numèro Client", "Nom", "Adresse" };
+        String[] columns = { "Numèro Devis", "Numèro CLient", "Libelle" };
 
         // Construct our table to hold our list of layers
         JTable layerTable = new JTable(data, columns){
@@ -98,8 +96,13 @@ public class SearchClient extends JDialog {
 				int ligne = tables.getSelectedRow();
 				if(ligne != -1){
 					String numero = datas[ligne][0].toString();
-					auto.setText(numero);
 					dialog.dispose();
+					try {
+						new ModifDevis(bdd,numero);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				else{
 					JOptionPane.showMessageDialog(null, "Aucune ligne de sélectionné", "ATTENTION", JOptionPane.WARNING_MESSAGE);

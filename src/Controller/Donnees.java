@@ -1,6 +1,7 @@
 package Controller;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -100,6 +101,28 @@ public class Donnees {
 		 
 	}
 	
+	public Object[][] listeDevis(){
+		ResultSet rs = base.Select("d.numDevis, cdf.numClient, d.lblDevis", "Devis as d, CommandesDevisFacture as cdf", "d.numDevis = cdf.numDevis");
+		Object[][] list = null;
+		try {
+			rs.last(); 
+			int nombreLignes = rs.getRow(); 
+			rs.beforeFirst(); 
+			list = new Object[nombreLignes][3];
+			int i = 0;
+			while(rs.next() && i < nombreLignes){
+				list[i][0] = rs.getString(1);
+				list[i][1] = rs.getString(2);
+				list[i][2] = rs.getString(3);
+				i ++;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return list;
+		 
+	}
+	
 	public String [] devises(){
 		ResultSet rs = base.Select("Symbole", "Devises", null);
 		String [] resultat = null;
@@ -157,6 +180,32 @@ public class Donnees {
 		} catch (SQLException e) {
 			resultat = e.getMessage();
 		} 
+		return resultat;
+	}
+	
+	public String [] devis(String numDevis){
+		String [] resultat;
+		ResultSet rs = base.Select("*", "Devis", "numDevis = " + numDevis);
+		
+		try {
+			ResultSetMetaData metadata = rs.getMetaData();
+			int nombreColonnes = metadata.getColumnCount();
+			resultat = new String [nombreColonnes+2];
+			while(rs.next()){
+				for(int i = 0; i< resultat.length-2; i++){
+					resultat[i] = rs.getString(i+1);
+				}
+			}
+			rs.close();
+			ResultSet rs2 = base.Select("numclient ,symbole", "CommandesDevisFacture as cdf, Devises as d", "d.CodeDevise = cdf.CodeDevise AND numDevis = " + numDevis);
+			while(rs2.next()){
+				resultat[resultat.length-2] = rs2.getString(1);
+				resultat[resultat.length-1] = rs2.getString(2);
+			}
+		} catch (SQLException e) {
+			resultat = new String[] {e.getMessage()};
+			System.out.println(e.getMessage());
+		}
 		return resultat;
 	}
 

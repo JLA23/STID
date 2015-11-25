@@ -4,19 +4,23 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import BDD.Base;
 import View.Devis.NewDevis;
+import View.Devis.SearchDevis;
 
 public class AddDevis{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
 	private Base bdd;
+	private JFrame fenetre;
 	
-	public AddDevis(Base base, String typeCompte){
+	public AddDevis(Base base, String typeCompte , JFrame frame){
 		this.bdd = base;
+		this.fenetre = frame;
 		menu = new JMenu("Devis");
 		menu.getAccessibleContext().setAccessibleDescription("Devis");
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/bouton-devis.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
@@ -39,7 +43,7 @@ public class AddDevis{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//new ModifDevis();
+					new SearchDevis(bdd, fenetre, true);
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Modifie un devis existant");

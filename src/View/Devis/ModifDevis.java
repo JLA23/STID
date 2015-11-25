@@ -12,8 +12,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -38,7 +40,7 @@ import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
 import fr.julien.autocomplete.view.AutoComplete;
 
-public class NewDevis extends JFrame{
+public class ModifDevis extends JFrame{
 	
     private JButton calcul1, valider, fermer, newClient, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7, nouveau, search;
     private JComboBox<String> devises;
@@ -58,23 +60,30 @@ public class NewDevis extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
 	
-	public NewDevis(Base bdd){
+	public ModifDevis(Base bdd, String numd) throws ParseException{
 		
 		this.base= bdd;
+		donnees = new Donnees(base);
+		String [] res = donnees.devis(numd);
+		System.out.println(res.length);
+		
 		NumberFormat num =  NumberFormat.getIntegerInstance();
         NumberFormat nf = new DecimalFormat("#0.00");
         nf.setGroupingUsed(false);
-		donnees = new Donnees(bdd);
-		int nbDevis = donnees.newNumDevis() + 1;
         AutoCompleteModel model = new AutoCompleteModel();
         model.addAll(donnees.listNumClient());
         numClient = new AutoComplete(model);
 		
-		this.setTitle("STID Gestion 2.0 (Nouveau Devis)");
+		this.setTitle("STID Gestion 2.0 (Modifier Devis)");
 		screenSize.width = 800;
 		screenSize.height = 600;
 		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setPreferredSize(screenSize);
+	    
+	    devises = new JComboBox<>();
+        devises.setModel(new DefaultComboBoxModel<>(donnees.devises()));
+        devises.setSelectedItem(res[11]);
+        valeurDevise = donnees.valeurDevise(devises.getSelectedItem().toString());
 		
 	    ImageIcon icon = new ImageIcon("lib/images/1447428838_calculate_16x16.gif");
 	    jPanel1 = new JPanel();
@@ -114,32 +123,32 @@ public class NewDevis extends JFrame{
 		devise = new JLabel();
         
         jNumDevis = new JFormattedTextField(num);
-        jNumDevis.setText(nbDevis + "");
-        jLibelle = new JTextField();
-        jFournitures = new JFormattedTextField(nf);;
+        jNumDevis.setText(res[0]);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		jDate.setDate(simpleDateFormat.parse(res[1]));
+        jLibelle = new JTextField(res[2]);
+        jFournitures = new JFormattedTextField(nf);
+        jFournitures.setText(res[3].replaceAll("\\.", ","));
         jCout = new JFormattedTextField(nf);
+        jCout.setText(res[4].replaceAll("\\.", ","));
         jPrefabrication = new JFormattedTextField(nf);
+        jPrefabrication.setText(res[7].replaceAll("\\.", ","));
         jTotalDevis = new JFormattedTextField(nf);
+  
         jHeureSite = new JFormattedTextField(nf);
+        jHeureSite.setText(res[5].replaceAll("\\.", ","));
         jHeureAtelier = new JFormattedTextField(nf);
+        jHeureAtelier.setText(res[6].replaceAll("\\.", ","));
+        
         jTotalHeure = new JFormattedTextField(nf);
         jPrevu = new JFormattedTextField(nf);
+        jPrevu.setText(res[8].replaceAll("\\.", ","));
         jCommande = new JFormattedTextField(nf);
+        jCommande.setText(res[9].replaceAll("\\.", ","));
         jResteCommande = new JFormattedTextField(nf);
-        
-        jFournitures.setText("0,00");
-        jCout.setText("0,00");
-        jPrefabrication.setText("0,00");
-        jTotalDevis.setText("0,00");
-        jHeureSite.setText("0,00");
-        jHeureAtelier.setText("0,00");
-        jTotalHeure.setText("0,00");
-        jResteCommande.setText("0,00");
-        jPrevu.setText("0,00");
-        jCommande.setText("0,00");
-        
 		jTotalDevisDevise = new JFormattedTextField(nf);
-        jTotalDevisDevise.setText("0,00");
+		
+		numClient.setText(res[10]);
         
         new ClickDroit(jFournitures, true, true);
         new ClickDroit(jCout, true, true);
@@ -153,12 +162,13 @@ public class NewDevis extends JFrame{
         new ClickDroit(jPrevu, true, true);
         new ClickDroit(jCommande, true, true);
         
+        jNumDevis.setEditable(false);
         jTotalDevis.setEditable(false);
         jTotalHeure.setEditable(false);
         jResteCommande.setEditable(false);
         jTotalDevisDevise.setEditable(false);
         
-        devises = new JComboBox<>();
+        
         
         newClient = new JButton("Crèer Client");
         calcul4 = new JButton(icon);
@@ -175,7 +185,7 @@ public class NewDevis extends JFrame{
         
         valider.addActionListener(new ActionValider(this));
         
-        search.addActionListener(new ActionSearch(bdd, numClient, this));
+        search.addActionListener(new ActionSearch(base, numClient, this));
         
         jFournitures.addFocusListener(new FocusPosition(jFournitures, 1));
         jCout.addFocusListener(new FocusPosition(jCout, 1));
@@ -210,8 +220,7 @@ public class NewDevis extends JFrame{
         jDate.setDate(new Date());
   
         jPanel2.setBorder(BorderFactory.createEtchedBorder());
-        devises.setModel(new DefaultComboBoxModel<>(donnees.devises()));
-        valeurDevise = donnees.valeurDevise(devises.getSelectedItem().toString());
+
         devises.addItemListener(new ItemChange(this));
         JPanelTemps.setBorder(BorderFactory.createTitledBorder("Temps"));
         JPanelTemps.setPreferredSize(new Dimension(350, 200));
@@ -226,7 +235,10 @@ public class NewDevis extends JFrame{
         jPanel3.setBorder(BorderFactory.createTitledBorder("Achat Matières"));
         
         devise.setText(devises.getSelectedItem().toString());
-
+        calculerDevis();
+        calculerHeures();
+        calculerResteCommande();
+        
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -667,6 +679,7 @@ public class NewDevis extends JFrame{
 			this.jtext = j;
 			this.met = methode;
 		}
+
 		@Override
 		public void focusGained(FocusEvent arg0) {
 		}
@@ -684,8 +697,11 @@ public class NewDevis extends JFrame{
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 		}
+		
 		@Override
-		public void keyReleased(KeyEvent e) {	
+		public void keyReleased(KeyEvent e) {
+	
+			
 		}
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -693,7 +709,9 @@ public class NewDevis extends JFrame{
 				e.setKeyChar(',');
 				System.out.println(e.getKeyChar());
 			}
+			
 		}
+			
 	}
 	
 	private class ItemChange implements ItemListener{
@@ -727,7 +745,7 @@ public class NewDevis extends JFrame{
 		public void actionPerformed(ActionEvent arg0) {
 			if(!donnees.existNumDevis(jNumDevis.getText())){
 				if(donnees.existClient(numClient.getText())){
-					System.out.println(base.insert("Devis", "'"  + jNumDevis.getText() + "', '" + new SimpleDateFormat("yyyy/MM/dd").format(jDate.getDate()) + "', '" + jLibelle.getText()
+					System.out.println(base.insert("Devis", "'"  + jNumDevis.getText() + "', '" + new SimpleDateFormat("dd/MM/yy").format(jDate.getDate()) + "', '" + jLibelle.getText()
 					+  "', " + jFournitures.getText().replaceAll(",", "\\.")
 					+ ", " + jCout.getText().replaceAll(",", "\\.")
 					+ ", " + jHeureAtelier.getText().replaceAll(",", "\\.")
@@ -751,5 +769,6 @@ public class NewDevis extends JFrame{
     }
 	
 }
+
 
 
