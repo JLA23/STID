@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import BDD.Base;
 
@@ -102,7 +103,7 @@ public class Donnees {
 	}
 	
 	public Object[][] listeDevis(){
-		ResultSet rs = base.Select("d.numDevis, cdf.numClient, d.lblDevis", "Devis as d, CommandesDevisFacture as cdf", "d.numDevis = cdf.numDevis");
+		ResultSet rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d", null);
 		Object[][] list = null;
 		try {
 			rs.last(); 
@@ -123,23 +124,22 @@ public class Donnees {
 		 
 	}
 	
-	public String [] devises(){
-		ResultSet rs = base.Select("Symbole", "Devises", null);
-		String [] resultat = null;
+	public HashMap<String, String[]> devises(){
+		ResultSet rs = base.Select("*", "Devises", null);
+		HashMap<String, String[]> resultat = null;
 		try {
-			rs.last();
-			int nombreLignes = rs.getRow(); 
-			rs.beforeFirst();
-			if(nombreLignes > 0){
-				resultat = new String [nombreLignes];
-				int i = 0;
-				while(rs.next() && i < nombreLignes){
-					resultat[i] = rs.getString(1);
-					i++;
-				}
+			resultat = new HashMap<String, String[]>();
+			while(rs.next()){
+				String cle = rs.getString(3);
+				String [] valeur = new String[3];
+				valeur[0] = rs.getString(1);
+				valeur[1] = rs.getString(2);
+				valeur[2] = rs.getString(4);
+				resultat.put(cle, valeur);
 			}
 		} catch (SQLException e) {
-			resultat = new String [] {e.getMessage()};
+			resultat = new HashMap<String, String[]>();
+			resultat.put("Error", new String [] {e.getMessage()});
 		} 
 		return resultat;
 	}
@@ -197,11 +197,6 @@ public class Donnees {
 				}
 			}
 			rs.close();
-			ResultSet rs2 = base.Select("numclient ,symbole", "CommandesDevisFacture as cdf, Devises as d", "d.CodeDevise = cdf.CodeDevise AND numDevis = " + numDevis);
-			while(rs2.next()){
-				resultat[resultat.length-2] = rs2.getString(1);
-				resultat[resultat.length-1] = rs2.getString(2);
-			}
 		} catch (SQLException e) {
 			resultat = new String[] {e.getMessage()};
 			System.out.println(e.getMessage());

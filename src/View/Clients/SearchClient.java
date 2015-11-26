@@ -36,9 +36,15 @@ public class SearchClient extends JDialog {
 	}
 	
 	@SuppressWarnings("serial")
-	public void searchClientNum(){
+	public void searchClientNum(Object [][] data){
 		Donnees donnees = new Donnees(bdd);
-		Object[][] data = donnees.listeClient();
+		Object[][] datas;
+		if(data == null) {
+			datas = donnees.listeClient();
+		}
+		else {
+			datas = data;
+		}
 		this.setPreferredSize(screenSize);
 		this.setTitle("STID Gestion 2.0 (Chercher Client)");
 		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
@@ -52,7 +58,7 @@ public class SearchClient extends JDialog {
         String[] columns = { "Numèro Client", "Nom", "Adresse" };
 
         // Construct our table to hold our list of layers
-        JTable layerTable = new JTable(data, columns){
+        JTable layerTable = new JTable(datas, columns){
         	public boolean isCellEditable(int row, int col) {
         		return false;
         	}
@@ -66,7 +72,7 @@ public class SearchClient extends JDialog {
         JButton annuler = new JButton("Annuler");
         layerPanel.add(valider, BorderLayout.SOUTH);
         layerPanel.add(annuler, BorderLayout.SOUTH);
-        valider.addActionListener(new SelectionAction(this, layerTable, data));
+        valider.addActionListener(new SelectionAction(this, layerTable, datas));
         this.add(layerPanel);
         this.pack();
 	    this.setResizable(false);
@@ -85,19 +91,19 @@ public class SearchClient extends JDialog {
 	private class SelectionAction implements ActionListener {
 		private JDialog dialog;
 		private JTable tables;
-		private Object[][] datas;
+		private Object[][] datass;
 		
-		SelectionAction(JDialog dialog, JTable table, Object [][] datas){
+		SelectionAction(JDialog dialog, JTable table, Object [][] datass){
 			this.dialog = dialog;
 			this.tables = table;
-			this.datas = datas;
+			this.datass = datass;
 		}
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getActionCommand().equals("Valider")) {
 				int ligne = tables.getSelectedRow();
 				if(ligne != -1){
-					String numero = datas[ligne][0].toString();
+					String numero = datass[ligne][0].toString();
 					auto.setText(numero);
 					dialog.dispose();
 				}

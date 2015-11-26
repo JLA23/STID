@@ -13,9 +13,11 @@ import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,7 +46,7 @@ public class NewDevis extends JFrame{
     private JComboBox<String> devises;
     private JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, dateLabel, euro5;
     private JLabel hrs2, hrs3, totalHeures, commande, euro6, resteCommande, euro7, deviselabel, libelle, numClientLabel, fournitures;
-    private JLabel coutMO, totalDevisdevise, devise;
+    private JLabel coutMO, totalDevisdevise, devise, nameClient;
     private JPanel jPanel1, jPanel2, jPanel3, JPanelTemps, jPanel6;
     private JSeparator jSeparator1, jSeparator2;
     private JFormattedTextField jTotalDevisDevise, jHeureSite, jFournitures, jCout, jPrefabrication, jTotalDevis, jPrevu, jHeureAtelier, jTotalHeure, jCommande, jResteCommande, jNumDevis;
@@ -54,6 +56,8 @@ public class NewDevis extends JFrame{
     private Donnees donnees;
     private AutoComplete numClient;
     private Base base;
+    private HashMap <String, String []> valeurDevises;
+    private Object [][] listClient;
 
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
@@ -67,7 +71,7 @@ public class NewDevis extends JFrame{
 		donnees = new Donnees(bdd);
 		int nbDevis = donnees.newNumDevis() + 1;
         AutoCompleteModel model = new AutoCompleteModel();
-        model.addAll(donnees.listNumClient());
+        model.addAll(listClient());
         numClient = new AutoComplete(model);
 		
 		this.setTitle("STID Gestion 2.0 (Nouveau Devis)");
@@ -112,6 +116,7 @@ public class NewDevis extends JFrame{
         resteCommande = new JLabel("Reste à commander");
         totalDevisdevise = new JLabel("Total (Devise)");
 		devise = new JLabel();
+		nameClient = new JLabel ("Client : ");
         
         jNumDevis = new JFormattedTextField(num);
         jNumDevis.setText(nbDevis + "");
@@ -177,6 +182,8 @@ public class NewDevis extends JFrame{
         
         search.addActionListener(new ActionSearch(bdd, numClient, this));
         
+        numClient.getZoneTexte().addFocusListener(new FocusClient(this));
+        
         jFournitures.addFocusListener(new FocusPosition(jFournitures, 1));
         jCout.addFocusListener(new FocusPosition(jCout, 1));
         jPrefabrication.addFocusListener(new FocusPosition(jPrefabrication, 1));
@@ -210,8 +217,8 @@ public class NewDevis extends JFrame{
         jDate.setDate(new Date());
   
         jPanel2.setBorder(BorderFactory.createEtchedBorder());
-        devises.setModel(new DefaultComboBoxModel<>(donnees.devises()));
-        valeurDevise = donnees.valeurDevise(devises.getSelectedItem().toString());
+        InsertDevises();
+        valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
         devises.addItemListener(new ItemChange(this));
         JPanelTemps.setBorder(BorderFactory.createTitledBorder("Temps"));
         JPanelTemps.setPreferredSize(new Dimension(350, 200));
@@ -487,6 +494,8 @@ public class NewDevis extends JFrame{
                                 .addComponent(search)
                                 .addGap(10, 10, 10)
                                 .addComponent(newClient)
+                                .addGap(30, 30, 30)
+                                .addComponent(nameClient)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             /*.addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
@@ -524,7 +533,7 @@ public class NewDevis extends JFrame{
                         .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(numClientLabel)
                             .addComponent(numClient)                    
-                        .addComponent(search).addComponent(newClient)))
+                        .addComponent(search).addComponent(newClient).addComponent(nameClient)))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     /*.addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(service)
@@ -610,35 +619,49 @@ public class NewDevis extends JFrame{
 			this.frame = fr;
 		}
 		public void actionPerformed(ActionEvent e) {
-			new SearchClient(base, numClient, frame, true).searchClientNum();
+			new SearchClient(base, numClient, frame, true).searchClientNum(listClient);
 		}
 	}
+	
+    private void InsertDevises(){
+    	valeurDevises = donnees.devises();
+    	for (HashMap.Entry<String, String []> entry : valeurDevises.entrySet())
+    	{
+    	   devises.addItem(entry.getKey());
+    	}
+    	devises.setSelectedItem("EUR");
+    }
+    
+    private ArrayList<String> listClient(){
+    	listClient = donnees.listeClient();
+    	ArrayList<String> res = new ArrayList<String>();
+    	for(int i = 0; i< listClient.length; i ++){
+    		res.add(listClient[i][0].toString());
+    	}
+    	return res;
+    }
 	
 	private void calculerDevis(){
 		double calcule = Double.parseDouble(jFournitures.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
 		calcule = calcule + Double.parseDouble(jCout.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
 		calcule = calcule + Double.parseDouble(jPrefabrication.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
-		calcule = ((double)Math.round((calcule + 0.004) * 100) / 100);
+		calcule = Math.round((calcule) * Math.pow(10,2)) / Math.pow(10,2);
 		jTotalDevis.setText((calcule +"").replaceAll("\\.", ","));
-		calcule = (Double)(calcule * valeurDevise);
+		calcule =  Math.round((calcule*valeurDevise) * Math.pow(10,2)) / Math.pow(10,2);
 		jTotalDevisDevise.setText((calcule + "").replaceAll("\\.", ","));
 	}
 	
 	private void calculerHeures(){
 		double calcule = Double.parseDouble(jHeureSite.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
 		calcule = calcule + Double.parseDouble(jHeureAtelier.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
-		calcule = ((double)Math.round((calcule + 0.004) * 100) / 100);
+		calcule = Math.round((calcule) * Math.pow(10,2)) / Math.pow(10,2);
 		jTotalHeure.setText((calcule +"").replaceAll("\\.", ","));
 	}
 	
 	private void calculerResteCommande(){
 		double calcule = Double.parseDouble(jPrevu.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
 		calcule = calcule - Double.parseDouble(jCommande.getText().toString().replaceAll(",", "\\.").replaceAll(" ", ""));
-		if(calcule < 0) {
-			JOptionPane.showMessageDialog(null, " Valeur de Prèvu < Valeur de Commandé", "ATTENTION", JOptionPane.WARNING_MESSAGE);
-			calcule = 0.00;
-		}
-		calcule = ((double)Math.round((calcule + 0.004) * 100) / 100);
+		calcule =  Math.round((calcule) * Math.pow(10,2)) / Math.pow(10,2);
 		jResteCommande.setText((calcule +"").replaceAll("\\.", ","));
 	}
 	
@@ -678,6 +701,35 @@ public class NewDevis extends JFrame{
 		}
 	}
 	
+	private class FocusClient implements FocusListener{
+		
+		JFrame fenetre;
+		
+		FocusClient(JFrame frame){
+			this.fenetre = frame;
+		}
+
+		@Override
+		public void focusGained(FocusEvent arg0) {
+		}
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			int i = 0;
+			while(!listClient[i][0].toString().equals(numClient.getText()) && i < listClient.length){
+				i++;
+			}
+			if(i < listClient.length){
+				nameClient.setText("Client : " + listClient[i][1]);
+			}
+			else{
+				nameClient.setText("Error");
+			}
+			fenetre.repaint();
+			
+		}
+		
+	}
+	
 	private class EcouteAction implements KeyListener{
 		EcouteAction(){
 		}
@@ -706,14 +758,12 @@ public class NewDevis extends JFrame{
 
 		@Override
 		public void itemStateChanged(ItemEvent arg0) {
-			valeurDevise = donnees.valeurDevise(devises.getSelectedItem().toString());
+			valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
 			devise.setText(devises.getSelectedItem().toString());
 			fenetre.repaint();
 			calculerDevis();
 			
 		}
-	
-			
 	}
 	
     private	class ActionValider implements ActionListener {
@@ -726,26 +776,27 @@ public class NewDevis extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(!donnees.existNumDevis(jNumDevis.getText())){
-				if(donnees.existClient(numClient.getText())){
-					System.out.println(base.insert("Devis", "'"  + jNumDevis.getText() + "', '" + new SimpleDateFormat("yyyy/MM/dd").format(jDate.getDate()) + "', '" + jLibelle.getText()
+				if(!numClient.getText().equals("") && donnees.existClient(numClient.getText())){
+					String [] re = valeurDevises.get(devises.getSelectedItem());
+					System.out.println(re.length);
+					base.insert("Devis", "'"  + jNumDevis.getText() + "', '" + jNumDevis.getText() + "', null, '" +new SimpleDateFormat("yyyy/MM/dd").format(jDate.getDate()) + "', '" + jLibelle.getText()
 					+  "', " + jFournitures.getText().replaceAll(",", "\\.")
 					+ ", " + jCout.getText().replaceAll(",", "\\.")
 					+ ", " + jHeureAtelier.getText().replaceAll(",", "\\.")
 					+ ", " + jHeureSite.getText().replaceAll(",", "\\.")
 					+ ", " + jPrefabrication.getText().replaceAll(",", "\\.")
 					+ ", " + jPrevu.getText().replaceAll(",", "\\.")
-					+ ", " + jCommande.getText().replaceAll(",", "\\.")));
-					String codeDevise = donnees.codeDevise(devises.getSelectedItem().toString());
-					System.out.println(base.insert("commandesdevisfacture", jNumDevis.getText() + ", null, null, null, " + codeDevise + ", " + numClient.getText()));
+					+ ", " + jCommande.getText().replaceAll(",", "\\.")
+					+ ", " + re[0]);
 					JOptionPane.showMessageDialog(null, "Devis validé !");
 					fenetre.dispose();
 				}
 				else{
-					JOptionPane.showMessageDialog(null, "Numèro de Client inconnu", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Erreur : Numéro de Client inconnu ou vide", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 			else{
-				JOptionPane.showMessageDialog(null, "Numèro de Devis existant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Numéro de Devis existant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 			}	
 		}
     }
