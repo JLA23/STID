@@ -11,6 +11,7 @@ import BDD.Base;
 import View.Devis.NewDevis;
 import View.Devis.SearchDevis;
 
+
 public class AddDevis{
 	
 	private JMenu menu;
@@ -43,7 +44,7 @@ public class AddDevis{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new SearchDevis(bdd, fenetre, true);
+					new SearchDevis(bdd, fenetre, true, "Modif");
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Modifie un devis existant");
@@ -56,7 +57,7 @@ public class AddDevis{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//new SupprDevis();
+					new SearchDevis(bdd, fenetre, true, "Suppr");
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Supprime un devis existant");

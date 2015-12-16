@@ -1,22 +1,25 @@
 package View.Devis;
 
+import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import BDD.Base;
 import Controller.Devis.ActionFermer;
 import Controller.Devis.FocusClient;
 import Controller.Devis.TestContenu;
 import Controller.Devis.ModifSupprDevis.ActionRechercher;
-import Controller.Devis.ModifSupprDevis.ActionValider;
+import Controller.Devis.ModifSupprDevis.ActionSuppr;
 import Model.Donnees;
 
-public class ModifDevis extends Devis{
+public class SupprDevis extends Devis{
 	private static final long serialVersionUID = 1L;
 	
-	public ModifDevis(Base bdd, String numd) throws ParseException{
+	public SupprDevis(Base bdd, String numd) throws ParseException{
 		super(bdd);
-		this.setTitle("STID Gestion 2.0 (Modifier Devis)");
+		this.setTitle("STID Gestion 2.0 (Supprimer Devis)");
 		this.base= bdd;
+		valider.setText("Supprimer");
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
@@ -34,6 +37,7 @@ public class ModifDevis extends Devis{
 		jPrevu.setText(res[10].replaceAll("\\.", ","));
 		jCommande.setText(res[11].replaceAll("\\.", ","));
 		newClient.setVisible(false);
+		search.setVisible(false);
 		new TestContenu(this, jFournitures, 1);
 		new TestContenu(this, jCout, 1);
 		new TestContenu(this, jPrefabrication, 1);
@@ -42,12 +46,31 @@ public class ModifDevis extends Devis{
 		new TestContenu(this, jPrevu, 3);
 		new TestContenu(this, jCommande, 3);
 		new FocusClient(this).nameClient();
-		valider.addActionListener(new ActionValider(this));
+		jFournitures.setEditable(false);
+		jFournitures.setBackground(new Color(204, 204, 204));
+		jCout.setEditable(false);
+		jCout.setBackground(new Color(204, 204, 204));
+		jPrefabrication.setEditable(false);
+		jPrefabrication.setBackground(new Color(204, 204, 204));
+		jHeureSite.setEditable(false);
+		jHeureSite.setBackground(new Color(204, 204, 204));
+		jHeureAtelier.setEditable(false);
+		jHeureAtelier.setBackground(new Color(204, 204, 204));
+		jPrevu.setEditable(false);
+		jPrevu.setBackground(new Color(204, 204, 204));
+		jCommande.setEditable(false);
+		jCommande.setBackground(new Color(204, 204, 204));
+		numClient.getZoneTexte().setEditable(false);
+		numClient.getZoneTexte().setBackground(new Color(204, 204, 204));
+		jNumDevis.setEditable(false);
+		jNumDevis.setBackground(new Color(204, 204, 204));
+		jDate.setEnabled(false);
+		devises.setEnabled(false);
+		jLibelle.setEditable(false);
+		jLibelle.setBackground(new Color(204, 204, 204));
+		valider.addActionListener(new ActionSuppr(this));
 		fermer.addActionListener(new ActionFermer(this));
-		nouveau.addActionListener(new ActionRechercher(this, "Modif"));
+		nouveau.addActionListener(new ActionRechercher(this, "Suppr"));
 		}
 	
 }
-
-
-

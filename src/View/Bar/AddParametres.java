@@ -6,13 +6,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Parameters.ParametreApplication;
 
 public class AddParametres{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
+	private Base base;
 	
 	public AddParametres(Base bdd, String typeCompte){
+		base = bdd;
 		menu = new JMenu("Paramètres");
 		menu.getAccessibleContext().setAccessibleDescription("Clients");		
 		
@@ -66,11 +69,11 @@ public class AddParametres{
 		menu.addSeparator();
 		
 		// Paramètres de l'application
-		menuItem = new JMenuItem("Paramètres de l'application");
+		menuItem = new JMenuItem("Paramètres Taux");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new ListDevis();
+				new ParametreApplication(base);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Paramètres de l'application");

@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import BDD.Base;
-import Controller.Donnees;
+import Model.Donnees;
 import fr.julien.autocomplete.view.AutoComplete;
 
 public class SearchClient extends JDialog {

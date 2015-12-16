@@ -1,10 +1,11 @@
-package Controller;
+package Model;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import BDD.Base;
 
@@ -67,6 +68,23 @@ public class Donnees {
 		return resultat;
 	}
 	
+	public boolean existNumClient(String num){
+		ResultSet rs = base.Select("numClient", "clients", "numClient = " + num);
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while(rs.next()){
+				i ++;
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if(i != 0){
+			resultat = true;
+		}
+		return resultat;
+	}
+	
 	public int newNumDevis(){
 		ResultSet rs = base.Select("MAX(NumDevis)", "devis", null);
 		int i = 0;
@@ -77,7 +95,20 @@ public class Donnees {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		return i;
+		return i+1;
+	}
+	
+	public int newNumClient(){
+		ResultSet rs = base.Select("MAX(NumClient)", "clients", null);
+		int i = 0;
+		try {
+			while(rs.next()){
+				i = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return i+1;
 	}
 	
 	public Object[][] listeClient(){
@@ -190,9 +221,9 @@ public class Donnees {
 		try {
 			ResultSetMetaData metadata = rs.getMetaData();
 			int nombreColonnes = metadata.getColumnCount();
-			resultat = new String [nombreColonnes+2];
+			resultat = new String [nombreColonnes];
 			while(rs.next()){
-				for(int i = 0; i< resultat.length-2; i++){
+				for(int i = 0; i< resultat.length; i++){
 					resultat[i] = rs.getString(i+1);
 				}
 			}
@@ -203,5 +234,60 @@ public class Donnees {
 		}
 		return resultat;
 	}
+	
+	public boolean lieeCommande(String numDevis){
+		ResultSet rs = base.Select("numCommande", "Devis", "numDevis = " + numDevis);
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while(rs.next()){
+				i ++;
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if(i != 0){
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public LinkedHashMap<String, Object[]> modesPaiements(){
+		LinkedHashMap<String, Object[]> modes = new LinkedHashMap<String, Object[]>();
+		ResultSet rs = base.Select("*", "modepaiement", null);
+		try{
+			while (rs.next()){
+				Object[] ob = new Object[2];
+				String titre = rs.getString(2);
+				ob[0] = rs.getString(1);
+				ob[1] = false;
+				modes.put(titre, ob);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			modes = null;
+		}
+		return modes;
+	}
+	
+	public LinkedHashMap<String, String[]> taux(){
+		ResultSet rs = base.Select("*", "taux", null);
+		LinkedHashMap<String, String[]> resultat = null;
+		try {
+			resultat = new LinkedHashMap<String, String[]>();
+			while(rs.next()){
+				String cle = rs.getString(3);
+				String [] valeur = new String[2];
+				valeur[0] = rs.getString(1);
+				valeur[1] = rs.getString(2);
+				resultat.put(cle, valeur);
+			}
+		} catch (SQLException e) {
+			resultat = new LinkedHashMap<String, String[]>();
+			resultat.put("Error", new String [] {e.getMessage()});
+		} 
+		return resultat;
+	}
+	
 
 }

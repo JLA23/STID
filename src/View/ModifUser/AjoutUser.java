@@ -19,8 +19,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import BDD.Base;
-import Controller.Donnees;
-import Controller.PasswordCreate;
+import Model.Donnees;
+import Model.PasswordCreate;
 import View.Options.ClickDroit;
 
 public class AjoutUser extends JDialog{

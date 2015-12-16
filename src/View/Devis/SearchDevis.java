@@ -2,36 +2,28 @@ package View.Devis;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
-import java.text.ParseException;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import BDD.Base;
-import Controller.Donnees;
+import Controller.Devis.ModifSupprDevis.ActionList;
+import Controller.Devis.ModifSupprDevis.ActionValiderVerif;
 import View.Options.ClickDroit;
 
 public class SearchDevis extends JDialog{
 	
-	private Base bdd;
 	private JFormattedTextField numDevis;
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
-	private JFrame fenetre;
 	
-	public SearchDevis(Base base, JFrame frame, boolean modale){
+	public SearchDevis(Base base, JFrame frame, boolean modale, String fonction){
 		super(frame, null, modale);
-		this.bdd = base;
-		this.fenetre = frame;
 		this.setLayout(new GridLayout(2, 1));
 		this.setTitle("STID Gestion 2.0 (Recherche Devis)");
 		screenSize.setSize(250, 110);
@@ -40,7 +32,7 @@ public class SearchDevis extends JDialog{
 	    
 	    JPanel pane = new JPanel();
 	    pane.setPreferredSize(new Dimension(100, 300));
-	    JLabel label = new JLabel("Numèro de Devis");
+	    JLabel label = new JLabel("Numéro de Devis");
 	    pane.add(label);
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
 	    numDevis = new JFormattedTextField(num);
@@ -58,50 +50,14 @@ public class SearchDevis extends JDialog{
 	    pane3.add(bouton);
 	    pane3.add(list);
 	    
-	    bouton.addActionListener(new ActionValider(this));
-	    list.addActionListener(new ActionList(this));
+	    bouton.addActionListener(new ActionValiderVerif(this, base, numDevis, fonction));
+	    list.addActionListener(new ActionList(this, base, fonction));
 	    
 	    this.add(pane);
 	    this.add(pane3);
 	    this.pack();
 	    this.setResizable(false);
-	    this.setVisible(true);
 	    this.setLocationRelativeTo(null);
+	    this.setVisible(true);
 	}
-	
-	private class ActionValider implements ActionListener {
-		private JDialog frame;
-		
-		ActionValider(JDialog frame){
-			this.frame = frame;
-		}
-		public void actionPerformed(ActionEvent e) {
-			Donnees donnees = new Donnees(bdd);
-			if(donnees.existNumDevis(numDevis.getText())){
-				frame.dispose();
-				try {
-					new ModifDevis(bdd, numDevis.getText());
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
-			}
-			else{
-				JOptionPane.showMessageDialog(null, "Aucun Devis avec ce numèro !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
-			}
-		}
-	}
-	
-	private class ActionList implements ActionListener {
-		private JDialog frame;
-		
-		ActionList(JDialog dialog){
-			this.frame = dialog;
-		}
-		public void actionPerformed(ActionEvent e) {
-			frame.dispose();
-			new SearchDevisList(bdd, fenetre, true).searchDevisNum();	
-		}
-	}
-	
-
 }

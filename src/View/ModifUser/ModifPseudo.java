@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import BDD.Base;
-import Controller.Donnees;
+import Model.Donnees;
 import View.Identification;
 
 public class ModifPseudo extends JDialog{

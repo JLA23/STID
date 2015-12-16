@@ -43,17 +43,29 @@ public class AddCommandes{
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Modifie commande");
 			menu.add(menuItem);
+			
+			//Supprime Commande
+			menuItem = new JMenuItem("Supprimer Commande");
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+						//new ModifDevis();
+				}
+			});
+			menuItem.getAccessibleContext().setAccessibleDescription("Supprime une commande");
+			menu.add(menuItem);
 		}
 		
-		//Recherche sur CDe commande
-		menuItem = new JMenuItem("Recherche sur le CDe Commande Client");
+		
+		//Recherche une commande
+		menuItem = new JMenuItem("Recherche Commande");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//new SupprDevis();
 			}
 		});
-		menuItem.getAccessibleContext().setAccessibleDescription("Recherche");
+		menuItem.getAccessibleContext().setAccessibleDescription("Recherche une commande");
 		menu.add(menuItem);
 		
 		

@@ -99,7 +99,7 @@ public class Base  {
 			message = "Ajout effectué avec succée !";
 		}
 		catch(Exception e){message = "Error : " + e.getMessage();}
-		
+		System.out.println(message);
 		return message;
 	}
 	

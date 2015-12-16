@@ -8,14 +8,17 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Clients.NewClient;
 
 public class AddClients{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
+	private Base base;
 	
 	public AddClients(Base bdd, String typeCompte){
 		menu = new JMenu("Clients");
+		this.base = bdd;
 		menu.getAccessibleContext().setAccessibleDescription("Clients");
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Client.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		menu.setIcon(icon);
@@ -26,7 +29,7 @@ public class AddClients{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new Devis();
+					new NewClient(base);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Creation d'un nouveau client");
@@ -41,6 +44,17 @@ public class AddClients{
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Modifie client");
+		menu.add(menuItem);
+		
+		//Supprimer Client
+		menuItem = new JMenuItem("Supprimer Client");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					//new ModifDevis();
+			}
+		});
+		menuItem.getAccessibleContext().setAccessibleDescription("Supprime un client");
 		menu.add(menuItem);
 		
 		menu.addSeparator();
