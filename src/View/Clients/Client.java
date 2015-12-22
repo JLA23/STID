@@ -5,9 +5,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-
+import java.util.Map.Entry;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -20,20 +19,24 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import BDD.Base;
+import Controller.LimiteCaratere;
 import Controller.Client.ItemChange;
 import Model.Donnees;
 
 public class Client extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField jName, jMail, jnumTVA;
-	private JTextField[] jAdresses;
-	private JLabel numClient, nameClient, moisSuivant, raisonAdresse, TVA, taux, delais, nbex, numTVA, fr, mail;
-	private JFormattedTextField jNumClient, jJourSuivant, jDelais, jNbExemplaire;
-	private JPanel panelClient, panelPaiement, panelDetails;
-	private JRadioButton br1, br2;
-	private JComboBox<String> boxTva;
-	private JButton jmodePaiement;
+	protected JTextField jName, jMail, jnumTVA;
+	protected JTextField[] jAdresses;
+	protected JLabel numClient, nameClient, moisSuivant, raisonAdresse, TVA, taux, delais, nbex, numTVA, fr, mail;
+	protected JFormattedTextField jNumClient;
+	protected JFormattedTextField jJourSuivant;
+	protected JFormattedTextField jDelais;
+	protected JFormattedTextField jNbExemplaire;
+	protected JPanel panelClient, panelPaiement, panelDetails;
+	protected JRadioButton br1, br2;
+	protected JComboBox<String> boxTva;
+	protected JButton jmodePaiement;
 	protected JButton valider;
 	protected JButton fermer;
 	protected JButton nouveau;
@@ -41,6 +44,7 @@ public class Client extends JDialog {
 	protected Donnees donnees;
 	protected NumberFormat num;
 	protected LinkedHashMap<String, String[]> valeurTaux;
+	protected LinkedHashMap<String, Object[]> vals;
 	protected ModePaiement modes;
 
 	public Client(Base bdd, JFrame frame) {
@@ -58,8 +62,6 @@ public class Client extends JDialog {
 		jNumClient.setText(donnees.newNumClient() + "");
 		panelClient = new JPanel();
 		panelClient.setBorder(BorderFactory.createTitledBorder("Client"));
-		panelDetails = new JPanel();
-		panelDetails.setBorder(BorderFactory.createTitledBorder("Dètails"));
 		initClient();
 		panelClient.add(panelPaiement);
 		panelClient.setPreferredSize(new Dimension(610, 305));
@@ -84,30 +86,6 @@ public class Client extends JDialog {
 
 	}
 
-	public JButton getValider() {
-		return valider;
-	}
-
-	public void setValider(JButton valider) {
-		this.valider = valider;
-	}
-
-	public JButton getFermer() {
-		return fermer;
-	}
-
-	public void setFermer(JButton fermer) {
-		this.fermer = fermer;
-	}
-
-	public JButton getNouveau() {
-		return nouveau;
-	}
-
-	public void setNouveau(JButton nouveau) {
-		this.nouveau = nouveau;
-	}
-
 	private void initClient() {
 		panelClient.setLayout(null);
 		panelClient.add(numClient);
@@ -127,6 +105,7 @@ public class Client extends JDialog {
 		nameClient.setBounds(l, 20 + insets.top, size.width, size.height);
 		l = l + 10 + size.width;
 		jName.setPreferredSize(new Dimension(200, 20));
+		jName.addKeyListener(new LimiteCaratere(jName, 30));
 		size = jName.getPreferredSize();
 		jName.setBounds(l, 20 + insets.top, size.width, size.height);
 		raisonAdresse = new JLabel("Raison social et Adresse");
@@ -141,6 +120,7 @@ public class Client extends JDialog {
 			tmp.setBounds(30, k, size.width, size.height);
 			k += size.height;
 			jAdresses[j] = tmp;
+			jAdresses[j].addKeyListener(new LimiteCaratere(jAdresses[j], 30));
 			panelClient.add(tmp);
 		}
 		k += 15;
@@ -167,15 +147,13 @@ public class Client extends JDialog {
 		jmodePaiement.setPreferredSize(new Dimension(140, 25));
 		size = jmodePaiement.getPreferredSize();
 		jmodePaiement.setBounds(400, 100, size.width, size.height);
-		modes = new ModePaiement(donnees, null);
+		modes = new ModePaiement(donnees, null, null);
 		jmodePaiement.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				modes.afficher();
-
 			}
-
 		});
 		panelClient.add(jmodePaiement);
 		o = 100 + size.height + 15;
@@ -185,7 +163,8 @@ public class Client extends JDialog {
 		delais.setBounds(395, o, size.width, size.height);
 		panelClient.add(delais);
 
-		jDelais = new JFormattedTextField();
+		jDelais = new JFormattedTextField(num);
+		jDelais.addKeyListener(new LimiteCaratere(jDelais, 2));
 		jDelais.setPreferredSize(new Dimension(50, 20));
 		int p = size.width + 405;
 		size = jDelais.getPreferredSize();
@@ -198,7 +177,7 @@ public class Client extends JDialog {
 		nbex.setBounds(360, o, size.width, size.height);
 		panelClient.add(nbex);
 
-		jNbExemplaire = new JFormattedTextField();
+		jNbExemplaire = new JFormattedTextField(num);
 		jNbExemplaire.setPreferredSize(new Dimension(50, 20));
 		p = size.width + 370;
 		size = jNbExemplaire.getPreferredSize();
@@ -217,15 +196,12 @@ public class Client extends JDialog {
 		fr = new JLabel("FR");
 		jnumTVA = new JTextField();
 		size = numTVA.getPreferredSize();
-		numTVA.setBounds(p - numTVA.getPreferredSize().width - 5, o, size.width, size.height);
+		numTVA.setBounds(p - numTVA.getPreferredSize().width, o, size.width, size.height);
 		panelClient.add(numTVA);
 		o = o + numTVA.getPreferredSize().height + 5;
-		size = fr.getPreferredSize();
-		fr.setBounds(p - 105, o, size.width, size.height);
-		panelClient.add(fr);
-		jnumTVA.setPreferredSize(new Dimension(100, 20));
+		jnumTVA.setPreferredSize(new Dimension(120, 20));
 		size = jnumTVA.getPreferredSize();
-		jnumTVA.setBounds(p - 105 + fr.getPreferredSize().width + 3, o, size.width, size.height);
+		jnumTVA.setBounds(p - 93, o, size.width, size.height);
 		panelClient.add(jnumTVA);
 
 		panelPaiement = new JPanel();
@@ -236,7 +212,7 @@ public class Client extends JDialog {
 		br2 = new JRadioButton("Fin de mois", false);
 		bg.add(br1);
 		bg.add(br2);
-		jJourSuivant = new JFormattedTextField();
+		jJourSuivant = new JFormattedTextField(num);
 		moisSuivant = new JLabel("du mois suivant");
 		panelPaiement.add(br1);
 		panelPaiement.add(br2);
@@ -248,6 +224,7 @@ public class Client extends JDialog {
 		l = 20;
 		br1.setBounds(10, l, size.width, size.height);
 		jJourSuivant.setPreferredSize(new Dimension(30, 20));
+		jJourSuivant.addKeyListener(new LimiteCaratere(jJourSuivant, 2));
 		l += 2;
 		int i = 10 + insets.left + size.width;
 		size = jJourSuivant.getPreferredSize();
@@ -271,7 +248,7 @@ public class Client extends JDialog {
 
 	protected void insertTaux() {
 		valeurTaux = donnees.taux();
-		for (HashMap.Entry<String, String[]> entry : valeurTaux.entrySet()) {
+		for (Entry<String, String[]> entry : valeurTaux.entrySet()) {
 			boxTva.addItem(entry.getKey());
 		}
 		boxTva.setSelectedItem("Normal");
@@ -381,7 +358,6 @@ public class Client extends JDialog {
 		this.jmodePaiement = jmodePaiement;
 	}
 	
-	
 	public JRadioButton getBr1() {
 		return br1;
 	}
@@ -404,6 +380,47 @@ public class Client extends JDialog {
 
 	public void setDonnees(Donnees donnees) {
 		this.donnees = donnees;
+	}
+	
+
+	public JButton getValider() {
+		return valider;
+	}
+
+	public void setValider(JButton valider) {
+		this.valider = valider;
+	}
+
+	public JButton getFermer() {
+		return fermer;
+	}
+
+	public void setFermer(JButton fermer) {
+		this.fermer = fermer;
+	}
+
+	public JButton getNouveau() {
+		return nouveau;
+	}
+
+	public void setNouveau(JButton nouveau) {
+		this.nouveau = nouveau;
+	}
+
+	public ModePaiement getModes() {
+		return modes;
+	}
+
+	public void setModes(ModePaiement modes) {
+		this.modes = modes;
+	}
+	
+	public LinkedHashMap<String, Object[]> getVal() {
+		return vals;
+	}
+
+	public void setVal(LinkedHashMap<String, Object[]> val) {
+		this.vals = val;
 	}
 
 }

@@ -1,20 +1,19 @@
-package Controller.Devis.ModifSupprDevis;
-
+package Controller.Client.ModifSupprClient;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import View.Devis.Devis;
-import View.Devis.SearchDevis;
+import View.Clients.Client;
+import View.Clients.SearchClient;
 
 public class ActionRechercher implements ActionListener {
 	
-	private Devis devis;
+	private Client client;
 	private String f;
 
-	public ActionRechercher(Devis d, String fonction){
-		this.devis = d;
+	public ActionRechercher(Client d, String fonction){
+		this.client = d;
 		this.f = fonction;
 	}
 	public void actionPerformed(ActionEvent arg0) {
@@ -26,11 +25,11 @@ public class ActionRechercher implements ActionListener {
 				  JOptionPane.YES_NO_CANCEL_OPTION,
 				  JOptionPane.QUESTION_MESSAGE);
 			if(option == JOptionPane.YES_OPTION){
-				new ActionValider(devis).valider();
+				new ActionValider(client).valider();
 			}
 			if(option != JOptionPane.CANCEL_OPTION){
-				devis.dispose();
-				new SearchDevis(devis.getBase(), null, true, f);
+				client.dispose();
+				new SearchClient(client.getBase(), null, f);
 			}
 		}
 		else if(f.equals("Suppr")){
@@ -41,11 +40,11 @@ public class ActionRechercher implements ActionListener {
 					  JOptionPane.YES_NO_CANCEL_OPTION,
 					  JOptionPane.QUESTION_MESSAGE);
 				if(option == JOptionPane.YES_OPTION){
-					new ActionSuppr(devis).suppr();
+					new ActionSuppr(client).suppr();
 				}
 				if(option != JOptionPane.CANCEL_OPTION){
-					devis.dispose();
-					new SearchDevis(devis.getBase(), null, true, f);
+					client.dispose();
+					new SearchClient(client.getBase(), null, f);
 			}
 		}
 	}

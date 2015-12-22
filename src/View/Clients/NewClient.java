@@ -1,9 +1,9 @@
 package View.Clients;
 
 import BDD.Base;
+import Controller.ActionFermer;
 import Controller.Client.NewClient.ActionNouveau;
 import Controller.Client.NewClient.ActionValider;
-import Controller.Devis.ActionFermer;
 
 public class NewClient extends Client{
 	

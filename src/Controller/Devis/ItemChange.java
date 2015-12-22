@@ -13,7 +13,6 @@ public class ItemChange implements ItemListener {
 	public ItemChange(Devis frame) {
 		this.devis = frame;
 	}
-
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
 		devis.setValeurDevise(Double.parseDouble((devis.getValeurDevises().get(devis.getDevises().getSelectedItem().toString()))[2]));

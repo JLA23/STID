@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,8 +29,8 @@ import javax.swing.KeyStroke;
 import com.toedter.calendar.JDateChooser;
 import BDD.Base;
 import Controller.ActionCalculatrice;
+import Controller.EcouteAction;
 import Controller.Devis.ActionSearch;
-import Controller.Devis.EcouteAction;
 import Controller.Devis.ExecuteClick;
 import Controller.Devis.FocusClient;
 import Controller.Devis.FocusPosition;
@@ -37,7 +40,7 @@ import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
 import fr.julien.autocomplete.view.AutoComplete;
 
-public class Devis extends JFrame {
+public class Devis extends JDialog {
 	protected JButton calcul1, valider, fermer, newClient, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7,
 			nouveau, search;
 	protected JComboBox<String> devises;
@@ -62,7 +65,8 @@ public class Devis extends JFrame {
 	protected Dimension screenSize = new Dimension();
 
 	@SuppressWarnings("unchecked")
-	public Devis(Base bdd) {
+	public Devis(Base bdd, JFrame frame) {
+		super(frame, null, true);
 		this.base = bdd;
 		this.donnees = new Donnees(base);
 		this.setLayout(null);
@@ -347,34 +351,15 @@ public class Devis extends JFrame {
 			}
 		});
 
-		calcul1.addActionListener(new ActionCalculatrice(jFournitures, this));
-		calcul2.addActionListener(new ActionCalculatrice(jCout, this));
-		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication, this));
-		calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier, this));
-		calcul5.addActionListener(new ActionCalculatrice(jPrevu, this));
-		calcul6.addActionListener(new ActionCalculatrice(jHeureSite, this));
-		calcul7.addActionListener(new ActionCalculatrice(jCommande, this));
+		calcul1.addActionListener(new ActionCalculatrice(jFournitures));
+		calcul2.addActionListener(new ActionCalculatrice(jCout));
+		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication));
+		calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier));
+		calcul5.addActionListener(new ActionCalculatrice(jPrevu));
+		calcul6.addActionListener(new ActionCalculatrice(jHeureSite));
+		calcul7.addActionListener(new ActionCalculatrice(jCommande));
 		
 		numClient.getZoneTexte().addFocusListener(new FocusClient(this));
-		
-	
-		
-		
-		
-		/*new ClickDroit(jCout, true, true);
-		new ClickDroit(jPrefabrication, true, true);
-		new ClickDroit(jTotalDevis, true, false);
-		new ClickDroit(jHeureSite, true, true);
-		new ClickDroit(jHeureAtelier, true, true);
-		new ClickDroit(jTotalHeure, true, false);
-		new ClickDroit(jResteCommande, true, false);
-		new ClickDroit(jTotalDevisDevise, true, false);
-		new ClickDroit(jPrevu, true, true);
-		new ClickDroit(jCommande, true, true);*/
-
-		this.setResizable(false);
-		this.setVisible(true);
-		this.setLocationRelativeTo(null);
 
 	}
 
@@ -605,7 +590,7 @@ public class Devis extends JFrame {
 
 	protected void InsertDevises() {
 		valeurDevises = donnees.devises();
-		for (HashMap.Entry<String, String[]> entry : valeurDevises.entrySet()) {
+		for (Entry<String, String[]> entry : valeurDevises.entrySet()) {
 			devises.addItem(entry.getKey());
 		}
 		devises.setSelectedItem("EUR");

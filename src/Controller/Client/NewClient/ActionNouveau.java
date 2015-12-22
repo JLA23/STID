@@ -5,18 +5,19 @@ import java.awt.event.ActionListener;
 
 import View.Clients.Client;
 import View.Clients.NewClient;
-import View.Devis.Devis;
-import View.Devis.NewDevis;
 
 public class ActionNouveau implements ActionListener {
 	
-	private Client devis;
+	private Client client;
 	
 	public ActionNouveau(Client newClient){
-		this.devis = newClient;
+		this.client = newClient;
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-	
+		new ActionValider(client).valider();
+		if(!client.isShowing()){
+			new NewClient(client.getBase());
+		}
 	}
 }

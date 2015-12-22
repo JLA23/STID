@@ -14,7 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import BDD.Base;
-import Controller.Devis.ActionFermer;
+import Controller.ActionFermer;
 import Controller.Devis.ModifSupprDevis.RetourAction;
 import Controller.Devis.ModifSupprDevis.SelectionAction;
 import Model.Donnees;

@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 
 import BDD.Base;
 import View.Clients.NewClient;
+import View.Clients.SearchClient;
 
 public class AddClients{
 	
@@ -40,7 +41,7 @@ public class AddClients{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new ModifDevis();
+					new SearchClient(base, null,"Modif");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Modifie client");
@@ -51,7 +52,7 @@ public class AddClients{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new ModifDevis();
+					new SearchClient(base, null,"Suppr");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Supprime un client");

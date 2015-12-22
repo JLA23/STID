@@ -6,7 +6,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
-import View.Parameters.ParametreApplication;
+import View.Parameters.ParametreTaux;
 
 public class AddParametres{
 	
@@ -73,7 +73,7 @@ public class AddParametres{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ParametreApplication(base);
+				new ParametreTaux(base);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Paramètres de l'application");

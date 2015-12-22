@@ -1,9 +1,10 @@
 package View.Devis;
 
+import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import BDD.Base;
-import Controller.Devis.ActionFermer;
+import Controller.ActionFermer;
 import Controller.Devis.FocusClient;
 import Controller.Devis.TestContenu;
 import Controller.Devis.ModifSupprDevis.ActionRechercher;
@@ -14,14 +15,15 @@ public class ModifDevis extends Devis{
 	private static final long serialVersionUID = 1L;
 	
 	public ModifDevis(Base bdd, String numd) throws ParseException{
-		super(bdd);
+		super(bdd, null);
 		this.setTitle("STID Gestion 2.0 (Modifier Devis)");
-		this.base= bdd;
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
 		String [] res = donnees.devis(numd);
 		jNumDevis.setText(res[0]);
+		jNumDevis.setEditable(false);
+		jNumDevis.setBackground(new Color(204, 204, 204));
 		numClient.getZoneTexte().setText(res[1]);
 	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		jDate.setDate(simpleDateFormat.parse(res[3]));
@@ -45,6 +47,9 @@ public class ModifDevis extends Devis{
 		valider.addActionListener(new ActionValider(this));
 		fermer.addActionListener(new ActionFermer(this));
 		nouveau.addActionListener(new ActionRechercher(this, "Modif"));
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 		}
 	
 }

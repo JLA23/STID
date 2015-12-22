@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import BDD.Base;
-import Controller.Devis.ActionFermer;
+import Controller.ActionFermer;
 import Controller.Devis.FocusClient;
 import Controller.Devis.TestContenu;
 import Controller.Devis.ModifSupprDevis.ActionRechercher;
@@ -16,7 +16,7 @@ public class SupprDevis extends Devis{
 	private static final long serialVersionUID = 1L;
 	
 	public SupprDevis(Base bdd, String numd) throws ParseException{
-		super(bdd);
+		super(bdd, null);
 		this.setTitle("STID Gestion 2.0 (Supprimer Devis)");
 		this.base= bdd;
 		valider.setText("Supprimer");
@@ -71,6 +71,9 @@ public class SupprDevis extends Devis{
 		valider.addActionListener(new ActionSuppr(this));
 		fermer.addActionListener(new ActionFermer(this));
 		nouveau.addActionListener(new ActionRechercher(this, "Suppr"));
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 		}
 	
 }
