@@ -12,13 +12,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +27,7 @@ import javax.swing.KeyStroke;
 import com.toedter.calendar.JDateChooser;
 import BDD.Base;
 import Controller.ActionCalculatrice;
+import Controller.ActionFermer;
 import Controller.EcouteAction;
 import Controller.Devis.ActionSearch;
 import Controller.Devis.ExecuteClick;
@@ -40,7 +39,7 @@ import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
 import fr.julien.autocomplete.view.AutoComplete;
 
-public class Devis extends JDialog {
+public class Devis extends JFrame {
 	protected JButton calcul1, valider, fermer, newClient, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7,
 			nouveau, search;
 	protected JComboBox<String> devises;
@@ -63,10 +62,11 @@ public class Devis extends JDialog {
 	protected Object[][] listClient;
 	protected static final long serialVersionUID = 1L;
 	protected Dimension screenSize = new Dimension();
+	protected JFrame fenetre;
 
 	@SuppressWarnings("unchecked")
 	public Devis(Base bdd, JFrame frame) {
-		super(frame, null, true);
+		this.fenetre = frame;
 		this.base = bdd;
 		this.donnees = new Donnees(base);
 		this.setLayout(null);
@@ -205,26 +205,27 @@ public class Devis extends JDialog {
 		
 		ExecuteClick click = new ExecuteClick(this);
 		
-		jFournitures.addMouseListener(new FocusPosition(this, jFournitures, 1, click));
-		jCout.addMouseListener(new FocusPosition(this, jCout, 1, click));
-		jPrefabrication.addMouseListener(new FocusPosition(this, jPrefabrication, 1, click));
-		jHeureSite.addMouseListener(new FocusPosition(this, jHeureSite, 2, click));
-		jHeureAtelier.addMouseListener(new FocusPosition(this,jHeureAtelier, 2, click));
-		jPrevu.addMouseListener(new FocusPosition(this, jPrevu, 3, click));
-		jCommande.addMouseListener(new FocusPosition(this, jCommande, 3, click));
+		jFournitures.addMouseListener(new FocusPosition(jFournitures, 1, click));
+		jCout.addMouseListener(new FocusPosition(jCout, 1, click));
+		jPrefabrication.addMouseListener(new FocusPosition(jPrefabrication, 1, click));
+		jHeureSite.addMouseListener(new FocusPosition(jHeureSite, 2, click));
+		jHeureAtelier.addMouseListener(new FocusPosition(jHeureAtelier, 2, click));
+		jPrevu.addMouseListener(new FocusPosition(jPrevu, 3, click));
+		jCommande.addMouseListener(new FocusPosition(jCommande, 3, click));
 		
 		new ClickDroit(jTotalDevis, true, false);
 		new ClickDroit(jTotalDevisDevise, true, false);
 		new ClickDroit(jTotalHeure, true, false);
 		new ClickDroit(jResteCommande, true, false);
 
-		jFournitures.addFocusListener(new FocusPosition(this, jFournitures, 1,click));
-		jCout.addFocusListener(new FocusPosition(this, jCout, 1, click));
-		jPrefabrication.addFocusListener(new FocusPosition(this, jPrefabrication, 1, click));
-		jHeureSite.addFocusListener(new FocusPosition(this, jHeureSite, 2, click));
-		jHeureAtelier.addFocusListener(new FocusPosition(this,jHeureAtelier, 2, click));
-		jPrevu.addFocusListener(new FocusPosition(this, jPrevu, 3, click));
-		jCommande.addFocusListener(new FocusPosition(this, jCommande, 3, click));
+		jFournitures.addFocusListener(new FocusPosition(jFournitures, 1,click));
+		jCout.addFocusListener(new FocusPosition(jCout, 1, click));
+		jPrefabrication.addFocusListener(new FocusPosition(jPrefabrication, 1, click));
+		jHeureSite.addFocusListener(new FocusPosition(jHeureSite, 2, click));
+		jHeureAtelier.addFocusListener(new FocusPosition(jHeureAtelier, 2, click));
+		jPrevu.addFocusListener(new FocusPosition(jPrevu, 3, click));
+		jCommande.addFocusListener(new FocusPosition(jCommande, 3, click));
+		
 		
 		jFournitures.addKeyListener(new EcouteAction(jFournitures));
 		jCout.addKeyListener(new EcouteAction(jCout));
@@ -287,6 +288,7 @@ public class Devis extends JDialog {
 			protected static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent ae) {
+				numClient.getFenetreRecherche().dispose();
 				jFournitures.requestFocus();
 			}
 		});
@@ -358,9 +360,19 @@ public class Devis extends JDialog {
 		calcul5.addActionListener(new ActionCalculatrice(jPrevu));
 		calcul6.addActionListener(new ActionCalculatrice(jHeureSite));
 		calcul7.addActionListener(new ActionCalculatrice(jCommande));
-		
 		numClient.getZoneTexte().addFocusListener(new FocusClient(this));
+		this.addWindowListener(new ActionFermer(this, frame));
+		if(fenetre != null){
+			fenetre.setEnabled(false);
+		}
+	}
 
+	public JFrame getFenetre() {
+		return fenetre;
+	}
+
+	public void setFenetre(JFrame fenetre) {
+		this.fenetre = fenetre;
 	}
 
 	protected void initPanel1() {
@@ -426,6 +438,7 @@ public class Devis extends JDialog {
 		jPanel3.setBounds(20, 300, jPanel3.getPreferredSize().width, jPanel3.getPreferredSize().height);
 		jPanel2.add(jPanel3);
 		initAchats();
+	
 	}
 
 	protected void initPanelMontant() {
@@ -595,7 +608,13 @@ public class Devis extends JDialog {
 		}
 		devises.setSelectedItem("EUR");
 	}
-
+	
+	public void refreshListClient(){
+		ArrayList<String> res = listClient();
+		numClient.getModel().setMots(res);
+		numClient.update();
+	}
+	
 	protected ArrayList<String> listClient() {
 		listClient = donnees.listeClient();
 		ArrayList<String> res = new ArrayList<String>();
@@ -733,276 +752,12 @@ public class Devis extends JDialog {
 		this.search = search;
 	}
 
-	public JLabel getNumero() {
-		return numero;
-	}
-
-	public void setNumero(JLabel numero) {
-		this.numero = numero;
-	}
-
-	public JLabel getPrefabrication() {
-		return prefabrication;
-	}
-
-	public void setPrefabrication(JLabel prefabrication) {
-		this.prefabrication = prefabrication;
-	}
-
-	public JLabel getEuro1() {
-		return euro1;
-	}
-
-	public void setEuro1(JLabel euro1) {
-		this.euro1 = euro1;
-	}
-
-	public JLabel getEuro2() {
-		return euro2;
-	}
-
-	public void setEuro2(JLabel euro2) {
-		this.euro2 = euro2;
-	}
-
-	public JLabel getEuro3() {
-		return euro3;
-	}
-
-	public void setEuro3(JLabel euro3) {
-		this.euro3 = euro3;
-	}
-
-	public JLabel getEuro4() {
-		return euro4;
-	}
-
-	public void setEuro4(JLabel euro4) {
-		this.euro4 = euro4;
-	}
-
-	public JLabel getTotalDevis() {
-		return totalDevis;
-	}
-
-	public void setTotalDevis(JLabel totalDevis) {
-		this.totalDevis = totalDevis;
-	}
-
-	public JLabel getHrsAtelier() {
-		return hrsAtelier;
-	}
-
-	public void setHrsAtelier(JLabel hrsAtelier) {
-		this.hrsAtelier = hrsAtelier;
-	}
-
-	public JLabel getPrevu() {
-		return prevu;
-	}
-
-	public void setPrevu(JLabel prevu) {
-		this.prevu = prevu;
-	}
-
-	public JLabel getHrsSite() {
-		return hrsSite;
-	}
-
-	public void setHrsSite(JLabel hrsSite) {
-		this.hrsSite = hrsSite;
-	}
-
-	public JLabel getHrs1() {
-		return hrs1;
-	}
-
-	public void setHrs1(JLabel hrs1) {
-		this.hrs1 = hrs1;
-	}
-
-	public JLabel getDateLabel() {
-		return dateLabel;
-	}
-
-	public void setDateLabel(JLabel dateLabel) {
-		this.dateLabel = dateLabel;
-	}
-
-	public JLabel getEuro5() {
-		return euro5;
-	}
-
-	public void setEuro5(JLabel euro5) {
-		this.euro5 = euro5;
-	}
-
-	public JLabel getHrs2() {
-		return hrs2;
-	}
-
-	public void setHrs2(JLabel hrs2) {
-		this.hrs2 = hrs2;
-	}
-
-	public JLabel getHrs3() {
-		return hrs3;
-	}
-
-	public void setHrs3(JLabel hrs3) {
-		this.hrs3 = hrs3;
-	}
-
-	public JLabel getTotalHeures() {
-		return totalHeures;
-	}
-
-	public void setTotalHeures(JLabel totalHeures) {
-		this.totalHeures = totalHeures;
-	}
-
-	public JLabel getCommande() {
-		return commande;
-	}
-
-	public void setCommande(JLabel commande) {
-		this.commande = commande;
-	}
-
-	public JLabel getEuro6() {
-		return euro6;
-	}
-
-	public void setEuro6(JLabel euro6) {
-		this.euro6 = euro6;
-	}
-
-	public JLabel getResteCommande() {
-		return resteCommande;
-	}
-
-	public void setResteCommande(JLabel resteCommande) {
-		this.resteCommande = resteCommande;
-	}
-
-	public JLabel getEuro7() {
-		return euro7;
-	}
-
-	public void setEuro7(JLabel euro7) {
-		this.euro7 = euro7;
-	}
-
-	public JLabel getDeviselabel() {
-		return deviselabel;
-	}
-
-	public void setDeviselabel(JLabel deviselabel) {
-		this.deviselabel = deviselabel;
-	}
-
-	public JLabel getLibelle() {
-		return libelle;
-	}
-
-	public void setLibelle(JLabel libelle) {
-		this.libelle = libelle;
-	}
-
-	public JLabel getNumClientLabel() {
-		return numClientLabel;
-	}
-
-	public void setNumClientLabel(JLabel numClientLabel) {
-		this.numClientLabel = numClientLabel;
-	}
-
-	public JLabel getFournitures() {
-		return fournitures;
-	}
-
-	public void setFournitures(JLabel fournitures) {
-		this.fournitures = fournitures;
-	}
-
-	public JLabel getCoutMO() {
-		return coutMO;
-	}
-
-	public void setCoutMO(JLabel coutMO) {
-		this.coutMO = coutMO;
-	}
-
-	public JLabel getTotalDevisdevise() {
-		return totalDevisdevise;
-	}
-
-	public void setTotalDevisdevise(JLabel totalDevisdevise) {
-		this.totalDevisdevise = totalDevisdevise;
-	}
-
 	public JLabel getNameClient() {
 		return nameClient;
 	}
 
 	public void setNameClient(JLabel nameClient) {
 		this.nameClient = nameClient;
-	}
-
-	public JPanel getjPanel1() {
-		return jPanel1;
-	}
-
-	public void setjPanel1(JPanel jPanel1) {
-		this.jPanel1 = jPanel1;
-	}
-
-	public JPanel getjPanel2() {
-		return jPanel2;
-	}
-
-	public void setjPanel2(JPanel jPanel2) {
-		this.jPanel2 = jPanel2;
-	}
-
-	public JPanel getjPanel3() {
-		return jPanel3;
-	}
-
-	public void setjPanel3(JPanel jPanel3) {
-		this.jPanel3 = jPanel3;
-	}
-
-	public JPanel getJPanelTemps() {
-		return JPanelTemps;
-	}
-
-	public void setJPanelTemps(JPanel jPanelTemps) {
-		JPanelTemps = jPanelTemps;
-	}
-
-	public JPanel getjPanel6() {
-		return jPanel6;
-	}
-
-	public void setjPanel6(JPanel jPanel6) {
-		this.jPanel6 = jPanel6;
-	}
-
-	public JSeparator getjSeparator1() {
-		return jSeparator1;
-	}
-
-	public void setjSeparator1(JSeparator jSeparator1) {
-		this.jSeparator1 = jSeparator1;
-	}
-
-	public JSeparator getjSeparator2() {
-		return jSeparator2;
-	}
-
-	public void setjSeparator2(JSeparator jSeparator2) {
-		this.jSeparator2 = jSeparator2;
 	}
 
 	public JFormattedTextField getjTotalDevisDevise() {
@@ -1149,13 +904,6 @@ public class Devis extends JDialog {
 		this.listClient = listClient;
 	}
 
-	public Dimension getScreenSize() {
-		return screenSize;
-	}
-
-	public void setScreenSize(Dimension screenSize) {
-		this.screenSize = screenSize;
-	}
 
 
 }

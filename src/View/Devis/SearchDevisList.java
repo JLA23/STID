@@ -42,7 +42,7 @@ public class SearchDevisList extends JDialog {
 		c.gridx = 0;
 		c.gridy = 0;
 
-		String[] columns = { "Numèro Devis", "Numèro CLient", "Libelle" };
+		String[] columns = { "Numéro Devis", "Numèro Client", "Libelle" };
 
 		// Construct our table to hold our list of layers
 		JTable layerTable = new JTable(data, columns) {
@@ -53,6 +53,7 @@ public class SearchDevisList extends JDialog {
 				return false;
 			}
 		};
+		
 		layerTable.getColumnModel().getColumn(0).setPreferredWidth(1);
 		layerTable.getColumnModel().getColumn(1).setPreferredWidth(1);
 		layerTable.getColumnModel().getColumn(2).setPreferredWidth(170);
@@ -64,8 +65,8 @@ public class SearchDevisList extends JDialog {
 		layerPanel.add(retour, BorderLayout.SOUTH);
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
-		valider.addActionListener(new SelectionAction(this, layerTable, data, bdd, fonction));
-		retour.addActionListener(new RetourAction(this, bdd, fonction));
+		valider.addActionListener(new SelectionAction(this, layerTable, data, bdd, frame, fonction));
+		retour.addActionListener(new RetourAction(this, bdd, frame, fonction));
 		annuler.addActionListener(new ActionFermer(this));
 		this.add(layerPanel);
 		this.pack();

@@ -3,6 +3,9 @@ package View.Devis;
 import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import javax.swing.JFrame;
+
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.Devis.FocusClient;
@@ -14,8 +17,8 @@ import Model.Donnees;
 public class ModifDevis extends Devis{
 	private static final long serialVersionUID = 1L;
 	
-	public ModifDevis(Base bdd, String numd) throws ParseException{
-		super(bdd, null);
+	public ModifDevis(Base bdd, String numd, JFrame frame) throws ParseException{
+		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Modifier Devis)");
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
@@ -45,8 +48,8 @@ public class ModifDevis extends Devis{
 		new TestContenu(this, jCommande, 3);
 		new FocusClient(this).nameClient();
 		valider.addActionListener(new ActionValider(this));
-		fermer.addActionListener(new ActionFermer(this));
-		nouveau.addActionListener(new ActionRechercher(this, "Modif"));
+		fermer.addActionListener(new ActionFermer(this, frame));
+		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

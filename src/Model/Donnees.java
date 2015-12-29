@@ -110,6 +110,20 @@ public class Donnees {
 		}
 		return i + 1;
 	}
+	
+	public int newNumCommande() {
+		ResultSet rs = base.Select("MAX(NumCommande)", "commandes", null);
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return i + 1;
+	}
+
 
 	public Object[][] listeClient() {
 		ResultSet rs = base.Select("NumClient, NomClient, Adresse2, Adresse3, Adresse4, Adresse5, Adresse6, Adresse7",
@@ -330,6 +344,82 @@ public class Donnees {
 		} catch (SQLException e) {
 			resultat = new String[] { e.getMessage() };
 			System.out.println(e.getMessage());
+		}
+		return resultat;
+	}
+
+	public Object[][] listeDevisNoCommande(String numCommande) {
+		ResultSet rs;
+		if (numCommande == null) {
+			rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d", "numcommande is null");
+		} else {
+			rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d",
+					"numcommande is null and numcommande = " + numCommande);
+		}
+		Object[][] list = null;
+		try {
+			rs.last();
+			int nombreLignes = rs.getRow();
+			System.out.println(nombreLignes);
+			rs.beforeFirst();
+			if (nombreLignes > 0) {
+				list = new Object[nombreLignes][3];
+				int i = 0;
+				while (rs.next() && i < nombreLignes) {
+					list[i][0] = rs.getString(1);
+					list[i][1] = rs.getString(2);
+					list[i][2] = rs.getString(3);
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return list;
+
+	}
+
+	public Object[][] listeDevisYesCommande(String numCommande) {
+		ResultSet rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d", "numcommande = " + numCommande);
+		Object[][] list = null;
+		try {
+			rs.last();
+			int nombreLignes = rs.getRow();
+			System.out.println(nombreLignes);
+			rs.beforeFirst();
+			if (nombreLignes > 0) {
+				list = new Object[nombreLignes][3];
+				int i = 0;
+				while (rs.next() && i < nombreLignes) {
+					list[i][0] = rs.getString(1);
+					list[i][1] = rs.getString(2);
+					list[i][2] = rs.getString(3);
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return list;
+
+	}
+
+	public double somme(String colone, String table, String[] numdevis) {
+		String query = "";
+		for (int i = 0; i < numdevis.length; i++) {
+			query += "numdevis = " + numdevis[i];
+			if ((i + 1) < numdevis.length) {
+				query += " || ";
+			}
+		}
+		ResultSet rs = base.Select("Sum(Round(" + colone + ", 2))", "devis", query);
+		double resultat = 0;
+		try {
+			while (rs.next()) {
+				resultat = rs.getDouble(1);
+			}
+		} catch (SQLException e) {
+			resultat = -1;
 		}
 		return resultat;
 	}

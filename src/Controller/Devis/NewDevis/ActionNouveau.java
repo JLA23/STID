@@ -16,7 +16,7 @@ public class ActionNouveau implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		new ActionValider(devis).valider();
 		if(!devis.isShowing()){
-			new NewDevis(devis.getBase());
+			new NewDevis(devis.getBase(), devis.getFenetre());
 		}
 	}
 }

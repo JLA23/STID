@@ -1,4 +1,4 @@
-package Controller.Devis;
+package Controller.Commandes;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -12,7 +12,7 @@ public class FocusPosition implements MouseListener, FocusListener {
 	protected int met;
 	protected ExecuteClick click;
 
-	public FocusPosition( JFormattedTextField j, int methode, ExecuteClick exe) {
+	public FocusPosition(JFormattedTextField j, int methode, ExecuteClick exe) {
 		this.jtext = j;
 		this.met = methode;
 		this.click = exe;

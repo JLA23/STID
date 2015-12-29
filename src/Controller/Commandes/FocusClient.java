@@ -1,21 +1,21 @@
-package Controller.Devis;
+package Controller.Commandes;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import View.Devis.Devis;
+import View.Commandes.Commandes;
 
 public class FocusClient implements FocusListener {
 
-	Devis devis;
+	Commandes devis;
 
-	public FocusClient(Devis d) {
+	public FocusClient(Commandes d) {
 		this.devis = d;
 	}
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
 		System.out.println("Hello");
+		devis.getNumClient().getZoneTexte().requestFocus();
 		devis.getNumClient().getFenetreRecherche().setVisible(true);
 	}
 
@@ -25,7 +25,7 @@ public class FocusClient implements FocusListener {
 	}
 	
 	public void nameClient(){
-		if (!devis.getNumClient().getText().equals("") && !devis.getNumClient().getText().equals("(vide)") && devis.getDonnees().existClient(devis.getNumClient().getText())) {
+		if (!devis.getNumClient().getText().equals("")) {
 			int i = 0;
 			while (!devis.getListClient()[i][0].toString().equals(devis.getNumClient().getText()) && i < devis.getListClient().length) {
 				i++;

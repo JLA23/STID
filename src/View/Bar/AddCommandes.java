@@ -5,17 +5,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Commandes.NewCommandes;
 
 public class AddCommandes{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
+	private Base base;
+	private JFrame fenetre;
 	
-	public AddCommandes(Base bdd, String typeCompte){
+	public AddCommandes(Base bdd, String typeCompte, JFrame frame){
+		this.base = bdd;
+		this.fenetre = frame;
 		menu = new JMenu("Commandes");
 		menu.getAccessibleContext().setAccessibleDescription("Devis");
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/pannier-commande.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
@@ -27,7 +33,7 @@ public class AddCommandes{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//new Devis();
+					new NewCommandes(base, fenetre);
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Creation d'une nouvelle commande");

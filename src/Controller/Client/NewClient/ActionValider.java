@@ -6,13 +6,20 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import View.Clients.Client;
+import View.Devis.Devis;
 
 public class ActionValider implements ActionListener {
 
 	private Client client;
+	private Devis dev;
 
 	public ActionValider(Client d) {
 		this.client = d;
+	}
+	
+	public ActionValider(Client d, Devis devis){
+		this.client = d;
+		this.dev = devis;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -54,6 +61,9 @@ public class ActionValider implements ActionListener {
 									}
 									JOptionPane.showMessageDialog(null, "client enregistré !");
 									client.dispose();
+									if(dev != null){
+										dev.getNumClient().getZoneTexte().setText(client.getjNumClient().getText());
+									}
 								} else {
 									JOptionPane.showMessageDialog(null, "Erreur : Adresse vide ou incomplète",
 											"ATTENTION", JOptionPane.WARNING_MESSAGE);

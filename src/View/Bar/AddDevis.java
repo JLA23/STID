@@ -33,7 +33,7 @@ public class AddDevis{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new NewDevis(bdd);
+					new NewDevis(bdd, fenetre);
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Creation d'un nouveau devis");
@@ -62,11 +62,20 @@ public class AddDevis{
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Supprime un devis existant");
 			menu.add(menuItem);
-		
-		
+		}
+			//Rechercher Devis
+			menuItem = new JMenuItem("Recherche Devis");
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					new SearchDevis(bdd, fenetre, true, "Recherche");
+				}
+			});
+			menuItem.getAccessibleContext().setAccessibleDescription("Afficher un devis existant");
+			menu.add(menuItem);
 		
 			menu.addSeparator();
-		}
+		
 		
 		//Devis en cours
 		menuItem = new JMenuItem("Devis en cours");

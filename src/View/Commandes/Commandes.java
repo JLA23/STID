@@ -1,11 +1,18 @@
-package View;
+package View.Commandes;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-
+import java.util.Map.Entry;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -15,55 +22,74 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
-
+import javax.swing.KeyStroke;
+import BDD.Base;
+import Controller.ActionCalculatrice;
+import Controller.ActionFermer;
+import Controller.EcouteAction;
+import Controller.Commandes.ExecuteClick;
+import Controller.Commandes.FocusPosition;
+import Controller.Commandes.ItemChange;
+import Controller.Commandes.SelectDevis.ActionSelectDevis;
+import Controller.Commandes.ActionSearch;
+import Controller.Commandes.FocusClient;
+import Model.Donnees;
+import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
 import fr.julien.autocomplete.view.AutoComplete;
 
 public class Commandes extends JFrame{
-    private JButton calcul1, valider, fermer, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7, nouveau, search;
-    private JComboBox<String> devises;
-    private JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, euro5;
-    private JLabel hrs2, hrs3, totalHeures, commande, euro6, resteCommande, euro7, deviselabel, libelle, numClientLabel, fournitures;
-    private JLabel coutMO, totalDevisdevise, devise, nameClient, numCommandeClient;
-    private JPanel jPanel1, jPanel2, jPanel3, JPanelTemps, jPanel6;
-    private JSeparator jSeparator1, jSeparator2;
-    private JFormattedTextField jTotalDevisDevise, jHeureSite, jFournitures, jPrefabrication, jCout, jTotalDevis, jPrevu, jHeureAtelier, jTotalHeure, jCommande, jResteCommande, jNumDevis, jNumCommandeClient;
-    private JTextField jLibelle;
-    private JButton jDevis;
-    private JCheckBox check;
-    
-    private double valeurDevise;
-   // private Donnees donnees;
-    private AutoComplete numClient;
-   // private Base base;
-    private HashMap <String, String []> valeurDevises;
-    private Object [][] listClient;
+    protected JButton calcul1, valider, fermer, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7, nouveau, search;
+    protected JComboBox<String> devises;
+    protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, euro5;
+    protected JLabel hrs2, hrs3, totalHeures, commande, euro6, resteCommande, euro7, deviselabel, libelle, numClientLabel, fournitures;
+    protected JLabel coutMO, totalDevisdevise, devise, nameClient, numCommandeClient;
+    protected JPanel jPanel1, jPanel2, jPanel3, JPanelTemps, jPanel6;
+    protected JSeparator jSeparator1, jSeparator2;
+    protected JFormattedTextField jTotalDevisDevise, jHeureSite, jFournitures, jPrefabrication, jCout, jTotalDevis, jPrevu, jHeureAtelier, jTotalHeure, jCommande, jResteCommande, jNumCommande, jNumCommandeClient;
+    protected JTextField jLibelle;
+    protected JButton jDevis;
+    protected JCheckBox check;
+    protected double valeurDevise;
+    protected Donnees donnees;
+    protected AutoComplete numClient;
+    protected Base base;
+    protected HashMap <String, String []> valeurDevises;
+    protected Object [][] listClient;
+    protected ArrayList<Object[]> listDevis;
 
-	private static final long serialVersionUID = 1L;
+	protected static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
+	protected SelectDevis sd;
+	protected JFrame fenetre;
 	
-	public Commandes(){
+	@SuppressWarnings("unchecked")
+	public Commandes(Base bdd, JFrame frame){
+		this.fenetre = frame;
+		fenetre.setEnabled(false);
+		this.base = bdd;
 		this.setLayout(null);
 		this.setTitle("STID Gestion 2.0 (Nouvelle Commande)");
 		screenSize.width = 800;
 		screenSize.height = 600;
-		//this.setImage(new Image("lib/images/e.png").getImage());
+		sd = new SelectDevis(bdd, this, null);
+		donnees = new Donnees(base);
+		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
 	    this.setSize(screenSize);
-	    
 		NumberFormat num =  NumberFormat.getIntegerInstance();
         DecimalFormat nf = new DecimalFormat("#0.00");
+		int nbCommande = donnees.newNumCommande();
+		AutoCompleteModel model = new AutoCompleteModel();
+		model.addAll(listClient());
+		numClient = new AutoComplete(model);
         nf.setGroupingUsed(false);
-	    
+        listDevis = new ArrayList<Object []>();
 	    jPanel1 = new JPanel();
 	    jPanel2 = new JPanel();
 	    JPanelTemps = new JPanel();
 	    jPanel6 = new JPanel();
         jPanel3 = new JPanel();
-        
-        jDevis = new JButton("Devis");
-        AutoCompleteModel model = new AutoCompleteModel();
-        numClient = new AutoComplete(model);
-	    
+        jDevis = new JButton("Devis");	    
         numero = new JLabel("N° de Commande");
         deviselabel = new JLabel("Devise");
         libelle = new JLabel("Libellé");
@@ -95,8 +121,8 @@ public class Commandes extends JFrame{
 		jNumCommandeClient = new JFormattedTextField();
 		check = new JCheckBox("Assujettie COREM", false);
 		
-		jNumDevis = new JFormattedTextField(num);
-        jNumDevis.setText("");
+		jNumCommande = new JFormattedTextField(num);
+        jNumCommande.setText(nbCommande + "");
         jLibelle = new JTextField();
         jFournitures = new JFormattedTextField(nf);;
         jCout = new JFormattedTextField(nf);
@@ -130,13 +156,14 @@ public class Commandes extends JFrame{
         
         devises = new JComboBox<>();
         
-        calcul4 = new JButton();
-        calcul6 = new JButton();
-        calcul1 = new JButton();
-        calcul2 = new JButton();
-        calcul3 = new JButton();
-        calcul5 = new JButton();
-        calcul7 = new JButton();
+        ImageIcon icon = new ImageIcon("lib/images/1447428838_calculate_16x16.gif");
+        calcul4 = new JButton(icon);
+		calcul6 = new JButton(icon);
+		calcul1 = new JButton(icon);
+		calcul2 = new JButton(icon);
+		calcul3 = new JButton(icon);
+		calcul5 = new JButton(icon);
+		calcul7 = new JButton(icon);
         nouveau = new JButton("Nouveau");
         valider = new JButton("Valider");
         fermer = new JButton("Fermer");
@@ -148,9 +175,9 @@ public class Commandes extends JFrame{
         jPanel1.setBorder(BorderFactory.createEtchedBorder());
   
         jPanel2.setBorder(BorderFactory.createEtchedBorder());
-        //InsertDevises();
-        //valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
-        //devises.addItemListener(new ItemChange(this));
+        InsertDevises();
+        valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
+        devises.addItemListener(new ItemChange(this));
         JPanelTemps.setBorder(BorderFactory.createTitledBorder("Temps"));
         JPanelTemps.setPreferredSize(new Dimension(350, 200));
 
@@ -163,7 +190,7 @@ public class Commandes extends JFrame{
         jPanel6.setPreferredSize(new Dimension(350, 200));
         jPanel3.setBorder(BorderFactory.createTitledBorder("Achat Matières"));
         
-       // devise.setText(devises.getSelectedItem().toString());
+        devise.setText(devises.getSelectedItem().toString());
         
         this.getContentPane().add(jPanel1);
         jPanel1.setPreferredSize(new Dimension(760, 40));
@@ -181,23 +208,345 @@ public class Commandes extends JFrame{
         this.getContentPane().add(fermer);
         nouveau.setPreferredSize(new Dimension(90, 25));
         nouveau.setBounds(20, 510, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+		new ClickDroit(jTotalDevis, true, false);
+		new ClickDroit(jTotalDevisDevise, true, false);
+		new ClickDroit(jTotalHeure, true, false);
+		new ClickDroit(jResteCommande, true, false);
+		new ClickDroit(jNumCommande, true, true);
+		jPanel1.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		jPanel2.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		JPanelTemps.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		jPanel6.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		jPanel3.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		ExecuteClick click = new ExecuteClick(this);
+		
+		jFournitures.addMouseListener(new FocusPosition(jFournitures, 1, click));
+		jCout.addMouseListener(new FocusPosition(jCout, 1, click));
+		jPrefabrication.addMouseListener(new FocusPosition(jPrefabrication, 1, click));
+		jHeureSite.addMouseListener(new FocusPosition(jHeureSite, 2, click));
+		jHeureAtelier.addMouseListener(new FocusPosition(jHeureAtelier, 2, click));
+		jPrevu.addMouseListener(new FocusPosition(jPrevu, 3, click));
+		jCommande.addMouseListener(new FocusPosition(jCommande, 3, click));
+		
+		jNumCommande.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jNumCommande.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jLibelle.requestFocus();
+			}
+		});
+		
+		new ClickDroit(jLibelle, true, true);
+		jLibelle.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jLibelle.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				numClient.getZoneTexte().requestFocus();
+			}
+		});
+		
+		new ClickDroit(numClient.getZoneTexte(), true, true);
+		numClient.getZoneTexte().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		numClient.getZoneTexte().getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				numClient.getFenetreRecherche().dispose();
+				jFournitures.requestFocus();
+			}
+		});
+
+		jFournitures.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jFournitures.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jCout.requestFocus();
+			}
+		});
+		jCout.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jCout.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jPrefabrication.requestFocus();
+			}
+		});
+		jPrefabrication.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jPrefabrication.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jHeureAtelier.requestFocus();
+			}
+		});
+		jHeureAtelier.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jHeureAtelier.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jHeureSite.requestFocus();
+			}
+		});
+
+		jHeureSite.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jHeureSite.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jPrevu.requestFocus();
+			}
+		});
+
+		jPrevu.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jPrevu.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jCommande.requestFocus();
+			}
+		});
+
+		jCommande.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jCommande.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				valider.requestFocus();
+			}
+		});
+
+		calcul1.addActionListener(new ActionCalculatrice(jFournitures));
+		calcul2.addActionListener(new ActionCalculatrice(jCout));
+		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication));
+		calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier));
+		calcul5.addActionListener(new ActionCalculatrice(jPrevu));
+		calcul6.addActionListener(new ActionCalculatrice(jHeureSite));
+		calcul7.addActionListener(new ActionCalculatrice(jCommande));
+		
+		jFournitures.addFocusListener(new FocusPosition(jFournitures, 1,click));
+		jCout.addFocusListener(new FocusPosition(jCout, 1, click));
+		jPrefabrication.addFocusListener(new FocusPosition(jPrefabrication, 1, click));
+		jHeureSite.addFocusListener(new FocusPosition(jHeureSite, 2, click));
+		jHeureAtelier.addFocusListener(new FocusPosition(jHeureAtelier, 2, click));
+		jPrevu.addFocusListener(new FocusPosition(jPrevu, 3, click));
+		jCommande.addFocusListener(new FocusPosition(jCommande, 3, click));
+		
+		jFournitures.addKeyListener(new EcouteAction(jFournitures));
+		jCout.addKeyListener(new EcouteAction(jCout));
+		jPrefabrication.addKeyListener(new EcouteAction(jPrefabrication));
+		jHeureSite.addKeyListener(new EcouteAction(jHeureSite));
+		jHeureAtelier.addKeyListener(new EcouteAction(jHeureAtelier));
+		jPrevu.addKeyListener(new EcouteAction(jPrevu));
+		jCommande.addKeyListener(new EcouteAction(jCommande));
+
+		numClient.getZoneTexte().addFocusListener(new FocusClient(this));
+		search.addActionListener(new ActionSearch(this));
         this.getContentPane().add(nouveau);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        this.addWindowListener(new ActionFermer(this, fenetre));
 	}
 	
+	public JLabel getNameClient() {
+		return nameClient;
+	}
+
+	public void setNameClient(JLabel nameClient) {
+		this.nameClient = nameClient;
+	}
+
+	public Object[][] getListClient() {
+		return listClient;
+	}
+
+	public void setListClient(Object[][] listClient) {
+		this.listClient = listClient;
+	}
+
+	public AutoComplete getNumClient() {
+		return numClient;
+	}
+
+	public void setNumClient(AutoComplete numClient) {
+		this.numClient = numClient;
+	}
+
+	public double getValeurDevise() {
+		return valeurDevise;
+	}
+
+	public void setValeurDevise(double valeurDevise) {
+		this.valeurDevise = valeurDevise;
+	}
+
+	public JComboBox<String> getDevises() {
+		return devises;
+	}
+
+	public void setDevises(JComboBox<String> devises) {
+		this.devises = devises;
+	}
+
+	public JLabel getCommande() {
+		return commande;
+	}
+
+	public void setCommande(JLabel commande) {
+		this.commande = commande;
+	}
+
+	public JLabel getDevise() {
+		return devise;
+	}
+
+	public void setDevise(JLabel devise) {
+		this.devise = devise;
+	}
+
+	public JFormattedTextField getjTotalDevisDevise() {
+		return jTotalDevisDevise;
+	}
+
+	public void setjTotalDevisDevise(JFormattedTextField jTotalDevisDevise) {
+		this.jTotalDevisDevise = jTotalDevisDevise;
+	}
+
+	public JFormattedTextField getjHeureSite() {
+		return jHeureSite;
+	}
+
+	public void setjHeureSite(JFormattedTextField jHeureSite) {
+		this.jHeureSite = jHeureSite;
+	}
+
+	public JFormattedTextField getjFournitures() {
+		return jFournitures;
+	}
+
+	public void setjFournitures(JFormattedTextField jFournitures) {
+		this.jFournitures = jFournitures;
+	}
+
+	public JFormattedTextField getjPrefabrication() {
+		return jPrefabrication;
+	}
+
+	public void setjPrefabrication(JFormattedTextField jPrefabrication) {
+		this.jPrefabrication = jPrefabrication;
+	}
+
+	public JFormattedTextField getjCout() {
+		return jCout;
+	}
+
+	public void setjCout(JFormattedTextField jCout) {
+		this.jCout = jCout;
+	}
+
+	public JFormattedTextField getjTotalDevis() {
+		return jTotalDevis;
+	}
+
+	public void setjTotalDevis(JFormattedTextField jTotalDevis) {
+		this.jTotalDevis = jTotalDevis;
+	}
+
+	public JFormattedTextField getjPrevu() {
+		return jPrevu;
+	}
+
+	public void setjPrevu(JFormattedTextField jPrevu) {
+		this.jPrevu = jPrevu;
+	}
+
+	public JFormattedTextField getjHeureAtelier() {
+		return jHeureAtelier;
+	}
+
+	public void setjHeureAtelier(JFormattedTextField jHeureAtelier) {
+		this.jHeureAtelier = jHeureAtelier;
+	}
+
+	public JFormattedTextField getjTotalHeure() {
+		return jTotalHeure;
+	}
+
+	public void setjTotalHeure(JFormattedTextField jTotalHeure) {
+		this.jTotalHeure = jTotalHeure;
+	}
+
+	public JFormattedTextField getjCommande() {
+		return jCommande;
+	}
+
+	public void setjCommande(JFormattedTextField jCommande) {
+		this.jCommande = jCommande;
+	}
+
+	public JFormattedTextField getjResteCommande() {
+		return jResteCommande;
+	}
+
+	public void setjResteCommande(JFormattedTextField jResteCommande) {
+		this.jResteCommande = jResteCommande;
+	}
+
+	public JFormattedTextField getjNumCommande() {
+		return jNumCommande;
+	}
+
+	public void setjNumCommande(JFormattedTextField jNumCommande) {
+		this.jNumCommande = jNumCommande;
+	}
+
+	public JFormattedTextField getjNumCommandeClient() {
+		return jNumCommandeClient;
+	}
+
+	public void setjNumCommandeClient(JFormattedTextField jNumCommandeClient) {
+		this.jNumCommandeClient = jNumCommandeClient;
+	}
+
+	public JTextField getjLibelle() {
+		return jLibelle;
+	}
+
+	public void setjLibelle(JTextField jLibelle) {
+		this.jLibelle = jLibelle;
+	}
+
+	public JButton getjDevis() {
+		return jDevis;
+	}
+
+	public void setjDevis(JButton jDevis) {
+		this.jDevis = jDevis;
+	}
+
+	public Base getBase() {
+		return base;
+	}
+
+	public void setBase(Base base) {
+		this.base = base;
+	}
+
 	private void initPanel1(){
 		jPanel1.setLayout(null);
 		numero.setBounds(10, 11, numero.getPreferredSize().width, numero.getPreferredSize().height);
 		jPanel1.add(numero);
 		int l = numero.getPreferredSize().width + 20;
-		jNumDevis.setPreferredSize(new Dimension(80,20));
-		jNumDevis.setBounds(l, 10, jNumDevis.getPreferredSize().width, jNumDevis.getPreferredSize().height);
-		jPanel1.add(jNumDevis);
-		l += jNumDevis.getPreferredSize().width + 145;
+		jNumCommande.setPreferredSize(new Dimension(80,20));
+		jNumCommande.setBounds(l, 10, jNumCommande.getPreferredSize().width, jNumCommande.getPreferredSize().height);
+		jPanel1.add(jNumCommande);
+		l += jNumCommande.getPreferredSize().width + 145;
 
 		jDevis.setPreferredSize(new Dimension(80,25));
 		jDevis.setBounds(l, 8, jDevis.getPreferredSize().width, jDevis.getPreferredSize().height);
+		jDevis.addActionListener(new ActionSelectDevis(sd));
 		jPanel1.add(jDevis);
 		l += jDevis.getPreferredSize().width + 180;
 		deviselabel.setBounds(l, 11, deviselabel.getPreferredSize().width, deviselabel.getPreferredSize().height);
@@ -394,16 +743,38 @@ public class Commandes extends JFrame{
 	
 	}
 	
-	private static void createAndShowGUI() {
-        new Commandes();
-    }
+	protected ArrayList<String> listClient() {
+		listClient = donnees.listeClient();
+		ArrayList<String> res = new ArrayList<String>();
+		for (int i = 0; i < listClient.length; i++) {
+			res.add(listClient[i][0].toString());
+		}
+		return res;
+	}
 	
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
-    }
+	public HashMap<String, String[]> getValeurDevises() {
+		return valeurDevises;
+	}
+
+	public void setValeurDevises(HashMap<String, String[]> valeurDevises) {
+		this.valeurDevises = valeurDevises;
+	}
+
+	protected void InsertDevises() {
+		valeurDevises = donnees.devises();
+		for (Entry<String, String[]> entry : valeurDevises.entrySet()) {
+			devises.addItem(entry.getKey());
+		}
+		devises.setSelectedItem("EUR");
+	}
+
+	public ArrayList<Object[]> getListDevis() {
+		return listDevis;
+	}
+
+	public void setListDevis(ArrayList<Object[]> listDevis) {
+		this.listDevis = listDevis;
+	}
+
 
 }

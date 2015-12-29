@@ -50,8 +50,8 @@ public class SearchDevis extends JDialog{
 	    pane3.add(bouton);
 	    pane3.add(list);
 	    
-	    bouton.addActionListener(new ActionValiderVerif(this, base, numDevis, fonction));
-	    list.addActionListener(new ActionList(this, base, fonction));
+	    bouton.addActionListener(new ActionValiderVerif(this, base, numDevis, frame, fonction));
+	    list.addActionListener(new ActionList(this, base, frame, fonction));
 	    
 	    this.add(pane);
 	    this.add(pane3);

@@ -14,28 +14,28 @@ import Controller.Devis.ModifSupprDevis.ActionRechercher;
 import Controller.Devis.ModifSupprDevis.ActionSuppr;
 import Model.Donnees;
 
-public class SupprDevis extends Devis{
+public class LookDevis extends Devis {
 	private static final long serialVersionUID = 1L;
-	
-	public SupprDevis(Base bdd, String numd, JFrame frame) throws ParseException{
+
+	public LookDevis(Base bdd, String numd, JFrame frame) throws ParseException {
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Supprimer Devis)");
-		this.base= bdd;
-		valider.setText("Supprimer");
+		this.base = bdd;
+		valider.setVisible(false);
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
-		String [] res = donnees.devis(numd);
+		String[] res = donnees.devis(numd);
 		jNumDevis.setText(res[0]);
 		numClient.getZoneTexte().setText(res[1]);
-	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		jDate.setDate(simpleDateFormat.parse(res[3]));
 		jLibelle.setText(res[4]);
 		jFournitures.setText(res[5].replaceAll("\\.", ","));
 		jCout.setText(res[6].replaceAll("\\.", ","));
 		jPrefabrication.setText(res[9].replaceAll("\\.", ","));
 		jHeureSite.setText(res[7].replaceAll("\\.", ","));
-		jHeureAtelier.setText(res[8].replaceAll("\\.", ","));;
+		jHeureAtelier.setText(res[8].replaceAll("\\.", ","));
 		jPrevu.setText(res[10].replaceAll("\\.", ","));
 		jCommande.setText(res[11].replaceAll("\\.", ","));
 		newClient.setVisible(false);
@@ -72,10 +72,11 @@ public class SupprDevis extends Devis{
 		jLibelle.setBackground(new Color(204, 204, 204));
 		valider.addActionListener(new ActionSuppr(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Suppr"));
+		nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche"));
+		fermer.setBounds(670, 510, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-		}
-	
+	}
+
 }
