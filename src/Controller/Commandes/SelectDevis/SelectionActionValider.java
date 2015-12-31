@@ -48,7 +48,7 @@ public class SelectionActionValider implements ActionListener {
 			new TestContenu(commandes, commandes.getjHeureAtelier(), 2);
 			new TestContenu(commandes, commandes.getjPrevu(), 3);
 			new TestContenu(commandes, commandes.getjCommande(), 3);
-			
+			numClientIdentique();
 			commandes.setListDevis(new ArrayList<Object[]>());
 			
 			for (int i = 0; i < select.getModel().getRowCount(); i++) {
@@ -59,14 +59,31 @@ public class SelectionActionValider implements ActionListener {
 				commandes.getListDevis().add(val);
 			}
 			select.dispose();
-			select.setEnabled(true);
-			select.setVisible(true);
+			commandes.setEnabled(true);
+			commandes.setVisible(true);
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "Aucun Devis n'a été sélectioné", "ATTENTION",
 					JOptionPane.WARNING_MESSAGE);
 		}
 
+	}
+	
+	private void numClientIdentique(){
+		int ligne = select.getModel().getRowCount();
+		String numclient = (String)select.getModel().getValueAt(0, 1);
+		boolean valide = true;
+		if(ligne > 1){
+			for(int  i = 1; i < ligne; i++){
+				if(!numclient.equals((String)select.getModel().getValueAt(i, 1))){
+					valide = false;
+					break;
+				}
+			}
+		}
+		if (valide){
+			commandes.getNumClient().getZoneTexte().setText(numclient);
+		}
 	}
 
 }

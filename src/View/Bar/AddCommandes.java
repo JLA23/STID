@@ -10,7 +10,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
-import View.Commandes.NewCommandes;
+import View.Commandes.NewCommande;
+import View.Commandes.SearchCommande;
 
 public class AddCommandes{
 	
@@ -33,7 +34,7 @@ public class AddCommandes{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new NewCommandes(base, fenetre);
+					new NewCommande(base, fenetre);
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Creation d'une nouvelle commande");
@@ -44,7 +45,7 @@ public class AddCommandes{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//new ModifDevis();
+					new SearchCommande(base, fenetre, "Modif");
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Modifie commande");

@@ -22,11 +22,16 @@ public class ActionSuppr implements ActionListener {
 
 	public void suppr() {
 		if (client.getDonnees().existNumClient(client.getjNumClient().getText())) {
-			client.getBase().delete("client", "numclient = " + client.getjNumClient().getText());
-			JOptionPane.showMessageDialog(null, "Client supprimé !");
-			client.dispose();
+			if(!client.getDonnees().lieeDevis(client.getjNumClient().getText())){
+				client.getBase().delete("client", "numclient = " + client.getjNumClient().getText());
+				JOptionPane.showMessageDialog(null, "Client supprimé !");
+				client.dispose();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Impossible de supprimer le Client.\nUn devis est liée à ce client.", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Numéro de Devis inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Numéro de Client inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }

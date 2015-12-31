@@ -4,19 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import BDD.Base;
+import Controller.ActionFermer;
+import Controller.Client.ModifSupprClient.RetourAction;
+import Controller.Client.ModifSupprClient.SelectionAction;
 import Model.Donnees;
 
 public class SearchClientList extends JDialog {
@@ -30,12 +30,8 @@ public class SearchClientList extends JDialog {
 		this.bdd = bdd;
 		Donnees donnees = new Donnees(bdd);
 		Object[][] data = donnees.listeClient();
-		Object[][] datas;
-		if(data == null) {
-			datas = donnees.listeClient();
-		}
-		else {
-			datas = data;
+		if(fonction.equals("Suppr")){
+			data = donnees.listeClientNoDevis();
 		}
 		this.setPreferredSize(screenSize);
 		this.setTitle("STID Gestion 2.0 (Chercher Client)");
@@ -50,7 +46,7 @@ public class SearchClientList extends JDialog {
         String[] columns = { "Numèro Client", "Nom", "Adresse" };
 
         // Construct our table to hold our list of layers
-        JTable layerTable = new JTable(datas, columns){
+        JTable layerTable = new JTable(data, columns){
 			private static final long serialVersionUID = 1L;
 
 			public boolean isCellEditable(int row, int col) {
@@ -64,9 +60,13 @@ public class SearchClientList extends JDialog {
         layerPanel.add(new JScrollPane(layerTable), c);
         JButton valider = new JButton("Valider");
         JButton annuler = new JButton("Annuler");
+        JButton retour = new JButton("Retour");
+        layerPanel.add(retour, BorderLayout.SOUTH);
         layerPanel.add(valider, BorderLayout.SOUTH);
         layerPanel.add(annuler, BorderLayout.SOUTH);
-        valider.addActionListener(new SelectionAction(this, layerTable, datas));
+        valider.addActionListener(new SelectionAction(this, layerTable, data, bdd, fonction));
+        annuler.addActionListener(new ActionFermer(this));
+        retour.addActionListener(new RetourAction(this, bdd, frame, fonction));
         this.add(layerPanel);
         this.pack();
 	    this.setResizable(false);
@@ -82,30 +82,6 @@ public class SearchClientList extends JDialog {
 			table.getColumnModel().getColumn(i).setCellRenderer(custom); 
 	   }
 	
-	private class SelectionAction implements ActionListener {
-		private JDialog dialog;
-		private JTable tables;
-		private Object[][] datass;
-		
-		SelectionAction(JDialog dialog, JTable table, Object [][] datas){
-			this.dialog = dialog;
-			this.tables = table;
-			this.datass = datas;
-		}
-		public void actionPerformed(ActionEvent e) {
-			
-			if (e.getActionCommand().equals("Valider")) {
-				int ligne = tables.getSelectedRow();
-				if(ligne != -1){
-					String numero = datass[ligne][0].toString();
-					dialog.dispose();
-					new ModifClient(bdd, numero);
-				}
-				else{
-					JOptionPane.showMessageDialog(null, "Aucune ligne de sélectionné", "ATTENTION", JOptionPane.WARNING_MESSAGE);
-				}
-			}
-		}
-	}
+
 
 }

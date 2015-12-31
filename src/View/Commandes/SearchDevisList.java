@@ -22,7 +22,7 @@ import Model.Donnees;
 public class SearchDevisList extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private Dimension screenSize = new Dimension(500, 500);
+	private Dimension screenSize = new Dimension(800, 500);
 	protected Base bdd;
 	protected SelectDevis sd;
 
@@ -45,7 +45,7 @@ public class SearchDevisList extends JDialog {
 			c.gridx = 0;
 			c.gridy = 0;
 
-			String[] columns = { "Numéro Devis", "Numéro Client", "Libelle" };
+			String[] columns = { "N° Devis", "N° Client", "Nom Client" , "Libelle" };
 
 			// Construct our table to hold our list of layers
 			JTable layerTable = new JTable(data, columns) {
@@ -59,9 +59,12 @@ public class SearchDevisList extends JDialog {
 
 			layerTable.getColumnModel().getColumn(0).setPreferredWidth(1);
 			layerTable.getColumnModel().getColumn(1).setPreferredWidth(1);
-			layerTable.getColumnModel().getColumn(2).setPreferredWidth(170);
+			layerTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+			layerTable.getColumnModel().getColumn(3).setPreferredWidth(330);
 			centrerTable(layerTable);
-			layerPanel.add(new JScrollPane(layerTable), c);
+			JScrollPane scroll = new JScrollPane(layerTable);
+			scroll.setPreferredSize(new Dimension(750, 400));
+			layerPanel.add(scroll, c);
 			JButton valider = new JButton("Ajouter");
 			JButton annuler = new JButton("Annuler");
 			layerPanel.add(valider, BorderLayout.SOUTH);

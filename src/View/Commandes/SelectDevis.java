@@ -18,14 +18,14 @@ import Controller.Commandes.ActionListDevis;
 import Controller.Commandes.SelectDevis.ActionAfficherDevis;
 import Controller.Commandes.SelectDevis.ActionAjouterVerif;
 import Controller.Commandes.SelectDevis.ActionFermerListDevis;
-import Controller.Commandes.SelectDevis.ActionSupprimer;
+import Controller.Commandes.SelectDevis.ActionSupprimerListDevis;
 import Controller.Commandes.SelectDevis.SelectionActionValider;
 import Model.Donnees;
 
 public class SelectDevis extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private Dimension screenSize = new Dimension(500, 550);
+	private Dimension screenSize = new Dimension(800, 550);
 	protected JFormattedTextField jNumDevis;
 	protected JLabel numDevis;
 	protected JButton ajouter;
@@ -44,12 +44,15 @@ public class SelectDevis extends JFrame {
 		this.setPreferredSize(screenSize);
 		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 		this.setLayout(null);
-		model.addColumn("Numéro Devis");
-		model.addColumn("Numèro Client");
+		model.addColumn("N° Devis");
+		model.addColumn("N° Client");
+		model.addColumn("Nom Client");
 		model.addColumn("Libelle");
+		System.out.println(numCommande);
 		if(numCommande != null){
+			System.out.println("entre");
 			Object[][] liees = donnees.listeDevisYesCommande(numCommande);
-			for(int m = 0; m<liees.length ; m++){
+			for(int m = 0; m< liees.length ; m++){
 				model.addRow(liees[m]);
 			}
 		}
@@ -74,9 +77,12 @@ public class SelectDevis extends JFrame {
 
 		layerTable.getColumnModel().getColumn(0).setPreferredWidth(1);
 		layerTable.getColumnModel().getColumn(1).setPreferredWidth(1);
-		layerTable.getColumnModel().getColumn(2).setPreferredWidth(170);
+		layerTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+		layerTable.getColumnModel().getColumn(3).setPreferredWidth(330);
 		centrerTable(layerTable);
-		layerPanel.add(new JScrollPane(layerTable), c);
+		JScrollPane scroll = new JScrollPane(layerTable);
+		scroll.setPreferredSize(new Dimension(765, 420));
+		layerPanel.add(scroll, c);
 		JButton valider = new JButton("Valider");
 		JButton fermer = new JButton("Fermer");
 		JButton consulter = new JButton("Consulter");
@@ -84,27 +90,27 @@ public class SelectDevis extends JFrame {
 		JButton liste = new JButton("Liste");
 		numDevis = new JLabel("N° Devis");
 		jNumDevis = new JFormattedTextField();
-		numDevis.setBounds(135, 448, numDevis.getPreferredSize().width, numDevis.getPreferredSize().height);
+		numDevis.setBounds(295, 448, numDevis.getPreferredSize().width, numDevis.getPreferredSize().height);
 		jNumDevis.setPreferredSize(new Dimension(100, 25));
-		jNumDevis.setBounds(145 + numDevis.getPreferredSize().width, 445, jNumDevis.getPreferredSize().width,
+		jNumDevis.setBounds(300 + numDevis.getPreferredSize().width, 445, jNumDevis.getPreferredSize().width,
 				jNumDevis.getPreferredSize().height);
 		this.getContentPane().add(numDevis);
 		this.getContentPane().add(jNumDevis);
 		ajouter = new JButton("Ajouter");
-		ajouter.setBounds(150 + numDevis.getPreferredSize().width + jNumDevis.getPreferredSize().width, 445,
+		ajouter.setBounds(310 + numDevis.getPreferredSize().width + jNumDevis.getPreferredSize().width, 445,
 				ajouter.getPreferredSize().width, ajouter.getPreferredSize().height);
 		this.getContentPane().add(ajouter);
-		consulter.setBounds(40, 480, consulter.getPreferredSize().width, consulter.getPreferredSize().height);
-		liste.setBounds(45 + consulter.getPreferredSize().width, 480, liste.getPreferredSize().width,
+		consulter.setBounds(190, 480, consulter.getPreferredSize().width, consulter.getPreferredSize().height);
+		liste.setBounds(195 + consulter.getPreferredSize().width, 480, liste.getPreferredSize().width,
 				liste.getPreferredSize().height);
-		supprimer.setBounds(50 + consulter.getPreferredSize().width + liste.getPreferredSize().width, 480,
+		supprimer.setBounds(200 + consulter.getPreferredSize().width + liste.getPreferredSize().width, 480,
 				supprimer.getPreferredSize().width, supprimer.getPreferredSize().height);
 		valider.setBounds(
-				55 + consulter.getPreferredSize().width + liste.getPreferredSize().width
+				205 + consulter.getPreferredSize().width + liste.getPreferredSize().width
 						+ supprimer.getPreferredSize().width,
 				480, valider.getPreferredSize().width, valider.getPreferredSize().height);
 		fermer.setBounds(
-				60 + consulter.getPreferredSize().width + liste.getPreferredSize().width
+				210 + consulter.getPreferredSize().width + liste.getPreferredSize().width
 						+ supprimer.getPreferredSize().width + valider.getPreferredSize().width,
 				480, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
 		this.getContentPane().add(consulter);
@@ -112,12 +118,12 @@ public class SelectDevis extends JFrame {
 		this.getContentPane().add(supprimer);
 		this.getContentPane().add(valider);
 		this.getContentPane().add(fermer);
-		layerPanel.setBounds(10, 10, layerPanel.getPreferredSize().width, layerPanel.getPreferredSize().height);
+		layerPanel.setBounds(10, 10, 770, 430);
 		liste.addActionListener(new ActionListDevis(base, this, numCommande));
 		valider.addActionListener(new SelectionActionValider(this, com)); 
 		fermer.addActionListener(new ActionFermerListDevis(this, com)); 
 		ajouter.addActionListener(new ActionAjouterVerif(this));
-		supprimer.addActionListener(new ActionSupprimer(this));
+		supprimer.addActionListener(new ActionSupprimerListDevis(this));
 		consulter.addActionListener(new ActionAfficherDevis(this));
 		this.addWindowListener(new ActionFermerListDevis(this, com));
 		this.add(layerPanel);

@@ -30,7 +30,6 @@ import Controller.EcouteAction;
 import Controller.Commandes.ExecuteClick;
 import Controller.Commandes.FocusPosition;
 import Controller.Commandes.ItemChange;
-import Controller.Commandes.SelectDevis.ActionSelectDevis;
 import Controller.Commandes.ActionSearch;
 import Controller.Commandes.FocusClient;
 import Model.Donnees;
@@ -41,7 +40,7 @@ import fr.julien.autocomplete.view.AutoComplete;
 public class Commandes extends JFrame{
     protected JButton calcul1, valider, fermer, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7, nouveau, search;
     protected JComboBox<String> devises;
-    protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, euro5;
+	protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, euro5;
     protected JLabel hrs2, hrs3, totalHeures, commande, euro6, resteCommande, euro7, deviselabel, libelle, numClientLabel, fournitures;
     protected JLabel coutMO, totalDevisdevise, devise, nameClient, numCommandeClient;
     protected JPanel jPanel1, jPanel2, jPanel3, JPanelTemps, jPanel6;
@@ -57,6 +56,7 @@ public class Commandes extends JFrame{
     protected HashMap <String, String []> valeurDevises;
     protected Object [][] listClient;
     protected ArrayList<Object[]> listDevis;
+    protected Object [][] DevisdelaCommande;
 
 	protected static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
@@ -72,8 +72,8 @@ public class Commandes extends JFrame{
 		this.setTitle("STID Gestion 2.0 (Nouvelle Commande)");
 		screenSize.width = 800;
 		screenSize.height = 600;
-		sd = new SelectDevis(bdd, this, null);
 		donnees = new Donnees(base);
+		DevisdelaCommande = null;
 		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
 	    this.setSize(screenSize);
 		NumberFormat num =  NumberFormat.getIntegerInstance();
@@ -350,6 +350,22 @@ public class Commandes extends JFrame{
         this.addWindowListener(new ActionFermer(this, fenetre));
 	}
 	
+	public Object[][] getDevisdelaCommande() {
+		return DevisdelaCommande;
+	}
+
+	public void setDevisdelaCommande(Object[][] devisdelaCommande) {
+		DevisdelaCommande = devisdelaCommande;
+	}
+
+	public JFrame getFenetre() {
+		return fenetre;
+	}
+
+	public void setFenetre(JFrame fenetre) {
+		this.fenetre = fenetre;
+	}
+
 	public JLabel getNameClient() {
 		return nameClient;
 	}
@@ -546,7 +562,6 @@ public class Commandes extends JFrame{
 
 		jDevis.setPreferredSize(new Dimension(80,25));
 		jDevis.setBounds(l, 8, jDevis.getPreferredSize().width, jDevis.getPreferredSize().height);
-		jDevis.addActionListener(new ActionSelectDevis(sd));
 		jPanel1.add(jDevis);
 		l += jDevis.getPreferredSize().width + 180;
 		deviselabel.setBounds(l, 11, deviselabel.getPreferredSize().width, deviselabel.getPreferredSize().height);
@@ -774,6 +789,22 @@ public class Commandes extends JFrame{
 
 	public void setListDevis(ArrayList<Object[]> listDevis) {
 		this.listDevis = listDevis;
+	}
+	
+    public Donnees getDonnees() {
+		return donnees;
+	}
+
+	public void setDonnees(Donnees donnees) {
+		this.donnees = donnees;
+	}
+
+	public JCheckBox getCheck() {
+		return check;
+	}
+
+	public void setCheck(JCheckBox check) {
+		this.check = check;
 	}
 
 

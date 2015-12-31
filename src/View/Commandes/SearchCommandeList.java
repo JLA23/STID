@@ -1,5 +1,4 @@
-package View.Devis;
-
+package View.Commandes;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -15,18 +14,18 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Devis.ModifSupprDevis.RetourAction;
-import Controller.Devis.ModifSupprDevis.SelectionAction;
+import Controller.Commandes.ModifSupprCommandes.RetourAction;
+import Controller.Commandes.ModifSupprCommandes.SelectionAction;
 import Model.Donnees;
 
-public class SearchDevisList extends JDialog {
+public class SearchCommandeList extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private Dimension screenSize = new Dimension(800, 480);
+	private Dimension screenSize = new Dimension(800, 500);
 	protected Base bdd;
 
-	public SearchDevisList(Base bdd, JFrame frame, boolean modale, String fonction) {
-		super(frame, null, modale);
+	public SearchCommandeList(Base bdd, JFrame frame, String fonction, String numComClient) {
+		super(frame, null, true);
 		this.bdd = bdd;
 		Donnees donnees = new Donnees(bdd);
 		Object[][] data = donnees.listeDevis();
@@ -42,7 +41,7 @@ public class SearchDevisList extends JDialog {
 		c.gridx = 0;
 		c.gridy = 0;
 
-		String[] columns = { "N° Devis", "N° Client", "Nom Client", "Libelle" };
+		String[] columns = { "N° Commande", "N° Client", "Nom Client", "Libelle" };
 
 		// Construct our table to hold our list of layers
 		JTable layerTable = new JTable(data, columns) {

@@ -84,6 +84,23 @@ public class Donnees {
 		}
 		return resultat;
 	}
+	
+	public boolean existNumCommande(String num) {
+		ResultSet rs = base.Select("numCommande", "Commandes", "numCommande = " + num);
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i++;
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if (i != 0) {
+			resultat = true;
+		}
+		return resultat;
+	}
 
 	public int newNumDevis() {
 		ResultSet rs = base.Select("MAX(NumDevis)", "devis", null);
@@ -148,9 +165,10 @@ public class Donnees {
 		return list;
 
 	}
-
-	public Object[][] listeDevis() {
-		ResultSet rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d", null);
+	
+	public Object[][] listeClientNoDevis() {
+		ResultSet rs = base.Select("c.NumClient, c.NomClient, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7",
+				"Clients as c", "not exists (select * from devis as d where d.numclient = c.numclient)");
 		Object[][] list = null;
 		try {
 			rs.last();
@@ -161,7 +179,31 @@ public class Donnees {
 			while (rs.next() && i < nombreLignes) {
 				list[i][0] = rs.getString(1);
 				list[i][1] = rs.getString(2);
+				list[i][2] = rs.getString(3) + " " + rs.getString(4) + " " + rs.getString(5) + " " + rs.getString(6)
+						+ " " + rs.getString(7) + " " + rs.getString(8);
+				i++;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return list;
+
+	}
+
+	public Object[][] listeDevis() {
+		ResultSet rs = base.Select("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numClient = c.numClient");
+		Object[][] list = null;
+		try {
+			rs.last();
+			int nombreLignes = rs.getRow();
+			rs.beforeFirst();
+			list = new Object[nombreLignes][4];
+			int i = 0;
+			while (rs.next() && i < nombreLignes) {
+				list[i][0] = rs.getString(1);
+				list[i][1] = rs.getString(2);
 				list[i][2] = rs.getString(3);
+				list[i][3] = rs.getString(4);
 				i++;
 			}
 		} catch (SQLException e) {
@@ -192,7 +234,7 @@ public class Donnees {
 	}
 
 	public ArrayList<String> listNumClient() {
-		ResultSet rs = base.Select("NumCLient", "Clients", null);
+		ResultSet rs = base.Select("NumClient", "Clients", null);
 		ArrayList<String> resultat = null;
 		try {
 			resultat = new ArrayList<String>();
@@ -232,7 +274,7 @@ public class Donnees {
 
 	public String[] devis(String numDevis) {
 		String[] resultat;
-		ResultSet rs = base.Select("*", "Devis", "numDevis = " + numDevis);
+		ResultSet rs = base.Select("*, c.nomclient", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " + numDevis);
 
 		try {
 			ResultSetMetaData metadata = rs.getMetaData();
@@ -250,6 +292,46 @@ public class Donnees {
 		}
 		return resultat;
 	}
+	
+	public String[] commande(String numCommande) {
+		String[] resultat;
+		ResultSet rs = base.Select("*", "Commandes", "numCommande = " + numCommande);
+
+		try {
+			ResultSetMetaData metadata = rs.getMetaData();
+			int nombreColonnes = metadata.getColumnCount();
+			resultat = new String[nombreColonnes];
+			while (rs.next()) {
+				for (int i = 0; i < resultat.length; i++) {
+					resultat[i] = rs.getString(i + 1);
+				}
+			}
+			rs.close();
+		} catch (SQLException e) {
+			resultat = new String[] { e.getMessage() };
+			System.out.println(e.getMessage());
+		}
+		return resultat;
+	}
+	
+	public boolean existPlusieurNumComClient(String numComClient) {
+		ResultSet rs = base.Select("numCommande", "Commandes", "CdeComClient = '" + numComClient + "'");
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while (rs.next()) {
+				if(!rs.getString(1).equals("null")){
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if (i > 1) {
+			resultat = true;
+		}
+		return resultat;
+	}
 
 	public boolean lieeCommande(String numDevis) {
 		ResultSet rs = base.Select("numCommande", "Devis", "numDevis = " + numDevis);
@@ -257,7 +339,47 @@ public class Donnees {
 		int i = 0;
 		try {
 			while (rs.next()) {
-				i++;
+				if(!rs.getString(1).equals("null")){
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if (i != 0) {
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public boolean lieeDevis(String numClient) {
+		ResultSet rs = base.Select("numClient", "Devis", "numClient = " + numClient);
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while (rs.next()) {
+				if(!rs.getString(1).equals("null")){
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if (i != 0) {
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public boolean clientsNoLieeDevis() {
+		ResultSet rs = base.Select("c.numClient", "clients as c", "not exists (select * from devis as d where d.numclient = c.numclient)");
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while (rs.next()) {
+				if(!rs.getString(1).equals("null")){
+					i++;
+				}
 			}
 		} catch (SQLException e) {
 			resultat = true;
@@ -351,10 +473,10 @@ public class Donnees {
 	public Object[][] listeDevisNoCommande(String numCommande) {
 		ResultSet rs;
 		if (numCommande == null) {
-			rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d", "numcommande is null");
+			rs = base.Select("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and numcommande is null");
 		} else {
-			rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d",
-					"numcommande is null and numcommande = " + numCommande);
+			rs = base.Select("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c",
+					"d.numclient = c.numclient and (d.numcommande is null || d.numCommande = " + numCommande + ")");
 		}
 		Object[][] list = null;
 		try {
@@ -363,12 +485,13 @@ public class Donnees {
 			System.out.println(nombreLignes);
 			rs.beforeFirst();
 			if (nombreLignes > 0) {
-				list = new Object[nombreLignes][3];
+				list = new Object[nombreLignes][4];
 				int i = 0;
 				while (rs.next() && i < nombreLignes) {
 					list[i][0] = rs.getString(1);
 					list[i][1] = rs.getString(2);
 					list[i][2] = rs.getString(3);
+					list[i][3] = rs.getString(4);
 					i++;
 				}
 			}
@@ -380,7 +503,7 @@ public class Donnees {
 	}
 
 	public Object[][] listeDevisYesCommande(String numCommande) {
-		ResultSet rs = base.Select("d.numDevis, d.numClient, d.lblDevis", "Devis as d", "numcommande = " + numCommande);
+		ResultSet rs = base.Select("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande = " + numCommande);
 		Object[][] list = null;
 		try {
 			rs.last();
@@ -388,12 +511,13 @@ public class Donnees {
 			System.out.println(nombreLignes);
 			rs.beforeFirst();
 			if (nombreLignes > 0) {
-				list = new Object[nombreLignes][3];
+				list = new Object[nombreLignes][4];
 				int i = 0;
 				while (rs.next() && i < nombreLignes) {
 					list[i][0] = rs.getString(1);
 					list[i][1] = rs.getString(2);
 					list[i][2] = rs.getString(3);
+					list[i][3] = rs.getString(4);
 					i++;
 				}
 			}

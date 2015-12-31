@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-
 import BDD.Base;
 import Model.Donnees;
 import View.Clients.ModifClient;
@@ -31,7 +30,13 @@ public class ActionValiderVerif implements ActionListener {
 				new ModifClient(bdd, numClient.getText());
 			}
 			else if(f.equals("Suppr")){
-				new SupprClient(bdd, numClient.getText());
+				if (!donnees.lieeDevis(numClient.getText())) {
+					new SupprClient(bdd, numClient.getText());
+				} else {
+					JOptionPane.showMessageDialog(null, "Le client ne peut être supprimé", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
+				
 			}
 		}
 		else{
