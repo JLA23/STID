@@ -1,4 +1,4 @@
-package View.ModifUser;
+package View.Users;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

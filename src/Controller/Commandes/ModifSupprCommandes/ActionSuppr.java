@@ -3,14 +3,14 @@ package Controller.Commandes.ModifSupprCommandes;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import View.Devis.Devis;
+import View.Commandes.Commandes;
 
 public class ActionSuppr implements ActionListener {
 	
-	private Devis devis;
+	private Commandes commande;
 
-	public ActionSuppr(Devis frame){
-		this.devis = frame;
+	public ActionSuppr(Commandes frame){
+		this.commande = frame;
 	}
 @Override
 public void actionPerformed(ActionEvent arg0) {
@@ -18,12 +18,17 @@ public void actionPerformed(ActionEvent arg0) {
 }
 
 public void suppr(){
-	if(devis.getDonnees().existNumDevis(devis.getjNumDevis().getText())){
-		if(!devis.getNumClient().getText().equals("") && devis.getDonnees().existClient(devis.getNumClient().getText())){
-			if(devis.getDonnees().lieeCommande(devis.getjNumDevis().getText())){
-				devis.getBase().delete("devis", "numDevis = "+ devis.getjNumDevis().getText());
+	if(commande.getDonnees().existNumDevis(commande.getjNumCommande().getText())){
+		if(!commande.getNumClient().getText().equals("") && commande.getDonnees().existClient(commande.getNumClient().getText())){
+			if(!commande.getDonnees().lieeTerme(commande.getjNumCommande().getText())){
+				for (int i = 0; i < commande.getListDevis().size(); i++) {
+					commande.getBase().update("Devis", "numcommande = null", "numdevis = " + (String)commande.getListDevis().get(i)[0]);
+				}
+				commande.getBase().delete("commandes", "numCommande = "+ commande.getjNumCommande().getText());
 				JOptionPane.showMessageDialog(null, "Devis supprimé !");
-				devis.dispose();
+				commande.dispose();
+				commande.getFenetre().setEnabled(true);
+				commande.getFenetre().setVisible(true);
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Erreur : Une commande est liée au devis", "ATTENTION", JOptionPane.WARNING_MESSAGE);

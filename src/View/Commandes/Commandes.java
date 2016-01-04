@@ -45,8 +45,8 @@ public class Commandes extends JFrame{
     protected JLabel coutMO, totalDevisdevise, devise, nameClient, numCommandeClient;
     protected JPanel jPanel1, jPanel2, jPanel3, JPanelTemps, jPanel6;
     protected JSeparator jSeparator1, jSeparator2;
-    protected JFormattedTextField jTotalDevisDevise, jHeureSite, jFournitures, jPrefabrication, jCout, jTotalDevis, jPrevu, jHeureAtelier, jTotalHeure, jCommande, jResteCommande, jNumCommande, jNumCommandeClient;
-    protected JTextField jLibelle;
+    protected JFormattedTextField jTotalDevisDevise, jHeureSite, jFournitures, jPrefabrication, jCout, jTotalDevis, jPrevu, jHeureAtelier, jTotalHeure, jCommande, jResteCommande, jNumCommande;
+    protected JTextField jLibelle, jNumCommandeClient;
     protected JButton jDevis;
     protected JCheckBox check;
     protected double valeurDevise;
@@ -118,7 +118,7 @@ public class Commandes extends JFrame{
 		devise = new JLabel();
 		nameClient = new JLabel ("Client : ");
 		numCommandeClient = new JLabel("N° C/Client");
-		jNumCommandeClient = new JFormattedTextField();
+		jNumCommandeClient = new JTextField();
 		check = new JCheckBox("Assujettie COREM", false);
 		
 		jNumCommande = new JFormattedTextField(num);
@@ -518,11 +518,11 @@ public class Commandes extends JFrame{
 		this.jNumCommande = jNumCommande;
 	}
 
-	public JFormattedTextField getjNumCommandeClient() {
+	public JTextField getjNumCommandeClient() {
 		return jNumCommandeClient;
 	}
 
-	public void setjNumCommandeClient(JFormattedTextField jNumCommandeClient) {
+	public void setjNumCommandeClient(JTextField jNumCommandeClient) {
 		this.jNumCommandeClient = jNumCommandeClient;
 	}
 

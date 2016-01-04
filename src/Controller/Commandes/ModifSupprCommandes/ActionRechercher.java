@@ -5,18 +5,17 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import View.Devis.Devis;
-import View.Devis.SearchDevis;
+import View.Commandes.Commandes;
+import View.Commandes.SearchCommande;
 
 public class ActionRechercher implements ActionListener {
 
-	private Devis devis;
+	private Commandes commandes;
 	private String f;
 	private JFrame fenetre;
 
-	public ActionRechercher(Devis d, JFrame frame, String fonction) {
-		this.devis = d;
+	public ActionRechercher(Commandes d, JFrame frame, String fonction) {
+		this.commandes = d;
 		this.f = fonction;
 		this.fenetre = frame;
 	}
@@ -26,21 +25,21 @@ public class ActionRechercher implements ActionListener {
 			int option = JOptionPane.showConfirmDialog(null, "Voulez-vous enregistrer les modifications ?",
 					"Quitter devis", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (option == JOptionPane.YES_OPTION) {
-				new ActionValider(devis).valider();
+				new ActionValider(commandes).valider();
 			}
 			if (option != JOptionPane.CANCEL_OPTION) {
-				devis.dispose();
-				new SearchDevis(devis.getBase(), fenetre, true, f);
+				commandes.dispose();
+				new SearchCommande(commandes.getBase(), fenetre, f);
 			}
 		} else if (f.equals("Suppr")) {
 			int option = JOptionPane.showConfirmDialog(null, "Voulez-vous supprimer le devis ?", "Quitter devis",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (option == JOptionPane.YES_OPTION) {
-				new ActionSuppr(devis).suppr();
+				new ActionSuppr(commandes).suppr();
 			}
 			if (option != JOptionPane.CANCEL_OPTION) {
-				devis.dispose();
-				new SearchDevis(devis.getBase(), fenetre, true, f);
+				commandes.dispose();
+				new SearchCommande(commandes.getBase(), fenetre, f);
 			}
 		}
 
@@ -48,8 +47,8 @@ public class ActionRechercher implements ActionListener {
 			int option = JOptionPane.showConfirmDialog(null, "Voulez-vous quitter le devis ?", "Quitter devis",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (option == JOptionPane.YES_OPTION) {
-				devis.dispose();
-				new SearchDevis(devis.getBase(), fenetre, true, f);
+				commandes.dispose();
+				new SearchCommande(commandes.getBase(), fenetre, f);
 			}
 		}
 	}

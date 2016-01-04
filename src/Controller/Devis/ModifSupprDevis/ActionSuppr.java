@@ -24,6 +24,8 @@ public void suppr(){
 				devis.getBase().delete("devis", "numDevis = "+ devis.getjNumDevis().getText());
 				JOptionPane.showMessageDialog(null, "Devis supprimé !");
 				devis.dispose();
+				devis.getFenetre().setEnabled(true);
+				devis.getFenetre().setVisible(true);
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Erreur : Une commande est liée au devis", "ATTENTION", JOptionPane.WARNING_MESSAGE);

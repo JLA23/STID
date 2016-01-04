@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import BDD.Base;
 import View.Commandes.ModifCommande;
+import View.Commandes.SupprCommande;
 
 
 public class SelectionAction implements ActionListener {
@@ -40,7 +41,7 @@ public class SelectionAction implements ActionListener {
 						new ModifCommande(bdd, numero, fenetre);
 					}
 					else if(f.equals("Suppr")){
-						//new SupprCommande(bdd, numero, fenetre);
+						new SupprCommande(bdd, numero, fenetre);
 					}
 					else if(f.equals("Recherche")){
 						//new LookCommande(bdd, numero, fenetre);

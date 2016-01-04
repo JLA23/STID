@@ -35,6 +35,8 @@ public class ActionValider implements ActionListener {
 				+ ", CodeDevise = " + re[0], "numDevis = " + devis.getjNumDevis().getText());
 				JOptionPane.showMessageDialog(null, "Devis validé !");
 				devis.dispose();
+				devis.getFenetre().setEnabled(true);
+				devis.getFenetre().setVisible(true);
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Erreur : Numéro de Client inconnu ou vide", "ATTENTION", JOptionPane.WARNING_MESSAGE);

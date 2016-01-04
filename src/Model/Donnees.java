@@ -101,6 +101,53 @@ public class Donnees {
 		}
 		return resultat;
 	}
+	
+	public boolean existNumCommande(String num, String numclient) {
+		ResultSet rs = base.Select("numCommande", "Commandes", "numCommande = " + num + "and CdeComClient = '" + numclient + "'");
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i++;
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if (i != 0) {
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public boolean existNumCommandeClient(String num) {
+		ResultSet rs = base.Select("numCommande", "Commandes", "CdeComClient = '" + num + "'");
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i++;
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if (i != 0) {
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public String searchNumCommandeClient(String num) {
+		ResultSet rs = base.Select("numCommande", "Commandes", "CdeComClient = '" + num + "'");
+		String resultat = "";
+		try {
+			while (rs.next()) {
+				resultat = rs.getString(1);
+			}
+		} catch (SQLException e) {
+			resultat = null;
+		}
+		return resultat;
+	}
 
 	public int newNumDevis() {
 		ResultSet rs = base.Select("MAX(NumDevis)", "devis", null);
@@ -192,6 +239,35 @@ public class Donnees {
 
 	public Object[][] listeDevis() {
 		ResultSet rs = base.Select("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numClient = c.numClient");
+		Object[][] list = null;
+		try {
+			rs.last();
+			int nombreLignes = rs.getRow();
+			rs.beforeFirst();
+			list = new Object[nombreLignes][4];
+			int i = 0;
+			while (rs.next() && i < nombreLignes) {
+				list[i][0] = rs.getString(1);
+				list[i][1] = rs.getString(2);
+				list[i][2] = rs.getString(3);
+				list[i][3] = rs.getString(4);
+				i++;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return list;
+
+	}
+	
+	public Object[][] listeCommandes(String numCommandeClient) {
+		ResultSet rs;
+		if(numCommandeClient == null){
+			rs = base.Select("d.numCommande, d.numClient, c.nomclient, d.lblCommande", "Commandes as d, Clients as c", "d.numClient = c.numClient");
+		}
+		else{
+			rs = base.Select("d.numCommande, d.numClient, c.nomclient, d.lblCommande", "Commandes as d, Clients as c", "d.numClient = c.numClient and d.CdeComClient = '" + numCommandeClient + "'");
+		}
 		Object[][] list = null;
 		try {
 			rs.last();
@@ -335,6 +411,25 @@ public class Donnees {
 
 	public boolean lieeCommande(String numDevis) {
 		ResultSet rs = base.Select("numCommande", "Devis", "numDevis = " + numDevis);
+		boolean resultat = false;
+		int i = 0;
+		try {
+			while (rs.next()) {
+				if(!rs.getString(1).equals("null")){
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			resultat = true;
+		}
+		if (i != 0) {
+			resultat = true;
+		}
+		return resultat;
+	}
+	
+	public boolean lieeTerme(String numCommande) {
+		ResultSet rs = base.Select("numCommande", "Termes", "numCommande = " + numCommande);
 		boolean resultat = false;
 		int i = 0;
 		try {

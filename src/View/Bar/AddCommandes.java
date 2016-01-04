@@ -56,7 +56,7 @@ public class AddCommandes{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-						//new ModifDevis();
+					new SearchCommande(base, fenetre, "Suppr");
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Supprime une commande");

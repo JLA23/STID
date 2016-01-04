@@ -28,7 +28,7 @@ public class SearchCommandeList extends JDialog {
 		super(frame, null, true);
 		this.bdd = bdd;
 		Donnees donnees = new Donnees(bdd);
-		Object[][] data = donnees.listeDevis();
+		Object[][] data = donnees.listeCommandes(numComClient);
 		this.setPreferredSize(screenSize);
 		this.setTitle("STID Gestion 2.0 (Chercher Devis)");
 		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());

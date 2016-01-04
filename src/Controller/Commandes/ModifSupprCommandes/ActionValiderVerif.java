@@ -12,6 +12,7 @@ import BDD.Base;
 import Model.Donnees;
 import View.Commandes.ModifCommande;
 import View.Commandes.SearchCommandeList;
+import View.Commandes.SupprCommande;
 
 public class ActionValiderVerif implements ActionListener {
 	private JDialog frame;
@@ -33,11 +34,55 @@ public class ActionValiderVerif implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		Donnees donnees = new Donnees(bdd);
-		if (donnees.existNumCommande(numCommande.getText())) {
-			frame.dispose();
-			if (donnees.existPlusieurNumComClient(commandeClient.getText())) {
-				new SearchCommandeList(bdd, fenetre, f, commandeClient.getText());
+		if (!numCommande.getText().isEmpty() && commandeClient.getText().isEmpty()) {
+			if (donnees.existNumCommande(numCommande.getText())) {
+				frame.dispose();
+				try {
+					if (f.equals("Modif")) {
+						new ModifCommande(bdd, numCommande.getText(), fenetre);
+					} else if (f.equals("Suppr")) {
+						new SupprCommande(bdd, numCommande.getText(), fenetre);
+					} else if (f.equals("Recherche")) {
+						// new LookCommande(bdd, numCommande.getText(),
+						// fenetre);
+					}
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 			} else {
+				JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		} else if (numCommande.getText().isEmpty() && !commandeClient.getText().isEmpty()) {
+			if (donnees.existNumCommandeClient(commandeClient.getText())) {
+				frame.dispose();
+				if (donnees.existPlusieurNumComClient(commandeClient.getText())) {
+					new SearchCommandeList(bdd, fenetre, f, commandeClient.getText());
+				} else {
+					if (f.equals("Modif")) {
+						try {
+							new ModifCommande(bdd, donnees.searchNumCommandeClient(commandeClient.getText()), fenetre);
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} else if (f.equals("Suppr")) {
+						// new SupprCommande(bdd, numCommande.getText(),
+						// fenetre);
+					} else if (f.equals("Recherche")) {
+						// new LookCommande(bdd, numCommande.getText(),
+						// fenetre);
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Aucune commande client avec ce numéro !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		} else if (!numCommande.getText().isEmpty() && !numCommande.getText().isEmpty()) {
+			if (donnees.existNumCommande(numCommande.getText(), commandeClient.getText())) {
+				frame.dispose();
 				if (f.equals("Modif")) {
 					try {
 						new ModifCommande(bdd, numCommande.getText(), fenetre);
@@ -46,15 +91,19 @@ public class ActionValiderVerif implements ActionListener {
 						e1.printStackTrace();
 					}
 				} else if (f.equals("Suppr")) {
-					//new SupprCommande(bdd, numCommande.getText(), fenetre);
+					// new SupprCommande(bdd, numCommande.getText(),
+					// fenetre);
 				} else if (f.equals("Recherche")) {
 					// new LookCommande(bdd, numCommande.getText(),
 					// fenetre);
 				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Aucune commande avec ces numéros !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
 			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Aucun commande avec ce numèro !", "ATTENTION",
-					JOptionPane.WARNING_MESSAGE);
+		} else if (numCommande.getText().isEmpty() && numCommande.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Les champs sont vides !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}
+
 	}
 }

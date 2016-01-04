@@ -1,4 +1,4 @@
-package View.ModifUser;
+package View.Users;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -15,15 +15,14 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import BDD.Base;
 
-public class ModifUser extends JDialog{
+public class SupprUser extends JDialog{
 
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
 	
-	public ModifUser(Base base){
+	public SupprUser(Base base){
 	    JComboBox<String> box = new JComboBox<>();
 	    ResultSet res = base.Select("pseudo", "users", null);
 	    int i = 0;
@@ -40,34 +39,23 @@ public class ModifUser extends JDialog{
 		}
 	    if(i != 0){
 			this.setLayout(new GridLayout(3, 1));
-			this.setTitle("STID Gestion 2.0 (Modification User)");
+			this.setTitle("STID Gestion 2.0 (Supprimer User)");
 			screenSize.setSize(300, 150);
 			this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 		    this.setPreferredSize(screenSize);
 		    
 		    JPanel pane = new JPanel();
 		    pane.setPreferredSize(new Dimension(100, 300));
-		    JLabel label = new JLabel("Utilisateur");
+		    JLabel label = new JLabel("Suppression d'un utilisateur");
 		    pane.add(label);
-	    	box.setPreferredSize(new Dimension(100, 25));
-		    pane.add(box);
 		    
-
 		    JPanel pane2 = new JPanel();
 		    pane2.setPreferredSize(new Dimension(100, 300));;
-		    JLabel label2 = new JLabel("Type de Compte");
+		    JLabel label2 = new JLabel("Nom Utilisateur : ");
 		    pane2.add(label2);
-		    JComboBox<String> box2 = new JComboBox<>();
-		    res = base.Select("type", "compte", null);
-		    try {
-				while(res.next()){
-					box2.addItem(res.getString(1));
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		    box2.setPreferredSize(new Dimension(100, 25));
-		    pane2.add(box2);
+		    
+	    	box.setPreferredSize(new Dimension(100, 25));
+	    	pane2.add(box);
 	    
 	    	JPanel pane3 = new JPanel();
 	    	pane3.setPreferredSize(new Dimension(100, 300));
@@ -76,7 +64,7 @@ public class ModifUser extends JDialog{
 	    	bouton.setMnemonic(KeyEvent.VK_ENTER);
 	    	pane3.add(bouton);
 	    
-	    	bouton.addActionListener(new ActionValider(base, box, box2, this));
+	    	bouton.addActionListener(new ActionValider(base, box, this));
 	    
 	    
 	    	this.add(pane);
@@ -89,7 +77,7 @@ public class ModifUser extends JDialog{
 	    }
 	    
 	    else{
-	    	JOptionPane.showMessageDialog(null, "Attention !\nAucun utilisateur ne peut être modifié !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+	    	JOptionPane.showMessageDialog(null, "Attention !\nAucun utilisateur ne peut être supprimé !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 	    }
 	}
 	
@@ -97,18 +85,16 @@ public class ModifUser extends JDialog{
 	private JDialog dialog;
 	private Base base;
 	private JComboBox<String> pseudo;
-	private JComboBox<String> typeCompte;
 	
-	ActionValider(Base bdd, JComboBox<String> user, JComboBox<String> compte, JDialog dialog){
+	ActionValider(Base bdd, JComboBox<String> user, JDialog dialog){
 		this.pseudo = user;
 		this.dialog = dialog;
 		this.base = bdd;
-		this.typeCompte = compte;
 	}
 		public void actionPerformed(ActionEvent e) {
-			String res = base.modifTypeCompte(pseudo.getSelectedItem().toString(), typeCompte.getSelectedItem().toString());
+			String res = base.supprUtilisateur(pseudo.getSelectedItem().toString());
 			dialog.dispose();
-			if(res.equals("Compte utilisateur modifié !")){
+			if(res.equals("Utilisateur supprimés !")){
 				dialog.dispose();
 				JOptionPane.showMessageDialog(null, res);
 			}

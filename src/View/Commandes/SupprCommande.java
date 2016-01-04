@@ -8,16 +8,15 @@ import Controller.ActionFermer;
 import Controller.Commandes.FocusClient;
 import Controller.Commandes.TestContenu;
 import Controller.Commandes.ModifSupprCommandes.ActionRechercher;
-import Controller.Commandes.ModifSupprCommandes.ActionValider;
+import Controller.Commandes.ModifSupprCommandes.ActionSuppr;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
 
-public class ModifCommande extends Commandes{
+public class SupprCommande extends Commandes{
+private static final long serialVersionUID = 1L;
 	
-	private static final long serialVersionUID = 1L;
-
-	public ModifCommande(Base bdd, String numd, JFrame frame) throws ParseException{
+	public SupprCommande(Base bdd, String numd, JFrame frame) throws ParseException{
 		super(bdd, frame);
-		this.setTitle("STID Gestion 2.0 (Modifier Commande)");
+		this.setTitle("STID Gestion 2.0 (Supprimer Commande)");
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
 		DevisdelaCommande = donnees.listeDevisYesCommande(numd);
@@ -53,13 +52,44 @@ public class ModifCommande extends Commandes{
 		new TestContenu(this, jPrevu, 3);
 		new TestContenu(this, jCommande, 3);
 		new FocusClient(this).nameClient();
-		valider.addActionListener(new ActionValider(this));
+		jFournitures.setEditable(false);
+		jFournitures.setBackground(new Color(204, 204, 204));
+		jCout.setEditable(false);
+		jCout.setBackground(new Color(204, 204, 204));
+		jPrefabrication.setEditable(false);
+		jPrefabrication.setBackground(new Color(204, 204, 204));
+		jHeureSite.setEditable(false);
+		jHeureSite.setBackground(new Color(204, 204, 204));
+		jHeureAtelier.setEditable(false);
+		jHeureAtelier.setBackground(new Color(204, 204, 204));
+		jPrevu.setEditable(false);
+		jPrevu.setBackground(new Color(204, 204, 204));
+		jCommande.setEditable(false);
+		jCommande.setBackground(new Color(204, 204, 204));
+		numClient.getZoneTexte().setEditable(false);
+		numClient.getZoneTexte().setBackground(new Color(204, 204, 204));
+		jNumCommande.setEditable(false);
+		jNumCommande.setBackground(new Color(204, 204, 204));
+		jDevis.setEnabled(false);
+		devises.setEnabled(false);
+		jLibelle.setEditable(false);
+		jLibelle.setBackground(new Color(204, 204, 204));
+		jNumCommandeClient.setEditable(false);
+		jNumCommandeClient.setBackground(new Color(204, 204, 204));
+		check.setEnabled(false);
+		search.setVisible(false);
+		calcul1.setVisible(false);
+		calcul2.setVisible(false);
+		calcul3.setVisible(false);
+		calcul4.setVisible(false);
+		calcul5.setVisible(false);
+		calcul6.setVisible(false);
+		calcul7.setVisible(false);
+		valider.addActionListener(new ActionSuppr(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif"));
+		nouveau.addActionListener(new ActionRechercher(this, frame, "Suppr"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		}
-	
 }
-

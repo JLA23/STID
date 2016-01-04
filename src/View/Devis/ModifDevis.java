@@ -39,6 +39,7 @@ public class ModifDevis extends Devis{
 		jPrevu.setText(res[10].replaceAll("\\.", ","));
 		jCommande.setText(res[11].replaceAll("\\.", ","));
 		newClient.setVisible(false);
+		devises.setSelectedIndex(Integer.parseInt(res[12]) - 1);
 		new TestContenu(this, jFournitures, 1);
 		new TestContenu(this, jCout, 1);
 		new TestContenu(this, jPrefabrication, 1);

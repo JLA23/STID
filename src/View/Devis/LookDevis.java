@@ -70,6 +70,13 @@ public class LookDevis extends Devis {
 		devises.setEnabled(false);
 		jLibelle.setEditable(false);
 		jLibelle.setBackground(new Color(204, 204, 204));
+		calcul1.setVisible(false);
+		calcul2.setVisible(false);
+		calcul3.setVisible(false);
+		calcul4.setVisible(false);
+		calcul5.setVisible(false);
+		calcul6.setVisible(false);
+		calcul7.setVisible(false);
 		valider.addActionListener(new ActionSuppr(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche"));

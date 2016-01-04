@@ -9,11 +9,11 @@ import javax.swing.JMenuItem;
 
 import BDD.Base;
 import View.Identification;
-import View.ModifUser.AjoutUser;
-import View.ModifUser.ModifMDP;
-import View.ModifUser.ModifPseudo;
-import View.ModifUser.ModifUser;
-import View.ModifUser.SupprUser;
+import View.Users.AjoutUser;
+import View.Users.ModifMDP;
+import View.Users.ModifPseudo;
+import View.Users.ModifUser;
+import View.Users.SupprUser;
 
 public class AddSTID{
 	

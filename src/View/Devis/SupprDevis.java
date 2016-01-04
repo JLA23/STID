@@ -69,6 +69,13 @@ public class SupprDevis extends Devis{
 		jDate.setEnabled(false);
 		devises.setEnabled(false);
 		jLibelle.setEditable(false);
+		calcul1.setVisible(false);
+		calcul2.setVisible(false);
+		calcul3.setVisible(false);
+		calcul4.setVisible(false);
+		calcul5.setVisible(false);
+		calcul6.setVisible(false);
+		calcul7.setVisible(false);
 		jLibelle.setBackground(new Color(204, 204, 204));
 		valider.addActionListener(new ActionSuppr(this));
 		fermer.addActionListener(new ActionFermer(this, frame));

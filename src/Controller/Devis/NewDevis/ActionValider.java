@@ -32,6 +32,8 @@ public class ActionValider implements ActionListener {
 				+ ", " + re[0] + ", (Select tauxchange from taux where id in (Select typetva as id from clients where numclient = " + devis.getNumClient().getText() + "))");
 				JOptionPane.showMessageDialog(null, "Devis enregistré !");
 				devis.dispose();
+				devis.getFenetre().setEnabled(true);
+				devis.getFenetre().setVisible(true);
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Erreur : Numéro de Client inconnu ou vide", "ATTENTION", JOptionPane.WARNING_MESSAGE);
