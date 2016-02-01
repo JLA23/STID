@@ -61,7 +61,7 @@ public class Termes extends JFrame{
 		fenetre.setEnabled(false);
 		this.setLayout(null);
 		this.setTitle("STID Gestion 2.0 (Nouveau Terme)");
-		screenSize.width = 600;
+		screenSize.width = 590;
 		screenSize.height = 500;
 		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
 	    this.setSize(screenSize);

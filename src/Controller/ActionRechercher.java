@@ -10,9 +10,11 @@ import Controller.ValiderSuppr;
 import View.Clients.Client;
 import View.Commandes.Commandes;
 import View.Devis.Devis;
+import View.Termes.Termes;
 import View.SearchClients.SearchClient;
 import View.SearchCommandes.SearchCommande;
 import View.SearchDevis.SearchDevis;
+import View.SearchTerme.SearchTerme;
 
 public class ActionRechercher implements ActionListener {
 
@@ -39,13 +41,22 @@ public class ActionRechercher implements ActionListener {
 			if (option != JOptionPane.CANCEL_OPTION) {
 				if (type.equals("Devis")) {
 					((Devis) classe).dispose();
-					new SearchClient(((Devis) classe).getBase(), fenetre, f);
+					((Devis)classe).getFenetre().setEnabled(true);
+					((Devis)classe).getFenetre().setVisible(true);
+					new SearchDevis(((Devis) classe).getBase(), fenetre, f);
 				} else if (type.equals("Client")) {
 					((Client) classe).dispose();
 					new SearchClient(((Client) classe).getBase(), null, f);
 				} else if (type.equals("Commandes")) {
 					((Commandes) classe).dispose();
-					new SearchClient(((Commandes) classe).getBase(), fenetre, f);
+					((Commandes)classe).getFenetre().setEnabled(true);
+					((Commandes)classe).getFenetre().setVisible(true);
+					new SearchCommande(((Commandes) classe).getBase(), fenetre, f);
+				} else if (type.equals("Termes")) {
+					((Termes) classe).dispose();
+					((Termes)classe).getFenetre().setEnabled(true);
+					((Termes)classe).getFenetre().setVisible(true);
+					new SearchTerme(((Termes) classe).getBase(), fenetre, f);
 				}
 			}
 		} else if (f.equals("Suppr")) {
@@ -57,7 +68,9 @@ public class ActionRechercher implements ActionListener {
 				}
 				if (option != JOptionPane.CANCEL_OPTION) {
 					((Devis) classe).dispose();
-					new SearchClient(((Devis) classe).getBase(), null, f);
+					((Devis)classe).getFenetre().setEnabled(true);
+					((Devis)classe).getFenetre().setVisible(true);
+					new SearchDevis(((Devis) classe).getBase(), null, f);
 				}
 			} else if (type.equals("Client")) {
 				int option = JOptionPane.showConfirmDialog(null, "Voulez-vous supprimer le client ?", "Quitter client",
@@ -77,7 +90,21 @@ public class ActionRechercher implements ActionListener {
 				}
 				if (option != JOptionPane.CANCEL_OPTION) {
 					((Commandes) classe).dispose();
-					new SearchClient(((Commandes) classe).getBase(), null, f);
+					((Commandes)classe).getFenetre().setEnabled(true);
+					((Commandes)classe).getFenetre().setVisible(true);
+					new SearchCommande(((Commandes) classe).getBase(), null, f);
+				}
+			} else if (type.equals("Termes")) {
+				int option = JOptionPane.showConfirmDialog(null, "Voulez-vous supprimer le terme ?",
+						"Quitter Commandes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (option == JOptionPane.YES_OPTION) {
+					new ValiderSuppr(classe, type).suppr();
+				}
+				if (option != JOptionPane.CANCEL_OPTION) {
+					((Termes) classe).dispose();
+					((Termes)classe).getFenetre().setEnabled(true);
+					((Termes)classe).getFenetre().setVisible(true);
+					new SearchTerme(((Termes) classe).getBase(), null, f);
 				}
 			}
 
@@ -88,6 +115,8 @@ public class ActionRechercher implements ActionListener {
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (option == JOptionPane.YES_OPTION) {
 					((Devis) classe).dispose();
+					((Devis)classe).getFenetre().setEnabled(true);
+					((Devis)classe).getFenetre().setVisible(true);
 					new SearchDevis(((Devis) classe).getBase(), fenetre, f);
 				}
 			} else if (type.equals("Client")) {
@@ -102,7 +131,18 @@ public class ActionRechercher implements ActionListener {
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (option == JOptionPane.YES_OPTION) {
 					((Commandes)classe).dispose();
+					((Commandes)classe).getFenetre().setEnabled(true);
+					((Commandes)classe).getFenetre().setVisible(true);
 					new SearchCommande(((Commandes) classe).getBase(), fenetre, f);
+				}
+			} else if (type.equals("Termes")) {
+				int option = JOptionPane.showConfirmDialog(null, "Voulez-vous quitter le terme ?", "Quitter terme",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (option == JOptionPane.YES_OPTION) {
+					((Termes)classe).dispose();
+					((Termes)classe).getFenetre().setEnabled(true);
+					((Termes)classe).getFenetre().setVisible(true);
+					new SearchTerme(((Termes) classe).getBase(), fenetre, f);
 				}
 			}
 		}

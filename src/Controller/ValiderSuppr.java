@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import View.Clients.Client;
 import View.Commandes.Commandes;
 import View.Devis.Devis;
+import View.Termes.Termes;
 
 public class ValiderSuppr implements ActionListener {
 
@@ -31,6 +32,8 @@ public class ValiderSuppr implements ActionListener {
 			supprClient();
 		} else if (type.equals("Commandes")) {
 			supprCommandes();
+		} else if (type.equals("Termes")) {
+			supprTermes();
 		}
 	}
 
@@ -93,7 +96,7 @@ public class ValiderSuppr implements ActionListener {
 					commande.getFenetre().setEnabled(true);
 					commande.getFenetre().setVisible(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "Erreur : Une commande est liée au devis", "ATTENTION",
+					JOptionPane.showMessageDialog(null, "Erreur : Un terme est liée à la commande", "ATTENTION",
 							JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
@@ -102,6 +105,31 @@ public class ValiderSuppr implements ActionListener {
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Numéro de Devis inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+	private void supprTermes() {
+		Termes termes = (Termes) classe;
+		if (termes.getDonnees().exist("Termes", "NumCommande, NumIndice",
+				"NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice())) {
+			if (!termes.getNumIndice().getText().equals("") && termes.getDonnees().exist("Commandes", "Numcommande",
+					"NumCommande = " + termes.getNumeroCommande())) {
+				if (!termes.getDonnees().lier("numfacture", "Termes", "numCommande = " + termes.getNumeroCommande() + " AND numindice = " + termes.getNumeroIndice())) {
+					termes.getBase().delete("termes", "numCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice());
+					JOptionPane.showMessageDialog(null, "Terme supprimé !");
+					termes.dispose();
+					termes.getFenetre().setEnabled(true);
+					termes.getFenetre().setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(null, "Erreur : Une facture est liée au devis", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Erreur : Numéro d'indice ou de commande incorrecte", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Terme inexistant ", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }

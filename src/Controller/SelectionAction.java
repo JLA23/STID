@@ -22,8 +22,10 @@ import View.SearchClients.SearchClientList;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevisList;
 import View.SearchTerme.SearchTermeList;
+import View.Termes.LookTerme;
 import View.Termes.ModifTerme;
 import View.Termes.NewTerme;
+import View.Termes.SupprTerme;
 import fr.julien.autocomplete.view.AutoComplete;
 
 public class SelectionAction implements ActionListener {
@@ -70,7 +72,7 @@ public class SelectionAction implements ActionListener {
 					} else if (type.equals("Commandes")) {
 						new SupprCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						// new ModifDevis(bdd, numero, fenetre);
+						new SupprTerme(bdd, fenetre, numero, datas[ligne][1].toString());
 					}
 				} else if (f.equals("Recherche")) {
 					if (type.equals("Client")) {
@@ -80,7 +82,7 @@ public class SelectionAction implements ActionListener {
 					} else if (type.equals("Commandes")) {
 						new LookCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						// new ModifDevis(bdd, numero, fenetre);
+						 new LookTerme(bdd, fenetre, numero, datas[ligne][1].toString());
 					}
 				} else if (f.equals("SearchClient")) {
 					autos.setText(numero);

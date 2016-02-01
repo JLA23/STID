@@ -50,7 +50,7 @@ public class AddTermes{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new SearchTerme(bdd, fenetre, "Suppr");
+					new SearchTerme(bdd, fenetre, "Suppr");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Supprime terme");
@@ -61,7 +61,7 @@ public class AddTermes{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new SearchTerme(bdd, fenetre, "Look");
+					new SearchTerme(bdd, fenetre, "Recherche");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Afficher terme");

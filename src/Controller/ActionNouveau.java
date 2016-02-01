@@ -16,7 +16,6 @@ import View.Commandes.NewCommande;
 import View.Devis.Devis;
 import View.Devis.NewDevis;
 import View.SearchCommandes.SearchCommande;
-import View.Termes.NewTerme;
 import View.Termes.Termes;
 
 public class ActionNouveau implements ActionListener {
@@ -40,6 +39,7 @@ public class ActionNouveau implements ActionListener {
 				}
 			}
 			else if (option == JOptionPane.NO_OPTION) {
+				((Client)frame).dispose();
 				if (!((Client)frame).isShowing()) {
 					new NewClient(((Client)frame).getBase());
 				}
@@ -55,6 +55,9 @@ public class ActionNouveau implements ActionListener {
 				}
 			}
 			else if (option == JOptionPane.NO_OPTION) {
+				((Devis)frame).dispose();
+				((Devis)frame).getFenetre().setEnabled(true);
+				((Devis)frame).getFenetre().setVisible(true);
 				if (!((Devis)frame).isShowing()) {
 					new NewDevis(((Devis)frame).getBase(),((Devis)frame).getFenetre());
 				}
@@ -70,6 +73,9 @@ public class ActionNouveau implements ActionListener {
 				}
 			}
 			else if (option == JOptionPane.NO_OPTION) {
+				((Commandes)frame).dispose();
+				((Commandes)frame).getFenetre().setEnabled(true);
+				((Commandes)frame).getFenetre().setVisible(true);
 				if (!((Commandes)frame).isShowing()) {
 					new NewCommande(((Commandes)frame).getBase(), ((Commandes)frame).getFenetre());
 				}
@@ -85,8 +91,11 @@ public class ActionNouveau implements ActionListener {
 				}
 			}
 			else if (option == JOptionPane.NO_OPTION) {
+				((Termes)frame).dispose();
+				((Termes)frame).getFenetre().setEnabled(true);
+				((Termes)frame).getFenetre().setVisible(true);
 				if (!((Termes)frame).isShowing()) {
-					new NewTerme(((Termes)frame).getBase(),((Termes)frame).getFenetre(), "NewTerme");
+					new SearchCommande(((Termes)frame).getBase(), ((Termes)frame).getFenetre(), "NewTerme");
 				}
 			}
 		}

@@ -22,6 +22,8 @@ public class SupprDevis extends Devis{
 		this.setTitle("STID Gestion 2.0 (Supprimer Devis)");
 		this.base= bdd;
 		valider.setText("Supprimer");
+		valider.setBounds(660, 495, 100, 25);
+		this.getContentPane().add(valider);
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);

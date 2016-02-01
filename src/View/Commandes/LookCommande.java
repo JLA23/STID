@@ -15,7 +15,7 @@ public class LookCommande extends Commandes {
 
 	public LookCommande(Base bdd, String numd, JFrame frame) throws ParseException{
 			super(bdd, frame);
-			this.setTitle("STID Gestion 2.0 (Supprimer Commande)");
+			this.setTitle("STID Gestion 2.0 (Fiche Commande)");
 			nouveau.setText("Recherche");
 			nouveau.setBounds(20, 510, 100, 25);
 			DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);

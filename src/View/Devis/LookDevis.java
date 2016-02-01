@@ -18,7 +18,7 @@ public class LookDevis extends Devis {
 
 	public LookDevis(Base bdd, String numd, JFrame frame) throws ParseException {
 		super(bdd, frame);
-		this.setTitle("STID Gestion 2.0 (Supprimer Devis)");
+		this.setTitle("STID Gestion 2.0 (Fiche Devis)");
 		this.base = bdd;
 		valider.setVisible(false);
 		nouveau.setText("Recherche");

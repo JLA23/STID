@@ -1,25 +1,32 @@
 package View.Termes;
 
+import java.awt.Color;
 import javax.swing.JFrame;
-
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.ActionNouveau;
-import Controller.ValiderModif;
+import Controller.ActionRechercher;
+import Controller.ValiderSuppr;
 import Model.Calcul;
+import Model.Donnees;
 
-public class ModifTerme extends Termes {
+public class SupprTerme extends Termes {
 
 	private static final long serialVersionUID = 1L;
 
-	public ModifTerme(Base bdd, JFrame frame, String num, String indice) {
+	public SupprTerme(Base bdd, JFrame frame, String num, String indice) {
 		super(bdd, frame);
+		this.setTitle("STID Gestion 2.0 (Supprimer Terme)");
+		this.base= bdd;
+		valider.setText("Supprimer");
+		valider.setBounds(460, 395, 100, 25);
+		nouveau.setText("Recherche");
+		nouveau.setBounds(20, 410, 100, 25);
+		donnees = new Donnees(base);
 		numero.setText(numero.getText() + num);
 		numeroCommande = num;
 		String nbindice = indice;
 		numeroIndice = indice;
-		String[] res = null;
-		res = donnees.fiche(
+		String[] res = donnees.fiche(
 				"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient",
 				"Commandes as c, Clients as cl, Termes as t", "t.numCommande = " + num + " and t.numIndice = "
 						+ nbindice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
@@ -36,11 +43,27 @@ public class ModifTerme extends Termes {
 		new Calcul().calculerMontant(jFournitures, jCout, jPrefabrication, jTotalDevis, jTotalDevisDevise,
 				valeurDevise);
 		jNumIndice.requestFocus();
-		nouveau.setText("Recherche");
-		nouveau.setBounds(20, 410, 100, 25);
-		valider.addActionListener(new ValiderModif(this, "Termes"));
+		jFournitures.setEditable(false);
+		jFournitures.setBackground(new Color(204, 204, 204));
+		jCout.setEditable(false);
+		jCout.setBackground(new Color(204, 204, 204));
+		jPrefabrication.setEditable(false);
+		jPrefabrication.setBackground(new Color(204, 204, 204));
+		
+		devises.setEnabled(false);
+		jLibelle.setEditable(false);
+		calcul1.setVisible(false);
+		calcul2.setVisible(false);
+		calcul3.setVisible(false);
+		jNumIndice.setEditable(false);
+		
+		jLibelle.setBackground(new Color(204, 204, 204));
+		jNumIndice.setBackground(new Color(204, 204, 204));
+		valider.addActionListener(new ValiderSuppr(this, "Termes"));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionNouveau(this, "Termes"));
+		nouveau.addActionListener(new ActionRechercher(this, frame, "Suppr", "Termes"));
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-	}
+		}
 }
