@@ -93,7 +93,7 @@ public class AjoutUser extends JDialog{
 		public void actionPerformed(ActionEvent e) {
 			Donnees donnees = new Donnees(base);
 			if(!pseudo.getText().equals("root") && !pseudo.getText().equals("test")){
-				if(!donnees.existPseudo(pseudo.getText())){
+				if(!donnees.exist("users", "pseudo", "pseudo = '" + pseudo.getText() + "'")){
 					String mdp = new PasswordCreate().create();
 					String res = base.newUtilisateur(pseudo.getText(), mdp, typeComptes.getSelectedItem().toString());
 					dialog.dispose();

@@ -26,12 +26,12 @@ import javax.swing.KeyStroke;
 import BDD.Base;
 import Controller.ActionCalculatrice;
 import Controller.ActionFermer;
+import Controller.ActionSearch;
 import Controller.EcouteAction;
-import Controller.Commandes.ExecuteClick;
-import Controller.Commandes.FocusPosition;
-import Controller.Commandes.ItemChange;
-import Controller.Commandes.ActionSearch;
-import Controller.Commandes.FocusClient;
+import Controller.FocusPosition;
+import Controller.ExecuteClick;
+import Controller.ItemChange;
+import Controller.FocusClient;
 import Model.Donnees;
 import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
@@ -78,7 +78,7 @@ public class Commandes extends JFrame{
 	    this.setSize(screenSize);
 		NumberFormat num =  NumberFormat.getIntegerInstance();
         DecimalFormat nf = new DecimalFormat("#0.00");
-		int nbCommande = donnees.newNumCommande();
+		int nbCommande = donnees.newNum("Commandes","NumCommande", null);
 		AutoCompleteModel model = new AutoCompleteModel();
 		model.addAll(listClient());
 		numClient = new AutoComplete(model);
@@ -120,7 +120,6 @@ public class Commandes extends JFrame{
 		numCommandeClient = new JLabel("N° C/Client");
 		jNumCommandeClient = new JTextField();
 		check = new JCheckBox("Assujettie COREM", false);
-		
 		jNumCommande = new JFormattedTextField(num);
         jNumCommande.setText(nbCommande + "");
         jLibelle = new JTextField();
@@ -177,7 +176,7 @@ public class Commandes extends JFrame{
         jPanel2.setBorder(BorderFactory.createEtchedBorder());
         InsertDevises();
         valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
-        devises.addItemListener(new ItemChange(this));
+        devises.addItemListener(new ItemChange(this, "Commandes"));
         JPanelTemps.setBorder(BorderFactory.createTitledBorder("Temps"));
         JPanelTemps.setPreferredSize(new Dimension(350, 200));
 
@@ -218,7 +217,7 @@ public class Commandes extends JFrame{
 		JPanelTemps.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		jPanel6.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		jPanel3.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
-		ExecuteClick click = new ExecuteClick(this);
+		ExecuteClick click = new ExecuteClick(this, "Commandes");
 		
 		jFournitures.addMouseListener(new FocusPosition(jFournitures, 1, click));
 		jCout.addMouseListener(new FocusPosition(jCout, 1, click));
@@ -322,8 +321,8 @@ public class Commandes extends JFrame{
 		calcul2.addActionListener(new ActionCalculatrice(jCout));
 		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication));
 		calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier));
-		calcul5.addActionListener(new ActionCalculatrice(jPrevu));
-		calcul6.addActionListener(new ActionCalculatrice(jHeureSite));
+		calcul5.addActionListener(new ActionCalculatrice(jHeureSite));
+		calcul6.addActionListener(new ActionCalculatrice(jPrevu));
 		calcul7.addActionListener(new ActionCalculatrice(jCommande));
 		
 		jFournitures.addFocusListener(new FocusPosition(jFournitures, 1,click));
@@ -342,8 +341,8 @@ public class Commandes extends JFrame{
 		jPrevu.addKeyListener(new EcouteAction(jPrevu));
 		jCommande.addKeyListener(new EcouteAction(jCommande));
 
-		numClient.getZoneTexte().addFocusListener(new FocusClient(this));
-		search.addActionListener(new ActionSearch(this));
+		numClient.getZoneTexte().addFocusListener(new FocusClient(this, "Commandes"));
+		search.addActionListener(new ActionSearch(this, "Commandes"));
         this.getContentPane().add(nouveau);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -759,7 +758,8 @@ public class Commandes extends JFrame{
 	}
 	
 	protected ArrayList<String> listClient() {
-		listClient = donnees.listeClient();
+		listClient = donnees.liste("NumClient, NomClient, Adresse2, Adresse3, Adresse4, Adresse5, Adresse6, Adresse7",
+				"Clients", null);
 		ArrayList<String> res = new ArrayList<String>();
 		for (int i = 0; i < listClient.length; i++) {
 			res.add(listClient[i][0].toString());

@@ -1,0 +1,51 @@
+package Controller;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+import BDD.Base;
+import View.SearchClients.SearchClientList;
+import View.SearchCommandes.SearchCommandeList;
+import View.SearchDevis.SearchDevisList;
+import View.SearchTerme.SearchTermeList;
+
+public class ActionList implements ActionListener {
+	private JDialog frame;
+	private JFrame windo;
+	private Base bdd;
+	private String fonction;
+	private String type;
+	
+	public ActionList(JDialog dialog, Base base, JFrame fenetre, String f, String typeClasse){
+		this.frame = dialog;
+		this.bdd = base;
+		this.fonction = f;
+		this.windo = fenetre;
+		this.type = typeClasse;
+	}
+	public void actionPerformed(ActionEvent e) {
+		if(frame != null){
+			frame.dispose();
+		}
+		if(type.equals("Devis")){
+			new SearchDevisList(bdd, windo, null, null, fonction);
+		}
+		else if(type.equals("Client")){
+			new SearchClientList(bdd, null, fonction, null);
+		}
+		else if(type.equals("Commandes")){
+			new SearchCommandeList(bdd, windo, fonction, null);	
+		}
+		else if(type.equals("Termes")){
+			if(fonction.equals("NewTerme")){
+				new SearchCommandeList(bdd, windo, fonction, null);	
+			}
+			else{
+				new SearchTermeList(bdd, windo, fonction, null);
+			}
+		}
+	}
+}

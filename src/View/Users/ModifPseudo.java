@@ -82,7 +82,7 @@ public class ModifPseudo extends JDialog{
 		public void actionPerformed(ActionEvent e) {
 			Donnees donnees = new Donnees(base);
 			if(!pseudo.getText().equals("root") && !pseudo.getText().equals("test")){
-				if(!donnees.existPseudo(pseudo.getText())){
+				if(!donnees.exist("users", "pseudo", "pseudo = '" + pseudo.getText() + "'")){
 					String res = base.modifPseudo(pseudo.getText());
 					dialog.dispose();
 					if(res.equals("Nom utilisateur modifié !")){

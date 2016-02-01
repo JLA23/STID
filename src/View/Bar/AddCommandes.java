@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
 
 import BDD.Base;
 import View.Commandes.NewCommande;
-import View.Commandes.SearchCommande;
+import View.SearchCommandes.SearchCommande;
 
 public class AddCommandes{
 	
@@ -69,7 +69,7 @@ public class AddCommandes{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new SupprDevis();
+				new SearchCommande(base, fenetre, "Recherche");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Recherche une commande");

@@ -9,7 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import BDD.Base;
 import View.Devis.NewDevis;
-import View.Devis.SearchDevis;
+import View.SearchDevis.SearchDevis;
 
 
 public class AddDevis{
@@ -44,7 +44,7 @@ public class AddDevis{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new SearchDevis(bdd, fenetre, true, "Modif");
+					new SearchDevis(bdd, fenetre, "Modif");
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Modifie un devis existant");
@@ -57,7 +57,7 @@ public class AddDevis{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new SearchDevis(bdd, fenetre, true, "Suppr");
+					new SearchDevis(bdd, fenetre, "Suppr");
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Supprime un devis existant");
@@ -68,7 +68,7 @@ public class AddDevis{
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new SearchDevis(bdd, fenetre, true, "Recherche");
+					new SearchDevis(bdd, fenetre, "Recherche");
 				}
 			});
 			menuItem.getAccessibleContext().setAccessibleDescription("Afficher un devis existant");

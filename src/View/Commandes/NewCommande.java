@@ -4,8 +4,8 @@ import javax.swing.JFrame;
 
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Commandes.NewCommande.ActionNouveau;
-import Controller.Commandes.NewCommande.ActionValider;
+import Controller.ActionNouveau;
+import Controller.Commandes.NewCommande.ActionValiderCommande;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
 
 public class NewCommande extends Commandes{
@@ -17,8 +17,8 @@ public class NewCommande extends Commandes{
 		sd = new SelectDevis(bdd, this, null);
 		jDevis.addActionListener(new ActionSelectDevis(sd));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		valider.addActionListener(new ActionValider(this));
-		nouveau.addActionListener(new ActionNouveau(this));
+		valider.addActionListener(new ActionValiderCommande(this));
+		nouveau.addActionListener(new ActionNouveau(this, "Commandes"));
         this.setVisible(true);
 	}
 	

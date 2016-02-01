@@ -28,7 +28,7 @@ import View.Bar.AddTermes;
 			this.add(new AddDevis(bdd, typeCompte, frame).getMenu());
 			this.add(new AddCommandes(bdd, typeCompte,frame).getMenu());
 			this.add(new AddClients(bdd, typeCompte).getMenu());
-			this.add(new AddTermes(bdd, typeCompte).getMenu());
+			this.add(new AddTermes(bdd, typeCompte, frame).getMenu());
 			this.add(new AddFacturation(bdd, typeCompte).getMenu());
 			this.add(new AddPointages(bdd, typeCompte).getMenu());
 			this.add(new AddParametres(bdd, typeCompte).getMenu());

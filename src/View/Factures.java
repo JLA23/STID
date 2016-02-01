@@ -41,9 +41,16 @@ public class Factures extends JFrame{
 	public Factures(){
 		this.setLayout(null);
 		this.setTitle("STID Gestion 2.0 (Nouvelle Facture)");
-		screenSize.width = 800;
-		screenSize.height = 530;
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int)dimension.getWidth();
+		int y = (int)dimension.getHeight();
+
+		double diff = (x * y);
+		diff = diff /(1366*768);
+		diff -= 0.5;
 		//this.setImage(new Image("lib/images/e.png").getImage());
+		screenSize.width = (int) (800 * diff);
+		screenSize.height = (int) (530 * diff);
 	    this.setSize(screenSize);
 	    
 		NumberFormat num =  NumberFormat.getIntegerInstance();
@@ -149,25 +156,25 @@ public class Factures extends JFrame{
        // devise.setText(devises.getSelectedItem().toString());
         
         this.getContentPane().add(jPanel1);
-        jPanel1.setPreferredSize(new Dimension(760, 40));
-        jPanel1.setBounds(10, 10, jPanel1.getPreferredSize().width, jPanel1.getPreferredSize().height);
+        jPanel1.setPreferredSize(new Dimension((int) (760*diff), (int) (40*diff)));
+        jPanel1.setBounds((int) (10*diff), (int) (10*diff), jPanel1.getPreferredSize().width, jPanel1.getPreferredSize().height);
         this.getContentPane().add(jPanel2);
-        jPanel2.setPreferredSize(new Dimension(760, 140));
-        jPanel2.setBounds(10, 60, jPanel2.getPreferredSize().width, jPanel2.getPreferredSize().height);
+        jPanel2.setPreferredSize(new Dimension((int) (760*diff), (int) (140*diff)));
+        jPanel2.setBounds((int) (10*diff), (int) (60*diff), jPanel2.getPreferredSize().width, jPanel2.getPreferredSize().height);
         this.getContentPane().add(jPanel3);
-        jPanel3.setPreferredSize(new Dimension(760, 210));
-        jPanel3.setBounds(10, 210, jPanel3.getPreferredSize().width, jPanel3.getPreferredSize().height);
+        jPanel3.setPreferredSize(new Dimension((int) (760 * diff), (int) (210*diff)));
+        jPanel3.setBounds((int) (10*diff), (int) (210*diff), jPanel3.getPreferredSize().width, jPanel3.getPreferredSize().height);
         initPanel1();
         initPanel2();
         initPanel3();
-        valider.setPreferredSize(new Dimension(80, 25));
-        valider.setBounds(670, 425, valider.getPreferredSize().width, valider.getPreferredSize().height);
+        valider.setPreferredSize(new Dimension((int) (80*diff), (int) (25*diff)));
+        valider.setBounds((int) (670*diff), (int) (425*diff), valider.getPreferredSize().width, valider.getPreferredSize().height);
         this.getContentPane().add(valider);
-        fermer.setPreferredSize(new Dimension(80, 25));
-        fermer.setBounds(670, 460, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
+        fermer.setPreferredSize(new Dimension((int) (80*diff), (int) (25*diff)));
+        fermer.setBounds((int) (670*diff), (int) (460*diff), fermer.getPreferredSize().width, fermer.getPreferredSize().height);
         this.getContentPane().add(fermer);
-        nouveau.setPreferredSize(new Dimension(90, 25));
-        nouveau.setBounds(20, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+        nouveau.setPreferredSize(new Dimension((int) (90*diff), (int) (25*diff)));
+        nouveau.setBounds((int) (20*diff), (int) (440*diff), nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
         this.getContentPane().add(nouveau);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);

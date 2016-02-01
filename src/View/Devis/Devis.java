@@ -29,11 +29,11 @@ import BDD.Base;
 import Controller.ActionCalculatrice;
 import Controller.ActionFermer;
 import Controller.EcouteAction;
-import Controller.Devis.ActionSearch;
-import Controller.Devis.ExecuteClick;
-import Controller.Devis.FocusClient;
-import Controller.Devis.FocusPosition;
-import Controller.Devis.ItemChange;
+import Controller.ExecuteClick;
+import Controller.FocusClient;
+import Controller.ActionSearch;
+import Controller.FocusPosition;
+import Controller.ItemChange;
 import Model.Donnees;
 import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
@@ -87,7 +87,7 @@ public class Devis extends JFrame {
 		jPanel3 = new JPanel();
 
 		jDate = new JDateChooser();
-		int nbDevis = donnees.newNumDevis();
+		int nbDevis = donnees.newNum("Devis", "NumDevis", null);
 		AutoCompleteModel model = new AutoCompleteModel();
 		model.addAll(listClient());
 		numClient = new AutoComplete(model);
@@ -180,7 +180,7 @@ public class Devis extends JFrame {
 		jPanel2.setBorder(BorderFactory.createEtchedBorder());
 		InsertDevises();
 		valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
-		devises.addItemListener(new ItemChange(this));
+		devises.addItemListener(new ItemChange(this, "Devis"));
 		JPanelTemps.setBorder(BorderFactory.createTitledBorder("Temps"));
 		JPanelTemps.setPreferredSize(new Dimension(350, 200));
 
@@ -201,9 +201,9 @@ public class Devis extends JFrame {
 		jPanel6.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		jPanel3.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 
-		search.addActionListener(new ActionSearch(this));
+		search.addActionListener(new ActionSearch(this, "Devis"));
 		
-		ExecuteClick click = new ExecuteClick(this);
+		ExecuteClick click = new ExecuteClick(this, "Devis");
 		
 		jFournitures.addMouseListener(new FocusPosition(jFournitures, 1, click));
 		jCout.addMouseListener(new FocusPosition(jCout, 1, click));
@@ -225,7 +225,6 @@ public class Devis extends JFrame {
 		jHeureAtelier.addFocusListener(new FocusPosition(jHeureAtelier, 2, click));
 		jPrevu.addFocusListener(new FocusPosition(jPrevu, 3, click));
 		jCommande.addFocusListener(new FocusPosition(jCommande, 3, click));
-		
 		
 		jFournitures.addKeyListener(new EcouteAction(jFournitures));
 		jCout.addKeyListener(new EcouteAction(jCout));
@@ -357,10 +356,10 @@ public class Devis extends JFrame {
 		calcul2.addActionListener(new ActionCalculatrice(jCout));
 		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication));
 		calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier));
-		calcul5.addActionListener(new ActionCalculatrice(jPrevu));
-		calcul6.addActionListener(new ActionCalculatrice(jHeureSite));
+		calcul5.addActionListener(new ActionCalculatrice(jHeureSite));
+		calcul6.addActionListener(new ActionCalculatrice(jPrevu));
 		calcul7.addActionListener(new ActionCalculatrice(jCommande));
-		numClient.getZoneTexte().addFocusListener(new FocusClient(this));
+		numClient.getZoneTexte().addFocusListener(new FocusClient(this, "Devis"));
 		this.addWindowListener(new ActionFermer(this, frame));
 		if(fenetre != null){
 			fenetre.setEnabled(false);
@@ -616,7 +615,7 @@ public class Devis extends JFrame {
 	}
 	
 	protected ArrayList<String> listClient() {
-		listClient = donnees.listeClient();
+		listClient = donnees.liste("NumClient, NomClient", "Clients", null);
 		ArrayList<String> res = new ArrayList<String>();
 		for (int i = 0; i < listClient.length; i++) {
 			res.add(listClient[i][0].toString());

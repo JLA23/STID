@@ -5,7 +5,8 @@ import java.awt.event.ItemListener;
 import java.util.LinkedHashMap;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import Controller.Devis.TestContenu;
+
+import Controller.TestContenu;
 
 public class ActionTaux implements ItemListener{
 	
@@ -22,7 +23,7 @@ public class ActionTaux implements ItemListener{
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
 		jtext1.setText(valeurs.get(b.getSelectedItem().toString())[1].replaceAll("\\.", ","));
-		new TestContenu(null, jtext1, 0);
+		new TestContenu(null, jtext1, 0, null);
 	}
 
 }

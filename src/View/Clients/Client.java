@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import BDD.Base;
 import Controller.LimiteCaratere;
-import Controller.Client.ItemChange;
+import Controller.ItemChange;
 import Model.Donnees;
 
 public class Client extends JDialog {
@@ -59,7 +59,7 @@ public class Client extends JDialog {
 		numClient = new JLabel("N° Client");
 		nameClient = new JLabel("Nom");
 		jNumClient = new JFormattedTextField(num);
-		jNumClient.setText(donnees.newNumClient() + "");
+		jNumClient.setText(donnees.newNum("Clients", "NumClient", null) + "");
 		panelClient = new JPanel();
 		panelClient.setBorder(BorderFactory.createTitledBorder("Client"));
 		initClient();
@@ -135,7 +135,7 @@ public class Client extends JDialog {
 		size = boxTva.getPreferredSize();
 		boxTva.setBounds(o, k - 2, size.width, size.height);
 		panelClient.add(boxTva);
-		boxTva.addItemListener(new ItemChange(this));
+		boxTva.addItemListener(new ItemChange(this, "Client"));
 		
 		taux = new JLabel("Taux TVA : ");
 		o = o + 10 + size.width;

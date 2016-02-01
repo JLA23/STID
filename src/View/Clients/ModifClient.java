@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Client.ModifSupprClient.ActionRechercher;
-import Controller.Client.ModifSupprClient.ActionValider;
+import Controller.ActionRechercher;
+import Controller.ValiderModif;
 import Model.Donnees;
 
 public class ModifClient extends Client{
@@ -19,7 +19,7 @@ public class ModifClient extends Client{
 		this.setTitle("STID Gestion 2.0 (Modifier Client)");
 		nouveau.setText("Recherche");
 		donnees = new Donnees(base);
-		String [] res = donnees.client(numero);
+		String [] res = donnees.fiche("*", "Clients", "numClient = " + numero);
 		jNumClient.setText(numero);
 		jNumClient.setEditable(false);
 		jNumClient.setBackground(new Color(204, 204, 204));
@@ -49,9 +49,9 @@ public class ModifClient extends Client{
 		modes = new ModePaiement(donnees, null, val);
 		vals = donnees.modesPaiements();
 		vals = verifPaiement(vals, numero);
-		valider.addActionListener(new ActionValider(this));
+		valider.addActionListener(new ValiderModif(this, "Client"));
 		fermer.addActionListener(new ActionFermer(this));
-		nouveau.addActionListener(new ActionRechercher(this, "Modif"));
+		nouveau.addActionListener(new ActionRechercher(this, null, "Modif", "Client"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

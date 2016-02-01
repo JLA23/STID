@@ -3,7 +3,7 @@ package Controller.Commandes;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import BDD.Base;
-import View.Commandes.SearchDevisList;
+import View.SearchDevis.SearchDevisList;
 import View.Commandes.SelectDevis;
 
 public class ActionListDevis implements ActionListener{
@@ -20,7 +20,7 @@ public class ActionListDevis implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new SearchDevisList(base, null, select, num);
+		new SearchDevisList(base, null, select, num, "SelectDevis");
 		
 	}
 	

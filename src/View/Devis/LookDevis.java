@@ -8,10 +8,9 @@ import javax.swing.JFrame;
 
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Devis.FocusClient;
-import Controller.Devis.TestContenu;
-import Controller.Devis.ModifSupprDevis.ActionRechercher;
-import Controller.Devis.ModifSupprDevis.ActionSuppr;
+import Controller.FocusClient;
+import Controller.TestContenu;
+import Controller.ActionRechercher;
 import Model.Donnees;
 
 public class LookDevis extends Devis {
@@ -25,7 +24,7 @@ public class LookDevis extends Devis {
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
-		String[] res = donnees.devis(numd);
+		String[] res = donnees.fiche("*, c.nomclient", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " + numd);
 		jNumDevis.setText(res[0]);
 		numClient.getZoneTexte().setText(res[1]);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -40,14 +39,14 @@ public class LookDevis extends Devis {
 		jCommande.setText(res[11].replaceAll("\\.", ","));
 		newClient.setVisible(false);
 		search.setVisible(false);
-		new TestContenu(this, jFournitures, 1);
-		new TestContenu(this, jCout, 1);
-		new TestContenu(this, jPrefabrication, 1);
-		new TestContenu(this, jHeureSite, 2);
-		new TestContenu(this, jHeureAtelier, 2);
-		new TestContenu(this, jPrevu, 3);
-		new TestContenu(this, jCommande, 3);
-		new FocusClient(this).nameClient();
+		new TestContenu(this, jFournitures, 1, "Devis");
+		new TestContenu(this, jCout, 1, "Devis");
+		new TestContenu(this, jPrefabrication, 1, "Devis");
+		new TestContenu(this, jHeureSite, 2, "Devis");
+		new TestContenu(this, jHeureAtelier, 2, "Devis");
+		new TestContenu(this, jPrevu, 3, "Devis");
+		new TestContenu(this, jCommande, 3, "Devis");
+		new FocusClient(this, "Devis").nameClient();
 		jFournitures.setEditable(false);
 		jFournitures.setBackground(new Color(204, 204, 204));
 		jCout.setEditable(false);
@@ -77,9 +76,8 @@ public class LookDevis extends Devis {
 		calcul5.setVisible(false);
 		calcul6.setVisible(false);
 		calcul7.setVisible(false);
-		valider.addActionListener(new ActionSuppr(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche"));
+		nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche", "Devis"));
 		fermer.setBounds(670, 510, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);

@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import BDD.Base;
 import Controller.Commandes.ActionListDevis;
 import Controller.Commandes.SelectDevis.ActionAfficherDevis;
-import Controller.Commandes.SelectDevis.ActionAjouterVerif;
+import Controller.Commandes.SelectDevis.AjoutDevis;
 import Controller.Commandes.SelectDevis.ActionFermerListDevis;
 import Controller.Commandes.SelectDevis.ActionSupprimerListDevis;
 import Controller.Commandes.SelectDevis.SelectionActionValider;
@@ -48,10 +48,9 @@ public class SelectDevis extends JFrame {
 		model.addColumn("N° Client");
 		model.addColumn("Nom Client");
 		model.addColumn("Libelle");
-		System.out.println(numCommande);
 		if(numCommande != null){
 			System.out.println("entre");
-			Object[][] liees = donnees.listeDevisYesCommande(numCommande);
+			Object[][] liees = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande = " + numCommande);
 			for(int m = 0; m< liees.length ; m++){
 				model.addRow(liees[m]);
 			}
@@ -74,7 +73,7 @@ public class SelectDevis extends JFrame {
 				return false;
 			}
 		};
-
+		layerTable.getTableHeader().setReorderingAllowed(false);
 		layerTable.getColumnModel().getColumn(0).setPreferredWidth(1);
 		layerTable.getColumnModel().getColumn(1).setPreferredWidth(1);
 		layerTable.getColumnModel().getColumn(2).setPreferredWidth(220);
@@ -122,7 +121,7 @@ public class SelectDevis extends JFrame {
 		liste.addActionListener(new ActionListDevis(base, this, numCommande));
 		valider.addActionListener(new SelectionActionValider(this, com)); 
 		fermer.addActionListener(new ActionFermerListDevis(this, com)); 
-		ajouter.addActionListener(new ActionAjouterVerif(this));
+		ajouter.addActionListener(new AjoutDevis(this));
 		supprimer.addActionListener(new ActionSupprimerListDevis(this));
 		consulter.addActionListener(new ActionAfficherDevis(this));
 		this.addWindowListener(new ActionFermerListDevis(this, com));

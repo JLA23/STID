@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import Controller.Commandes.TestContenu;
+import Controller.TestContenu;
 import View.Commandes.Commandes;
 import View.Commandes.SelectDevis;
 
@@ -41,13 +41,13 @@ public class SelectionActionValider implements ActionListener {
 			commandes.getjHeureAtelier().setText(new Double(hratelier).toString().replaceAll("\\.", ","));
 			commandes.getjPrevu().setText(new Double(matiereprevu).toString().replaceAll("\\.", ","));
 			commandes.getjCommande().setText(new Double(matierecommande).toString().replaceAll("\\.", ","));
-			new TestContenu(commandes, commandes.getjFournitures(), 1);
-			new TestContenu(commandes, commandes.getjCout(), 1);
-			new TestContenu(commandes, commandes.getjPrefabrication(), 1);
-			new TestContenu(commandes, commandes.getjHeureSite(), 2);
-			new TestContenu(commandes, commandes.getjHeureAtelier(), 2);
-			new TestContenu(commandes, commandes.getjPrevu(), 3);
-			new TestContenu(commandes, commandes.getjCommande(), 3);
+			new TestContenu(commandes, commandes.getjFournitures(), 1, "Commandes");
+			new TestContenu(commandes, commandes.getjCout(), 1, "Commandes");
+			new TestContenu(commandes, commandes.getjPrefabrication(), 1, "Commandes");
+			new TestContenu(commandes, commandes.getjHeureSite(), 2, "Commandes");
+			new TestContenu(commandes, commandes.getjHeureAtelier(), 2, "Commandes");
+			new TestContenu(commandes, commandes.getjPrevu(), 3, "Commandes");
+			new TestContenu(commandes, commandes.getjCommande(), 3, "Commandes");
 			numClientIdentique();
 			commandes.setListDevis(new ArrayList<Object[]>());
 			

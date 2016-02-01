@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.EcouteAction;
-import Controller.Devis.TestContenu;
+import Controller.TestContenu;
 import Controller.ParametreTaux.ActionTaux;
 import Controller.ParametreTaux.ActionValider;
 import Model.Donnees;
@@ -59,7 +59,7 @@ public class ParametreTaux extends JDialog{
 			}
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				new TestContenu(null, jTaux, 0);
+				new TestContenu(null, jTaux, 0, null);
 			}
 		});
 		initTaux();
@@ -116,7 +116,7 @@ public class ParametreTaux extends JDialog{
 		}
 		jTypeTaux.setSelectedItem("Normal");
 		jTaux.setText(valeur.get(jTypeTaux.getSelectedItem().toString())[1].replaceAll("\\.", ","));
-		new TestContenu(null, jTaux, 0);
+		new TestContenu(null, jTaux, 0, null);
 	}
 	
 	

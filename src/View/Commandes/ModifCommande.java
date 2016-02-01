@@ -5,10 +5,10 @@ import java.text.ParseException;
 import javax.swing.JFrame;
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Commandes.FocusClient;
-import Controller.Commandes.TestContenu;
-import Controller.Commandes.ModifSupprCommandes.ActionRechercher;
-import Controller.Commandes.ModifSupprCommandes.ActionValider;
+import Controller.FocusClient;
+import Controller.TestContenu;
+import Controller.ActionRechercher;
+import Controller.ValiderModif;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
 
 public class ModifCommande extends Commandes{
@@ -20,8 +20,8 @@ public class ModifCommande extends Commandes{
 		this.setTitle("STID Gestion 2.0 (Modifier Commande)");
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
-		DevisdelaCommande = donnees.listeDevisYesCommande(numd);
-		String [] res = donnees.commande(numd);
+		DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);
+		String [] res = donnees.fiche("*", "Commandes", "numCommande = " + numd);
 		jNumCommande.setText(res[0]);
 		jNumCommande.setEditable(false);
 		jNumCommande.setBackground(new Color(204, 204, 204));
@@ -38,24 +38,23 @@ public class ModifCommande extends Commandes{
 		devises.setSelectedIndex(Integer.parseInt(res[12]) - 1);
 		sd = new SelectDevis(bdd, this, numd);
 		jDevis.addActionListener(new ActionSelectDevis(sd));
-		DevisdelaCommande = donnees.listeDevisYesCommande(numd);
 		for(int i = 0; i < DevisdelaCommande.length; i++){
 			listDevis.add(DevisdelaCommande[i]);
 		}
 		if(res[8].equals("1")){
 			check.setSelected(true);
 		}
-		new TestContenu(this, jFournitures, 1);
-		new TestContenu(this, jCout, 1);
-		new TestContenu(this, jPrefabrication, 1);
-		new TestContenu(this, jHeureSite, 2);
-		new TestContenu(this, jHeureAtelier, 2);
-		new TestContenu(this, jPrevu, 3);
-		new TestContenu(this, jCommande, 3);
-		new FocusClient(this).nameClient();
-		valider.addActionListener(new ActionValider(this));
+		new TestContenu(this, jFournitures, 1, "Commandes");
+		new TestContenu(this, jCout, 1, "Commandes");
+		new TestContenu(this, jPrefabrication, 1, "Commandes");
+		new TestContenu(this, jHeureSite, 2, "Commandes");
+		new TestContenu(this, jHeureAtelier, 2, "Commandes");
+		new TestContenu(this, jPrevu, 3, "Commandes");
+		new TestContenu(this, jCommande, 3, "Commandes");
+		new FocusClient(this, "Commandes").nameClient();
+		valider.addActionListener(new ValiderModif(this, "Commandes"));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif"));
+		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif", "Commandes"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

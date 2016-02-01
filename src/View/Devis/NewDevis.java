@@ -3,8 +3,8 @@ import javax.swing.JFrame;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.Devis.NewDevis.ActionCreateClient;
-import Controller.Devis.NewDevis.ActionNouveau;
-import Controller.Devis.NewDevis.ActionValider;
+import Controller.ActionNouveau;
+import Controller.Devis.NewDevis.ActionValiderDevis;
 
 public class NewDevis extends Devis{
 	
@@ -12,9 +12,9 @@ public class NewDevis extends Devis{
 
 	public NewDevis(Base bdd, JFrame frame){
 		super(bdd, frame);
-		valider.addActionListener(new ActionValider(this));
+		valider.addActionListener(new ActionValiderDevis(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionNouveau(this));
+		nouveau.addActionListener(new ActionNouveau(this, "Devis"));
 		newClient.addActionListener(new ActionCreateClient(this));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);

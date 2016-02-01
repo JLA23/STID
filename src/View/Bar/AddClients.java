@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import BDD.Base;
 import Model.Donnees;
 import View.Clients.NewClient;
-import View.Clients.SearchClient;
+import View.SearchClients.SearchClient;
 
 public class AddClients {
 
@@ -56,7 +56,7 @@ public class AddClients {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (donnees.clientsNoLieeDevis()) {
+				if (donnees.noLier("c.numClient", "clients as c", "not exists (select * from devis as d where d.numclient = c.numclient)")) {
 					new SearchClient(base, null, "Suppr");
 				} else {
 					JOptionPane.showMessageDialog(null, "Aucun client ne peut être supprimé", "ATTENTION",

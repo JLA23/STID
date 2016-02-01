@@ -87,7 +87,6 @@ public class Base  {
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
-		
 		return rs;
 	}
 	
@@ -113,7 +112,7 @@ public class Base  {
 			stmt.executeUpdate(query); 
 			message = "Modification effectué avec succée !";
 		}
-		catch(Exception e){message = "Error : " + e.getMessage();}
+		catch(Exception e){System.out.println("Error : " + e.getMessage());}
 		
 		return message;
 	}

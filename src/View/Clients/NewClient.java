@@ -2,8 +2,8 @@ package View.Clients;
 
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Client.NewClient.ActionNouveau;
-import Controller.Client.NewClient.ActionValider;
+import Controller.ActionNouveau;
+import Controller.Client.NewClient.ActionValiderClient;
 import View.Devis.Devis;
 
 public class NewClient extends Client{
@@ -12,9 +12,9 @@ public class NewClient extends Client{
 
 	public NewClient(Base bdd){
 		super(bdd, null);
-		valider.addActionListener(new ActionValider(this));
+		valider.addActionListener(new ActionValiderClient(this));
 		fermer.addActionListener(new ActionFermer(this));
-		nouveau.addActionListener(new ActionNouveau(this));
+		nouveau.addActionListener(new ActionNouveau(this, "Client"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -22,9 +22,8 @@ public class NewClient extends Client{
 	
 	public NewClient(Base bdd, Devis devis){
 		super(bdd, null);
-		valider.addActionListener(new ActionValider(this, devis));
+		valider.addActionListener(new ActionValiderClient(this, devis));
 		fermer.addActionListener(new ActionFermer(this));
-		//nouveau.addActionListener(new ActionNouveau(this));
 		nouveau.setVisible(false);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);

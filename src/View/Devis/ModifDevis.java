@@ -8,10 +8,10 @@ import javax.swing.JFrame;
 
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Devis.FocusClient;
-import Controller.Devis.TestContenu;
-import Controller.Devis.ModifSupprDevis.ActionRechercher;
-import Controller.Devis.ModifSupprDevis.ActionValider;
+import Controller.FocusClient;
+import Controller.TestContenu;
+import Controller.ActionRechercher;
+import Controller.ValiderModif;
 import Model.Donnees;
 
 public class ModifDevis extends Devis{
@@ -23,7 +23,7 @@ public class ModifDevis extends Devis{
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
-		String [] res = donnees.devis(numd);
+		String [] res = donnees.fiche("*, c.nomclient", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " + numd);
 		jNumDevis.setText(res[0]);
 		jNumDevis.setEditable(false);
 		jNumDevis.setBackground(new Color(204, 204, 204));
@@ -40,17 +40,17 @@ public class ModifDevis extends Devis{
 		jCommande.setText(res[11].replaceAll("\\.", ","));
 		newClient.setVisible(false);
 		devises.setSelectedIndex(Integer.parseInt(res[12]) - 1);
-		new TestContenu(this, jFournitures, 1);
-		new TestContenu(this, jCout, 1);
-		new TestContenu(this, jPrefabrication, 1);
-		new TestContenu(this, jHeureSite, 2);
-		new TestContenu(this, jHeureAtelier, 2);
-		new TestContenu(this, jPrevu, 3);
-		new TestContenu(this, jCommande, 3);
-		new FocusClient(this).nameClient();
-		valider.addActionListener(new ActionValider(this));
+		new TestContenu(this, jFournitures, 1, "Devis");
+		new TestContenu(this, jCout, 1, "Devis");
+		new TestContenu(this, jPrefabrication, 1, "Devis");
+		new TestContenu(this, jHeureSite, 2, "Devis");
+		new TestContenu(this, jHeureAtelier, 2, "Devis");
+		new TestContenu(this, jPrevu, 3, "Devis");
+		new TestContenu(this, jCommande, 3, "Devis");
+		new FocusClient(this, "Devis").nameClient();
+		valider.addActionListener(new ValiderModif(this, "Devis"));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif"));
+		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif", "Devis"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.Client.ModifSupprClient.ActionRechercher;
-import Controller.Client.ModifSupprClient.ActionValider;
+import Controller.ActionRechercher;
+import Controller.ValiderSuppr;
 import Model.Donnees;
 
 public class SupprClient extends Client {
@@ -19,7 +19,7 @@ public class SupprClient extends Client {
 		this.setTitle("STID Gestion 2.0 (Supprimer Client)");
 		nouveau.setText("Recherche");
 		donnees = new Donnees(base);
-		String[] res = donnees.client(numero);
+		String[] res = donnees.fiche("*", "Clients", "numClient = " + numero);
 		jNumClient.setText(numero);
 		jNumClient.setEditable(false);
 		jNumClient.setBackground(new Color(204, 204, 204));
@@ -65,13 +65,13 @@ public class SupprClient extends Client {
 		modes = new ModePaiement(donnees, null, val);
 		vals = donnees.modesPaiements();
 		vals = verifPaiement(vals, numero);
-		valider.addActionListener(new ActionValider(this));
+		valider.addActionListener(new ValiderSuppr(this, "Client"));
 		valider.setText("Supprimer");
 		valider.setBounds(270, 325, 120, 25);
 		fermer.setBounds(400, 325, 80, 25);
 		nouveau.setBounds(155, 325, 105, 25);
 		fermer.addActionListener(new ActionFermer(this));
-		nouveau.addActionListener(new ActionRechercher(this, "Suppr"));
+		nouveau.addActionListener(new ActionRechercher(this, null, "Suppr", "Client"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
