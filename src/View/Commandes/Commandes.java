@@ -317,13 +317,13 @@ public class Commandes extends JFrame{
 			}
 		});
 
-		calcul1.addActionListener(new ActionCalculatrice(jFournitures));
-		calcul2.addActionListener(new ActionCalculatrice(jCout));
-		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication));
-		calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier));
-		calcul5.addActionListener(new ActionCalculatrice(jHeureSite));
-		calcul6.addActionListener(new ActionCalculatrice(jPrevu));
-		calcul7.addActionListener(new ActionCalculatrice(jCommande));
+		calcul1.addActionListener(new ActionCalculatrice(this, jFournitures, 1, "Commandes"));
+		calcul2.addActionListener(new ActionCalculatrice(this, jCout, 1, "Commandes"));
+		calcul3.addActionListener(new ActionCalculatrice(this, jPrefabrication, 1, "Commandes"));
+		calcul4.addActionListener(new ActionCalculatrice(this, jHeureAtelier, 2, "Commandes"));
+		calcul5.addActionListener(new ActionCalculatrice(this, jHeureSite, 2, "Commandes"));
+		calcul6.addActionListener(new ActionCalculatrice(this, jPrevu, 3, "Commandes"));
+		calcul7.addActionListener(new ActionCalculatrice(this, jCommande, 3, "Commandes"));
 		
 		jFournitures.addFocusListener(new FocusPosition(jFournitures, 1,click));
 		jCout.addFocusListener(new FocusPosition(jCout, 1, click));

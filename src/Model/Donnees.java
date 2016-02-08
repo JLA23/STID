@@ -50,6 +50,19 @@ public class Donnees {
 		}
 		return resultat;
 	}
+	
+	public String searchTerme(String num){
+		ResultSet rs = base.Select("numindice", "Termes", "NumFacture is null AND Numcommande = '" + num + "'");
+		String resultat = "";
+		try {
+			while (rs.next()) {
+				resultat = rs.getString(1);
+			}
+		} catch (SQLException e) {
+			resultat = null;
+		}
+		return resultat;
+	}
 
 	public int newNum(String table, String colonne, String condition) {
 		ResultSet rs = base.Select("MAX("+colonne+")", table, condition);
@@ -99,6 +112,24 @@ public class Donnees {
 				valeur[0] = rs.getString(1);
 				valeur[1] = rs.getString(2);
 				valeur[2] = rs.getString(4);
+				resultat.put(cle, valeur);
+			}
+		} catch (SQLException e) {
+			resultat = new HashMap<String, String[]>();
+			resultat.put("Error", new String[] { e.getMessage() });
+		}
+		return resultat;
+	}
+	
+	public HashMap<String, String[]> modesPaiements(String numClient) {
+		ResultSet rs = base.Select("m.id, m.mode", "modepaiement as m, paiementclient as p", "p.numClient = " + numClient + " and p.modePaiement = m.id");
+		HashMap<String, String[]> resultat = null;
+		try {
+			resultat = new HashMap<String, String[]>();
+			while (rs.next()) {
+				String cle = rs.getString(2);
+				String[] valeur = new String[1];
+				valeur[0] = rs.getString(1);
 				resultat.put(cle, valeur);
 			}
 		} catch (SQLException e) {

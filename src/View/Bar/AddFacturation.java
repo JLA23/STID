@@ -2,38 +2,33 @@ package View.Bar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.SearchTerme.SearchTerme;
 
 public class AddFacturation{
 	
 	private JMenu menu;
+	private JFrame fenetre;
 	private JMenuItem menuItem;
+	private Base bdd;
 	
-	public AddFacturation(Base bdd, String typeCompte){
+	public AddFacturation(Base base, String typeCompte, JFrame frame){
 		menu = new JMenu("Facturation");
-		menu.getAccessibleContext().setAccessibleDescription("Facturation");		
-		
-		
-		//Creation de Bdl
-		menuItem = new JMenuItem("Création de Bdl");
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-					//new Devis();
-			}
-		});
-		menuItem.getAccessibleContext().setAccessibleDescription("Creation d'un borderau de livraison");
-		menu.add(menuItem);
+		menu.getAccessibleContext().setAccessibleDescription("Facturation");
+		this.bdd = base;
+		this.fenetre = frame;		
 		
 		//Creer une facture
 		menuItem = new JMenuItem("Créer une facture");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new ModifDevis();
+					new SearchTerme(bdd, fenetre, "NewFacture");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Créer une facture");

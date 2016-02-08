@@ -18,6 +18,7 @@ import View.Commandes.SupprCommande;
 import View.Devis.LookDevis;
 import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
+import View.Factures.NewFacture;
 import View.SearchClients.SearchClientList;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevisList;
@@ -89,6 +90,8 @@ public class SelectionAction implements ActionListener {
 					dialog.dispose();
 				} else if (f.equals("NewTerme")){ 
 					new NewTerme(bdd, fenetre, numero);
+				}  else if (f.equals("NewFacture")){ 
+					new NewFacture(bdd, fenetre, numero, datas[ligne][1].toString());
 				} else if (f.equals("SelectDevis")) {
 					if (!select.containt((String) datas[ligne][0])) {
 						select.getModel().addRow(datas[ligne]);
@@ -125,6 +128,14 @@ public class SelectionAction implements ActionListener {
 		}
 		else if(f.equals("NewTerme")){
 			SearchCommandeList search = (SearchCommandeList)clas;
+			dialog = search;
+			datas = search.getData();
+			bdd = search.getBdd();
+			tables = search.getLayerTable();
+			fenetre = search.getFrame();
+		}
+		else if(f.equals("NewFacture")){
+			SearchTermeList search = (SearchTermeList)clas;
 			dialog = search;
 			datas = search.getData();
 			bdd = search.getBdd();

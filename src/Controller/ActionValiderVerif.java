@@ -16,6 +16,7 @@ import View.Commandes.SupprCommande;
 import View.Devis.LookDevis;
 import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
+import View.Factures.NewFacture;
 import View.SearchClients.SearchClient;
 import View.SearchCommandes.SearchCommande;
 import View.SearchCommandes.SearchCommandeList;
@@ -150,6 +151,8 @@ public class ActionValiderVerif implements ActionListener {
 							new LookCommande(bdd,
 									donnees.searchNumCommandeClient(((SearchCommande) fr).getNumComClient().getText()),
 									((SearchCommande) fr).getFr());
+						} else if (((SearchCommande) fr).getF().equals("NewTerme")) {
+							new NewTerme(bdd, ((SearchCommande) fr).getFr(), donnees.searchNumCommandeClient(((SearchCommande) fr).getNumComClient().getText()));
 						}
 					} catch (ParseException e1) {
 						// TODO Auto-generated catch block
@@ -176,6 +179,8 @@ public class ActionValiderVerif implements ActionListener {
 					} else if (((SearchCommande) fr).getF().equals("Recherche")) {
 						new LookCommande(bdd, ((SearchCommande) fr).getNumCom().getText(),
 								((SearchCommande) fr).getFr());
+					} else if (((SearchCommande) fr).getF().equals("NewTerme")) {
+						new NewTerme(bdd, ((SearchCommande) fr).getFr(), ((SearchCommande) fr).getNumCom().getText());
 					}
 				} catch (ParseException e1) {
 					// TODO Auto-generated catch block
@@ -199,10 +204,15 @@ public class ActionValiderVerif implements ActionListener {
 				&& ((SearchTerme) fr).getNumIndice().getText().isEmpty()) {
 			if (donnees.exist("Termes", "NumCommande", "NumCommande = " + ((SearchTerme) fr).getNumCom().getText())) {
 				((SearchTerme) fr).dispose();
-				if (donnees.existPlusieur("NumIndice", "Termes",
-						"NumCommande = " + ((SearchTerme) fr).getNumCom().getText())) {
-					new SearchTermeList(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getF(),
-							((SearchTerme) fr).getNumCom().getText());
+				boolean exist = false;
+				if(((SearchTerme)fr).getF().equals("NewFacture")){
+					exist = donnees.existPlusieur("NumIndice", "Termes", "Numfacture is null and NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
+				}
+				else{
+					exist = donnees.existPlusieur("NumIndice", "Termes", "NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
+				}
+				if (exist) {
+					new SearchTermeList(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getF(),	((SearchTerme) fr).getNumCom().getText());
 				} else {
 					if (((SearchTerme) fr).getF().equals("Modif")) {
 						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
@@ -210,6 +220,9 @@ public class ActionValiderVerif implements ActionListener {
 						new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
 					} else if (((SearchTerme) fr).getF().equals("Recherche")) {
 						new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
+					} else if (((SearchTerme) fr).getF().equals("NewFacture")){
+						String num = donnees.searchTerme(((SearchTerme)fr).getNumCom().getText());
+						new NewFacture(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme)fr).getNumCom().getText(), num);
 					}
 				}
 			} else {
@@ -242,8 +255,9 @@ public class ActionValiderVerif implements ActionListener {
 						JOptionPane.WARNING_MESSAGE);
 			}
 		} else if (((SearchTerme) fr).getNumCom().getText().isEmpty()
-				&& ((SearchTerme) fr).getNumComClient().getText().isEmpty()) {
+				&& ((SearchTerme) fr).getNumIndice().getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Les champs sont vides !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}
 	}
+
 }

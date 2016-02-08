@@ -29,4 +29,20 @@ public class Calcul {
 		calcule = Math.round((calcule) * Math.pow(10, 2)) / Math.pow(10, 2);
 		jResteCommande.setText((calcule + "").replaceAll("\\.", ","));
 	}
+	
+	public double calculerMontantTTC(JFormattedTextField jFournitures, JFormattedTextField jCout, JFormattedTextField jPrefabrication, JFormattedTextField jTotalDevis, JFormattedTextField jTotalDevisTTC, JFormattedTextField jTotalDevisDevise, Double valeurDevise, Double tva) {
+		double calcule = Double.parseDouble(jFournitures.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = calcule + Double.parseDouble(jCout.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = calcule + Double.parseDouble(jPrefabrication.getText().replaceAll(",", "\\.").replaceAll(" ", ""));
+		calcule = Math.round((calcule) * Math.pow(10, 2)) / Math.pow(10, 2);
+		jTotalDevis.setText((calcule + "").replaceAll("\\.", ","));
+		double tvaRecup = (calcule * tva)/100;
+		tvaRecup = Math.round((tvaRecup + 0.004) * Math.pow(10, 2)) / Math.pow(10, 2);
+		calcule = Math.round((calcule + tvaRecup)*Math.pow(10, 2))/Math.pow(10, 2);
+		jTotalDevisTTC.setText((calcule + "").replaceAll("\\.", ","));
+		calcule = Math.round(((calcule * valeurDevise) + 0.004) * Math.pow(10, 2)) / Math.pow(10, 2);
+		jTotalDevisDevise.setText((calcule + "").replaceAll("\\.", ","));
+		return tvaRecup;
+	}
+	
 }

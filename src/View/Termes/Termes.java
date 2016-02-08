@@ -326,9 +326,9 @@ public class Termes extends JFrame{
 		devise.setBounds(l, 171, devise.getPreferredSize().width, devise.getPreferredSize().height);
 		jPanel6.add(devise);
 		
-		calcul1.addActionListener(new ActionCalculatrice(jFournitures));
-		calcul2.addActionListener(new ActionCalculatrice(jCout));
-		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication));
+		calcul1.addActionListener(new ActionCalculatrice(this, jFournitures, 1, "Termes"));
+		calcul2.addActionListener(new ActionCalculatrice(this, jCout, 1, "Termes"));
+		calcul3.addActionListener(new ActionCalculatrice(this, jPrefabrication, 1, "Termes"));
 		
 		jFournitures.addKeyListener(new EcouteAction(jFournitures));
 		jCout.addKeyListener(new EcouteAction(jCout));

@@ -352,13 +352,13 @@ public class Devis extends JFrame {
 			}
 		});
 
-		calcul1.addActionListener(new ActionCalculatrice(jFournitures));
-		calcul2.addActionListener(new ActionCalculatrice(jCout));
-		calcul3.addActionListener(new ActionCalculatrice(jPrefabrication));
-		calcul4.addActionListener(new ActionCalculatrice(jHeureAtelier));
-		calcul5.addActionListener(new ActionCalculatrice(jHeureSite));
-		calcul6.addActionListener(new ActionCalculatrice(jPrevu));
-		calcul7.addActionListener(new ActionCalculatrice(jCommande));
+		calcul1.addActionListener(new ActionCalculatrice(this, jFournitures, 1, "Devis"));
+		calcul2.addActionListener(new ActionCalculatrice(this, jCout, 1, "Devis"));
+		calcul3.addActionListener(new ActionCalculatrice(this, jPrefabrication, 1, "Devis"));
+		calcul4.addActionListener(new ActionCalculatrice(this, jHeureAtelier, 2, "Devis"));
+		calcul5.addActionListener(new ActionCalculatrice(this, jHeureSite, 2, "Devis"));
+		calcul6.addActionListener(new ActionCalculatrice(this, jPrevu, 3, "Devis"));
+		calcul7.addActionListener(new ActionCalculatrice(this, jCommande, 3, "Devis"));
 		numClient.getZoneTexte().addFocusListener(new FocusClient(this, "Devis"));
 		this.addWindowListener(new ActionFermer(this, frame));
 		if(fenetre != null){

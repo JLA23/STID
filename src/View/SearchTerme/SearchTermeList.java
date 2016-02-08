@@ -25,7 +25,13 @@ public class SearchTermeList extends SearchList {
 		this.bdd = bdd;
 		this.frame = frame;
 		data = null;
-		if(numCom != null){
+		if(fonction.equals("NewFacture") && numCom == null){
+			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "Termes as t, Commandes as co, Clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null");
+		}
+		else if(fonction.equals("NewFacture") && numCom != null){
+			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "Termes as t, Commandes as co, Clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom);
+		}
+		else if(!fonction.equals("NewFacture") && numCom != null){
 			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "Termes as t, Commandes as co, Clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom);
 		}
 		else{

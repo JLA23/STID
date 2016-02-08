@@ -5,6 +5,7 @@ import javax.swing.JFormattedTextField;
 import Model.Calcul;
 import View.Commandes.Commandes;
 import View.Devis.Devis;
+import View.Factures.Factures;
 import View.Termes.Termes;
 
 public class TestContenu {
@@ -51,6 +52,13 @@ public class TestContenu {
 				new Calcul().calculerMontant(((Termes) d).getjFournitures(), ((Termes) d).getjCout(),
 						((Termes) d).getjPrefabrication(), ((Termes) d).getjTotalDevis(),
 						((Termes) d).getjTotalDevisDevise(), ((Termes) d).getValeurDevise());
+			}
+		}
+		else if (typeClasse != null && typeClasse.equals("Factures")) {
+			if (methode == 1) {
+				new Calcul().calculerMontantTTC(((Factures) d).getjFournitures(), ((Factures) d).getjCout(),
+						((Factures) d).getjPrefabrication(), ((Factures) d).getjTotalHT(),((Factures) d).getjTotalTTC(),
+						((Factures) d).getjTotalDevise(), ((Factures) d).getValeurDevise(), ((Factures)d).getValeurTVA());
 			}
 		}
 	}
