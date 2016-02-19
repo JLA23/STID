@@ -56,6 +56,7 @@ public class Commandes extends JFrame{
     protected HashMap <String, String []> valeurDevises;
     protected Object [][] listClient;
     protected ArrayList<Object[]> listDevis;
+    protected String [] valeursCommande;
     protected Object [][] DevisdelaCommande;
 
 	protected static final long serialVersionUID = 1L;

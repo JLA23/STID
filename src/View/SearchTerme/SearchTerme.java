@@ -2,7 +2,6 @@ package View.SearchTerme;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.text.NumberFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,6 +13,7 @@ import javax.swing.JTextField;
 import BDD.Base;
 import Controller.ActionList;
 import Controller.ActionValiderVerif;
+import Controller.EcouteAction;
 import View.Options.ClickDroit;
 
 public class SearchTerme extends JDialog{
@@ -40,14 +40,16 @@ public class SearchTerme extends JDialog{
 	    pane.setPreferredSize(new Dimension(200, 130));
 	    JLabel label = new JLabel("Numéro de Commande");
 	    pane.add(label);
-	    NumberFormat num =  NumberFormat.getIntegerInstance();
-	    numCom = new JFormattedTextField(num);
+	   // NumberFormat num =  NumberFormat.getIntegerInstance();
+	    numCom = new JFormattedTextField();
+	    numCom.addKeyListener(new EcouteAction(numCom, false));
 	    numCom.setPreferredSize(new Dimension(100, 25));
 	    new ClickDroit(numCom, true, true);
 	    pane.add(numCom);
 	    JLabel labelIndice = new JLabel("Numéro Indice");
 	    pane.add(labelIndice);
-	    numIndice = new JFormattedTextField(num);
+	    numIndice = new JFormattedTextField();
+	    numIndice.addKeyListener(new EcouteAction(numIndice, false));
 	    numIndice.setPreferredSize(new Dimension(100, 25));
 	    new ClickDroit(numIndice, true, true);
 	    pane.add(numIndice);

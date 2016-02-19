@@ -58,7 +58,7 @@ public class TestContenu {
 			if (methode == 1) {
 				new Calcul().calculerMontantTTC(((Factures) d).getjFournitures(), ((Factures) d).getjCout(),
 						((Factures) d).getjPrefabrication(), ((Factures) d).getjTotalHT(),((Factures) d).getjTotalTTC(),
-						((Factures) d).getjTotalDevise(), ((Factures) d).getValeurDevise(), ((Factures)d).getValeurTVA());
+						((Factures) d).getjTotalDevise(), ((Factures) d).getValeurDevise(), Double.parseDouble(((Factures)d).getjTVA().getText().replaceAll(",", "\\.")), ((Factures)d));
 			}
 		}
 	}

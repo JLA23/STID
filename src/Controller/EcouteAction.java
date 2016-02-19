@@ -9,9 +9,14 @@ public class EcouteAction implements KeyListener {
 
 	JFormattedTextField text1;
 	String l = "1234567890,";
+	boolean point = true;
 
 	public EcouteAction(JFormattedTextField jtext1) {
 		this.text1 = jtext1;
+	}
+	public EcouteAction(JFormattedTextField jtext1, boolean point) {
+		this.text1 = jtext1;
+		this.point = point;
 	}
 
 	@Override
@@ -24,8 +29,8 @@ public class EcouteAction implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if (e.getKeyChar() == '.') {
-			if (!text1.getText().contains(",")) {
+		if (e.getKeyChar() == '.' || e.getKeyChar() == ',') {
+			if (!text1.getText().contains(",") && point) {
 				e.setKeyChar(',');
 			} else {
 				e.consume();

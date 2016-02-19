@@ -44,6 +44,7 @@ public class ModifCommande extends Commandes{
 		if(res[8].equals("1")){
 			check.setSelected(true);
 		}
+		valeursCommande = res;
 		new TestContenu(this, jFournitures, 1, "Commandes");
 		new TestContenu(this, jCout, 1, "Commandes");
 		new TestContenu(this, jPrefabrication, 1, "Commandes");

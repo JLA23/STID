@@ -18,7 +18,6 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -50,14 +49,16 @@ public class Factures extends JFrame{
     protected JLabel coutMO, totalDevise, devise, nameClient, facture, totalTTC, client, libelle2, labelNumCommandeClient, numCommandeClient;
     protected JPanel jPanel1, jPanel2, jPanel3;
     protected JFormattedTextField jTotalDevise, jTotalTTC, jFournitures, jPrefabrication, jCout, jTotalHT, jNumFacture, jAnneeValeur, jTVA;
-    protected JCheckBox jValeur;
+    protected JFormattedTextField jValeur;
     protected JDateChooser jDateEmission, jDateEcheance;
-    protected double valeurDevise, valeurTVA;
-    protected Donnees donnees;
+    protected double valeurDevise, recupTVA;
+	protected Donnees donnees;
     protected Base base;
     protected HashMap <String, String []> valeurDevises, modespaiements;
     protected Object [][] listClient;
     protected JFrame fenetre;
+    protected String numeroCommande, numeroIndice;
+    protected String [] valeursTerme;
 
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
@@ -78,6 +79,7 @@ public class Factures extends JFrame{
 		num.setGroupingUsed(false);
         DecimalFormat nf = new DecimalFormat("#0.00");
         nf.setGroupingUsed(false);
+        recupTVA = 0;
 	    
 	    jPanel1 = new JPanel();
 	    jPanel2 = new JPanel();
@@ -125,7 +127,7 @@ public class Factures extends JFrame{
         jPrefabrication = new JFormattedTextField(nf);
         jTotalHT = new JFormattedTextField(nf);
         jTotalTTC = new JFormattedTextField(nf);
-        jValeur = new JCheckBox();
+        jValeur = new JFormattedTextField(num);
         jAnneeValeur = new JFormattedTextField(num);
         jTVA = new JFormattedTextField(nf);
 
@@ -141,6 +143,7 @@ public class Factures extends JFrame{
         jTotalDevise.setText("0,00");
         jTotalDevise.setText("0,00");
         jTVA.setText("0,00");
+        jValeur.setText("0");
         
         jTotalHT.setEditable(false);
         jTotalTTC.setEditable(false);
@@ -282,10 +285,10 @@ public class Factures extends JFrame{
 			}
 		});
 		
-		jFournitures.addFocusListener(new FocusPosition(jFournitures, 1,click));
+		jFournitures.addFocusListener(new FocusPosition(jFournitures, 1, click));
 		jCout.addFocusListener(new FocusPosition(jCout, 1, click));
 		jPrefabrication.addFocusListener(new FocusPosition(jPrefabrication, 1, click));
-		jTVA.addFocusListener(new FocusPosition(jTVA,  0, click));
+		jTVA.addFocusListener(new FocusPosition(jTVA, 1, click));
 		jFournitures.addKeyListener(new EcouteAction(jFournitures));
 		jCout.addKeyListener(new EcouteAction(jCout));
 		jPrefabrication.addKeyListener(new EcouteAction(jPrefabrication));
@@ -433,7 +436,8 @@ public class Factures extends JFrame{
 		l += boxModePaiement.getPreferredSize().width + 50;
 		valeur.setBounds(l, 141, valeur.getPreferredSize().width, valeur.getPreferredSize().height);
 		jPanel3.add(valeur);
-		l += valeur.getPreferredSize().width + 3;
+		l += valeur.getPreferredSize().width + 10;
+		jValeur.setPreferredSize(new Dimension(50, 20));
 		jValeur.setBounds(l, 141, jValeur.getPreferredSize().width, jValeur.getPreferredSize().height);
 		jPanel3.add(jValeur);
 		
@@ -591,11 +595,11 @@ public class Factures extends JFrame{
 		this.jTVA = jTVA;
 	}
 
-	public JCheckBox getjValeur() {
+	public JFormattedTextField getjValeur() {
 		return jValeur;
 	}
 
-	public void setjValeur(JCheckBox jValeur) {
+	public void setjValeur(JFormattedTextField jValeur) {
 		this.jValeur = jValeur;
 	}
 
@@ -663,11 +667,54 @@ public class Factures extends JFrame{
 		return valeurDevises.values();
 	}
 
-	public double getValeurTVA() {
-		return valeurTVA;
+    public double getRecupTVA() {
+		return recupTVA;
 	}
 
-	public void setValeurTVA(double valeurTVA) {
-		this.valeurTVA = valeurTVA;
+	public void setRecupTVA(double recupTVA) {
+		this.recupTVA = recupTVA;
 	}
+
+	public String getNumeroCommande() {
+		return numeroCommande;
+	}
+
+	public void setNumeroCommande(String numeroCommande) {
+		this.numeroCommande = numeroCommande;
+	}
+
+	public String getNumeroIndice() {
+		return numeroIndice;
+	}
+
+	public void setNumeroIndice(String numeroIndice) {
+		this.numeroIndice = numeroIndice;
+	}
+
+	public JLabel getLibelle2() {
+		return libelle2;
+	}
+
+	public void setLibelle2(JLabel libelle2) {
+		this.libelle2 = libelle2;
+	}
+
+	public JFrame getFenetre() {
+		return fenetre;
+	}
+
+	public void setFenetre(JFrame fenetre) {
+		this.fenetre = fenetre;
+	}
+
+	public String[] getValeursTerme() {
+		return valeursTerme;
+	}
+
+	public void setValeursTerme(String[] valeursTerme) {
+		this.valeursTerme = valeursTerme;
+	}
+	
+	
+	
 }
