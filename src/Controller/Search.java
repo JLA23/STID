@@ -2,50 +2,58 @@ package Controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import View.SearchList.SearchList;
 
-import javax.swing.JFormattedTextField;
-import javax.swing.JTable;
+public class Search implements KeyListener {
 
-public class Search implements KeyListener{
-	
-	private JFormattedTextField jtextfield;
-	private Object[][] data;
-	private JTable table;
-	
-	public Search(JFormattedTextField jtext, Object[][] datas, JTable layerTable){
-		this.jtextfield = jtext;
-		this.data = datas;
-		this.table = layerTable;
+	private int col;
+	private SearchList search;
+
+	public Search(SearchList list, int colonne) {
+		this.col = colonne;
+		this.search = list;
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		int i = 0;
-		boolean trouve = false;
-		for(; i < data.length; i++){
-			if(((String)data[i][0]).length() >= jtextfield.getText().length()){
-				if(jtextfield.getText().equals(((String)data[i][0]).substring(0, jtextfield.getText().length()))){
+		//boolean trouve = false;
+		int j = 0;
+		for (; j < search.getLayerTable().getRowCount(); j++) {
+			if (((String) search.getLayerTable().getValueAt(j, col)).length() >= search.getSearch().getText().length()) {
+				if (search.getSearch().getText().equals(((String) search.getLayerTable().getValueAt(j, col)).substring(0, search.getSearch().getText().length()))){
+					search.getLayerTable().setRowSelectionInterval(j, j);
+					break;
+				}
+			}
+		}
+		/*for (; i < search.getData().length; i++) {
+			if (((String) search.getData()[i][col]).length() >= search.getSearch().getText().length()) {
+				if (search.getSearch().getText().equals(
+						((String) search.getData()[i][col]).substring(0, search.getSearch().getText().length()))) {
 					trouve = true;
 					break;
 				}
 			}
 		}
-		if(trouve){
-			for(int j = 0; j < table.getRowCount(); j ++){
-				if(((String)table.getModel().getValueAt(j, 0)).equals((String)data[i][0])){
-					table.setRowSelectionInterval(j, j);
-				}
+		if (trouve) {
+	
+			if (acs == -1 || acs == 0) {
+				search.getLayerTable().setRowSelectionInterval(j, j);
+			} else if (acs == 1) {
+				System.out.println(search.getLayerTable().getRowCount() + " " + j);
+				search.getLayerTable().setRowSelectionInterval(search.getLayerTable().getRowCount() - j - 1, search.getLayerTable().getRowCount() - j - 1);
 			}
-		}
-		
-	}
+		}*/
 
+	}
+		
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 

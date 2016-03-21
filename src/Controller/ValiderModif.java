@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import View.Clients.Client;
 import View.Commandes.Commandes;
 import View.Devis.Devis;
+import View.Factures.Factures;
 import View.Termes.Termes;
 
 public class ValiderModif implements ActionListener {
@@ -37,6 +38,8 @@ public class ValiderModif implements ActionListener {
 			validerCommandes();
 		} else if (type.equals("Termes")){
 			validerTermes();
+		} else if (type.equals("Factures")){
+			validerFactures();
 		}
 		
 	}
@@ -47,7 +50,21 @@ public class ValiderModif implements ActionListener {
 			if (!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("Clients", "NumClient",
 					"NumClient = " + devis.getNumClient().getText())) {
 				String[] re = devis.getValeurDevises().get(devis.getDevises().getSelectedItem());
-				System.out.println(re.length);
+				String[] valeursInit = devis.getDonnees().fiche("NumDevis, NumClient, DateDevis, LblDevis, Round(MntFour, 2), Round(CoutMo,2), Round(HeureSite, 2), Round(HeureAtelier,2), Round(Prefabrication, 2), Round(MatierePrevu,2), Round(MatiereCommande, 2), CodeDevise", "Devis", "numDevis = " + devis.getjNumDevis().getText());
+				String[] valeursModifie = new String [12] ;
+				valeursModifie[0] = devis.getjNumDevis().getText();
+				valeursModifie[1] = devis.getNumClient().getText();
+				valeursModifie[2] = new SimpleDateFormat("yyyy-MM-dd").format(devis.getjDate().getDate());
+				valeursModifie[3] = devis.getjLibelle().getText();
+				valeursModifie[4] = devis.getjFournitures().getText().replaceAll(",", "\\.");
+				valeursModifie[5] = devis.getjCout().getText().replaceAll(",", "\\.");
+				valeursModifie[6] = devis.getjHeureSite().getText().replaceAll(",", "\\.");
+				valeursModifie[7] = devis.getjHeureAtelier().getText().replaceAll(",", "\\.");
+				valeursModifie[8] = devis.getjPrefabrication().getText().replaceAll(",", "\\.");
+				valeursModifie[9] = devis.getjPrevu().getText().replaceAll(",", "\\.");
+				valeursModifie[10] = devis.getjCommande().getText().replaceAll(",", "\\.");
+				valeursModifie[11] = re[0];
+				if(!ModifieOuIdentique(valeursInit, valeursModifie)){
 				devis.getBase().update("Devis",
 						"numClient = " + devis.getNumClient().getText() + ", DateDevis = '"
 								+ new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate())
@@ -64,6 +81,11 @@ public class ValiderModif implements ActionListener {
 				devis.dispose();
 				devis.getFenetre().setEnabled(true);
 				devis.getFenetre().setVisible(true);
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Aucune Modification", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Erreur : Numéro de Client inconnu ou vide", "ATTENTION",
 						JOptionPane.WARNING_MESSAGE);
@@ -184,7 +206,7 @@ public class ValiderModif implements ActionListener {
 	private void validerTermes(){
 		Termes termes = (Termes)classe;
 		if(termes.getDonnees().exist("Termes", "NumCommande, NumIndice", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice())){
-			if(!termes.getNumIndice().getText().equals("") && termes.getDonnees().exist("Commandes", "NumCommande", "NumCommande = " + termes.getNumeroCommande())){
+			if(termes.getDonnees().exist("Commandes", "NumCommande", "NumCommande = " + termes.getNumeroCommande())){
 				termes.getBase().update("Termes", "Lblterme = '" + termes.getjLibelle().getText()
 				+  "', MntFour = " + termes.getjFournitures().getText().replaceAll(",", "\\.")
 				+ ", CoutMO = " + termes.getjCout().getText().replaceAll(",", "\\.")
@@ -201,6 +223,29 @@ public class ValiderModif implements ActionListener {
 		}
 		else{
 			JOptionPane.showMessageDialog(null, "Numéro de Termes inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+	private void validerFactures(){
+		Factures factures = (Factures)classe;
+		if(factures.getDonnees().exist("Factures", "NumFacture", "NumFacture = " + factures.getjNumFacture().getText())){
+			if(factures.getDonnees().exist("Termes", "NumCommande, NumIndice", "NumCommande = " + factures.getNumeroCommande() + " AND NumIndice = " + factures.getNumeroIndice())){
+				factures.getBase().update("factures", "MontantTaxe = " + factures.getRecupTVA()
+				+  ", valeur = " + factures.getjValeur().getText()
+				+ ", ModePaiement = " + factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem())[0]
+				+ ", PrecLettre = '" + factures.getjPrecision().getText() + "', DateEmission = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEmission().getDate()) + "', DateEcheance = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEcheance().getDate()) + "', AnneeValeur = " + factures.getjAnneeValeur().getText() + ", CodeDevise = " + factures.getValeursTerme()[5]  
+				, "numFacture = " + factures.getjNumFacture().getText());
+				JOptionPane.showMessageDialog(null, "Facture modifié !");
+				factures.dispose();
+				factures.getFenetre().setEnabled(true);
+				factures.getFenetre().setVisible(true);
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Erreur : Numéro de Commande inconnu", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		else{
+			JOptionPane.showMessageDialog(null, "Numéro de Facture inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
@@ -239,5 +284,18 @@ public class ValiderModif implements ActionListener {
 			}
 		}
 		return resultat;
+	}
+	
+	private boolean ModifieOuIdentique(String[] valeursInit, String [] valeursMaintenant){
+		boolean verifie = true;
+		for(int i = 0; i < valeursInit.length; i ++){
+			//System.out.println(i + " : " + valeursInit[i] + " - " + valeursMaintenant[i]);
+			if(!valeursInit[i].equals(valeursMaintenant[i])){
+				verifie = false;
+				break;
+			}
+		}
+		//System.out.println(verifie);
+		return verifie;
 	}
 }

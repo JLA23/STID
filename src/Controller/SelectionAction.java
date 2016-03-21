@@ -52,7 +52,7 @@ public class SelectionAction implements ActionListener {
 		initVerif();
 		int ligne = tables.getSelectedRow();
 		if (ligne != -1) {
-			String numero = datas[ligne][0].toString();
+			String numero = datas[tables.convertRowIndexToModel(ligne)][0].toString();
 			dialog.dispose();
 			try {
 				if (f.equals("Modif")) {

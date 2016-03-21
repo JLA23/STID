@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="lib/icu4j-56_1.jar"/>
 	<classpathentry kind="lib" path="lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-jdbc.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace/JasperReport-3.6.modified.jar"/>
 	<classpathentry kind="lib" path="lib/JasperReport-3.6.modified.jar"/>
 	<classpathentry kind="lib" path="lib/ireport/ant-1.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/ireport/antlr-2.7.5.jar"/>

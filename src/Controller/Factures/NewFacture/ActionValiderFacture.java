@@ -4,12 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-
 import javax.swing.JOptionPane;
-
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RuleBasedNumberFormat;
-
+import Model.GeneratePDF;
 import View.Factures.Factures;
 
 public class ActionValiderFacture implements ActionListener {
@@ -28,16 +26,7 @@ public class ActionValiderFacture implements ActionListener {
 		if (!facture.getDonnees().exist("Factures", "NumFacture", "NumFacture = " + facture.getjNumFacture().getText())) {
 				if (facture.getDonnees().exist("Termes", "NumCommande , Numindice", "NumCommande = " + facture.getNumeroCommande() + " and numIndice = " + facture.getNumeroIndice())) {
 				if (!facture.getjFournitures().getText().equals("0,00") || !facture.getjPrefabrication().getText().equals("0,00") || !facture.getjCout().getText().equals("0,00")) {
-					System.out.println(
-							facture.getjNumFacture().getText() + ", " + facture.getRecupTVA() + ", " + facture.getjValeur().getText() + ", "
-									+ facture.getModespaiements().get(facture.getBoxModePaiement().getSelectedItem())[0] + ", '"
-									+ facture.getjPrecision().getText() + "', '"
-									+ new SimpleDateFormat("yyyy/MM/dd").format(facture.getjDateEmission().getDate()) + "', '"
-									+ new SimpleDateFormat("yyyy/MM/dd").format(facture.getjDateEcheance().getDate()) + "', '"
-									+ facture.getLibelle2().getText() + "', "
-									+ facture.getjAnneeValeur().getText() + ", "
-									+ facture.getValeurDevises().get(facture.getDevises().getSelectedItem())[0] + ", " + facture.getjTVA().getText().replaceAll(",", "\\."));
-					facture.getBase().insert("Factures",
+						facture.getBase().insert("Factures",
 							facture.getjNumFacture().getText() + ", " + facture.getRecupTVA() + ", " + facture.getjValeur().getText() + ", "
 									+ facture.getModespaiements().get(facture.getBoxModePaiement().getSelectedItem())[0] + ", '"
 									+ facture.getjPrecision().getText() + "', '"
@@ -55,14 +44,17 @@ public class ActionValiderFacture implements ActionListener {
 
 
 					double num = 2718.28;
-					//NumberFormat formatter = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
-					NumberFormat formatter = new RuleBasedNumberFormat(Locale.FRANCE, RuleBasedNumberFormat.SPELLOUT);
-					String result = formatter.format(num);
-					System.out.println(result);
+					int i = new Double(num).intValue(); //recuperer la partie entiere
+					double decimale = num-(new Double(i).doubleValue());
+					decimale = decimale * 100;
+					int d = new Double(decimale).intValue();
 					
-					// résultat avec Locale.ENGLISH : two thousand seven hundred and eighteen point two eight
-					// résultat avec Locale.GERMAN : zwei tausend sieben hundert achtzehn Komma zwei acht
-					// résultat avec Locale.FRANCE : deux-mille-sept-cent-dix-huit virgule deux huit
+					NumberFormat formatter = new RuleBasedNumberFormat(Locale.FRANCE, RuleBasedNumberFormat.SPELLOUT);
+					String result = formatter.format(new Double(i).doubleValue());
+					result += " euros " + formatter.format(new Double(d).doubleValue()) + " cts";
+					
+					new GeneratePDF(facture.getjNumFacture().getText(), facture.getBase(), result.toUpperCase());
+					
 					JOptionPane.showMessageDialog(null, "Facture enregistré !");
 					facture.dispose();
 					facture.getFenetre().setEnabled(true);

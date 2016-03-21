@@ -8,6 +8,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.SearchFactures.SearchFacture;
 import View.SearchTerme.SearchTerme;
 
 public class AddFacturation{
@@ -34,8 +35,19 @@ public class AddFacturation{
 		menuItem.getAccessibleContext().setAccessibleDescription("Créer une facture");
 		menu.add(menuItem);
 		
-		//Liste des Clients
+		//Modifier Facture ou avoir ou crèer avoir
 		menuItem = new JMenuItem("Modifier une facture / créer un avoir");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SearchFacture(bdd, fenetre, "Modif");
+			}
+		});
+		menuItem.getAccessibleContext().setAccessibleDescription("Modifier une facture ou créer un avoir");
+		menu.add(menuItem);
+		
+		//Afficher facture ou avoir
+		menuItem = new JMenuItem("Afficher facture / avoir");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -46,6 +58,7 @@ public class AddFacturation{
 		menu.add(menuItem);
 		
 		menu.addSeparator();
+		
 		
 		//Listing TVA
 		menuItem = new JMenuItem("Listing TVA");

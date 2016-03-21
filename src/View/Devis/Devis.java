@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -34,6 +36,7 @@ import Controller.FocusClient;
 import Controller.ActionSearch;
 import Controller.FocusPosition;
 import Controller.ItemChange;
+import Controller.TestContenu;
 import Model.Donnees;
 import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
@@ -41,7 +44,7 @@ import fr.julien.autocomplete.view.AutoComplete;
 
 public class Devis extends JFrame {
 	protected JButton calcul1, valider, fermer, newClient, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7,
-			nouveau, search;
+			nouveau, search, gauche, droite, feuille;
 	protected JComboBox<String> devises;
 	protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1,
 			dateLabel, euro5;
@@ -599,6 +602,33 @@ public class Devis extends JFrame {
 		euro7.setBounds(l, 81, euro7.getPreferredSize().width, euro7.getPreferredSize().height);
 		jPanel3.add(euro7);
 	}
+	
+	public void initModif(String [] res) throws ParseException{
+		jNumDevis.setText(res[0]);
+		jNumDevis.setEditable(false);
+		jNumDevis.setBackground(new Color(204, 204, 204));
+		numClient.getZoneTexte().setText(res[1]);
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		jDate.setDate(simpleDateFormat.parse(res[3]));
+		jLibelle.setText(res[4]);
+		jFournitures.setText(res[5].replaceAll("\\.", ","));
+		jCout.setText(res[6].replaceAll("\\.", ","));
+		jPrefabrication.setText(res[9].replaceAll("\\.", ","));
+		jHeureSite.setText(res[7].replaceAll("\\.", ","));
+		jHeureAtelier.setText(res[8].replaceAll("\\.", ","));;
+		jPrevu.setText(res[10].replaceAll("\\.", ","));
+		jCommande.setText(res[11].replaceAll("\\.", ","));
+		newClient.setVisible(false);
+		devises.setSelectedIndex(Integer.parseInt(res[12]) - 1);
+		new TestContenu(this, jFournitures, 1, "Devis");
+		new TestContenu(this, jCout, 1, "Devis");
+		new TestContenu(this, jPrefabrication, 1, "Devis");
+		new TestContenu(this, jHeureSite, 2, "Devis");
+		new TestContenu(this, jHeureAtelier, 2, "Devis");
+		new TestContenu(this, jPrevu, 3, "Devis");
+		new TestContenu(this, jCommande, 3, "Devis");
+		new FocusClient(this, "Devis").nameClient();
+	}
 
 	protected void InsertDevises() {
 		valeurDevises = donnees.devises();
@@ -901,6 +931,30 @@ public class Devis extends JFrame {
 
 	public void setListClient(Object[][] listClient) {
 		this.listClient = listClient;
+	}
+
+	public JButton getGauche() {
+		return gauche;
+	}
+
+	public void setGauche(JButton gauche) {
+		this.gauche = gauche;
+	}
+
+	public JButton getDroite() {
+		return droite;
+	}
+
+	public void setDroite(JButton droite) {
+		this.droite = droite;
+	}
+
+	public JButton getFeuille() {
+		return feuille;
+	}
+
+	public void setFeuille(JButton feuille) {
+		this.feuille = feuille;
 	}
 
 

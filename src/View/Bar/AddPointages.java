@@ -6,6 +6,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Pointage.SaisiePointage;
 
 public class AddPointages{
 	
@@ -46,7 +47,7 @@ public class AddPointages{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new SupprDevis();
+				new SaisiePointage();
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Saisir des pointages");

@@ -3,7 +3,6 @@ package View.SearchList;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.text.NumberFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
@@ -12,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 import BDD.Base;
 import Model.Donnees;
 import fr.julien.autocomplete.view.AutoComplete;
@@ -29,6 +30,7 @@ public class SearchList extends JDialog{
 	protected JPanel layerPanel;
 	protected GridBagConstraints c;
 	protected JFormattedTextField search;
+	protected DefaultTableModel model;
 	
 	public SearchList(Base bdd, JFrame frame){
 		super(frame, null, true);
@@ -43,8 +45,7 @@ public class SearchList extends JDialog{
         c.weightx = 1; c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0; c.gridy = 0;
-        NumberFormat num =  NumberFormat.getIntegerInstance();
-        search = new JFormattedTextField(num);
+        search = new JFormattedTextField();
         search.setPreferredSize(new Dimension(110, 27));     
 	}
 	
@@ -86,6 +87,22 @@ public class SearchList extends JDialog{
 
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
+	}
+
+	public JFormattedTextField getSearch() {
+		return search;
+	}
+
+	public void setSearch(JFormattedTextField search) {
+		this.search = search;
+	}
+
+	public DefaultTableModel getModel() {
+		return model;
+	}
+
+	public void setModel(DefaultTableModel model) {
+		this.model = model;
 	}
 
 	protected void centrerTable(JTable table) {

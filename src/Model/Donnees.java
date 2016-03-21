@@ -334,5 +334,18 @@ public class Donnees {
 		}
 		return resultat;
 	}
+	
+	public String max(String colonne, String table){
+		ResultSet rs = base.Select("MAX("+colonne+")", table, null);
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return i + "";
+	}
 
 }

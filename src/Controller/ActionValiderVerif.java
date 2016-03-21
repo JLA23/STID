@@ -16,11 +16,13 @@ import View.Commandes.SupprCommande;
 import View.Devis.LookDevis;
 import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
+import View.Factures.ModifFacture;
 import View.Factures.NewFacture;
 import View.SearchClients.SearchClient;
 import View.SearchCommandes.SearchCommande;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevis;
+import View.SearchFactures.SearchFacture;
 import View.SearchTerme.SearchTerme;
 import View.SearchTerme.SearchTermeList;
 import View.Termes.LookTerme;
@@ -38,6 +40,10 @@ public class ActionValiderVerif implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		verif();
+	}
+	
+	public void verif(){
 		if (type.equals("Client")) {
 			verifClient();
 		} else if (type.equals("Devis")) {
@@ -50,8 +56,14 @@ public class ActionValiderVerif implements ActionListener {
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
+		} else if (type.equals("Factures")) {
+			try {
+				verifFacture();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 	private void verifClient() {
@@ -152,7 +164,8 @@ public class ActionValiderVerif implements ActionListener {
 									donnees.searchNumCommandeClient(((SearchCommande) fr).getNumComClient().getText()),
 									((SearchCommande) fr).getFr());
 						} else if (((SearchCommande) fr).getF().equals("NewTerme")) {
-							new NewTerme(bdd, ((SearchCommande) fr).getFr(), donnees.searchNumCommandeClient(((SearchCommande) fr).getNumComClient().getText()));
+							new NewTerme(bdd, ((SearchCommande) fr).getFr(),
+									donnees.searchNumCommandeClient(((SearchCommande) fr).getNumComClient().getText()));
 						}
 					} catch (ParseException e1) {
 						// TODO Auto-generated catch block
@@ -205,14 +218,16 @@ public class ActionValiderVerif implements ActionListener {
 			if (donnees.exist("Termes", "NumCommande", "NumCommande = " + ((SearchTerme) fr).getNumCom().getText())) {
 				((SearchTerme) fr).dispose();
 				boolean exist = false;
-				if(((SearchTerme)fr).getF().equals("NewFacture")){
-					exist = donnees.existPlusieur("NumIndice", "Termes", "Numfacture is null and NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
-				}
-				else{
-					exist = donnees.existPlusieur("NumIndice", "Termes", "NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
+				if (((SearchTerme) fr).getF().equals("NewFacture")) {
+					exist = donnees.existPlusieur("NumIndice", "Termes",
+							"Numfacture is null and NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
+				} else {
+					exist = donnees.existPlusieur("NumIndice", "Termes",
+							"NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
 				}
 				if (exist) {
-					new SearchTermeList(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getF(),	((SearchTerme) fr).getNumCom().getText());
+					new SearchTermeList(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getF(),
+							((SearchTerme) fr).getNumCom().getText());
 				} else {
 					if (((SearchTerme) fr).getF().equals("Modif")) {
 						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
@@ -220,9 +235,15 @@ public class ActionValiderVerif implements ActionListener {
 						new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
 					} else if (((SearchTerme) fr).getF().equals("Recherche")) {
 						new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
-					} else if (((SearchTerme) fr).getF().equals("NewFacture")){
-						String num = donnees.searchTerme(((SearchTerme)fr).getNumCom().getText());
-						new NewFacture(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme)fr).getNumCom().getText(), num);
+					} else if (((SearchTerme) fr).getF().equals("NewFacture")) {
+						String num = donnees.searchTerme(((SearchTerme) fr).getNumCom().getText());
+						if (!num.isEmpty()) {
+							new NewFacture(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
+									num);
+						} else {
+							JOptionPane.showMessageDialog(null, "Tout les termes de cette commande ont été facturés !",
+									"ATTENTION", JOptionPane.WARNING_MESSAGE);
+						}
 					}
 				}
 			} else {
@@ -247,7 +268,8 @@ public class ActionValiderVerif implements ActionListener {
 					new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
 							((SearchTerme) fr).getNumIndice().getText());
 				} else if (((SearchTerme) fr).getF().equals("Recherche")) {
-					new LookTerme(bdd,((SearchTerme)fr).getFr(),((SearchTerme)fr).getNumCom().getText(), ((SearchTerme)fr).getNumIndice().getText());
+					new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
+							((SearchTerme) fr).getNumIndice().getText());
 				}
 
 			} else {
@@ -260,4 +282,126 @@ public class ActionValiderVerif implements ActionListener {
 		}
 	}
 
+	private void verifFacture() throws ParseException {
+		Base bdd = ((SearchFacture) fr).getBdd();
+		Donnees donnees = new Donnees(bdd);
+		int utile = ((SearchFacture) fr).getJtp().getSelectedIndex();
+		if (utile == 0) {
+			// Si Num Commande n'est pas vide et num indice vide et num facture
+			// vide
+			if (!((SearchFacture) fr).getNumCom().getText().isEmpty()
+					&& ((SearchFacture) fr).getNumIndice().getText().isEmpty()) {
+				if (donnees.exist("Termes", "NumCommande",
+						"NumCommande = " + ((SearchFacture) fr).getNumCom().getText())) {
+					((SearchFacture) fr).dispose();
+					boolean exist = false;
+					exist = donnees.existPlusieur("NumIndice", "Termes",
+							"Numfacture is not null and NumCommande = " + ((SearchFacture) fr).getNumCom().getText());
+					if (exist) {
+						new SearchTermeList(bdd, ((SearchFacture) fr).getFr(), ((SearchFacture) fr).getF(),
+								((SearchFacture) fr).getNumCom().getText());
+					} else {
+						String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "Termes",
+								"NumIndice = 1 AND NumCommande = " + ((SearchFacture) fr).getNumCom().getText());
+						if (((SearchFacture) fr).getF().equals("Modif")) {
+							new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+						} /*
+							 * else if (((SearchFacture)
+							 * fr).getF().equals("Suppr")) { new SupprTerme(bdd,
+							 * ((SearchFacture) fr).getFr(), ((SearchFacture)
+							 * fr).getNumCom().getText(), "1"); } else if
+							 * (((SearchFacture) fr).getF().equals("Recherche"))
+							 * { new LookTerme(bdd, ((SearchFacture)
+							 * fr).getFr(), ((SearchFacture)
+							 * fr).getNumCom().getText(), "1"); } else if
+							 * (((SearchFacture)
+							 * fr).getF().equals("NewFacture")){ String num =
+							 * donnees.searchTerme(((SearchFacture)fr).getNumCom
+							 * ().getText()); if(!num.isEmpty()){ new
+							 * NewFacture(bdd, ((SearchFacture) fr).getFr(),
+							 * ((SearchFacture)fr).getNumCom().getText(), num);
+							 * } else{ JOptionPane.showMessageDialog(null,
+							 * "Tout les termes de cette commande ont été facturés !"
+							 * , "ATTENTION", JOptionPane.WARNING_MESSAGE); } }
+							 */
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			// Si Num Commande vide et num indice n'est pas vide
+			else if (((SearchFacture) fr).getNumCom().getText().isEmpty()
+					&& !((SearchFacture) fr).getNumIndice().getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Il faut un numéro de Commande !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+			// Si Num commande n'est pas vide et num indice n'est pas vide et
+			// num facture vide
+			else if (!((SearchFacture) fr).getNumCom().getText().isEmpty()
+					&& !((SearchFacture) fr).getNumIndice().getText().isEmpty()) {
+				if (donnees.exist("Termes", "NumCommande, NumIndice",
+						"NumCommande = " + ((SearchFacture) fr).getNumCom().getText() + " AND NumIndice = "
+								+ ((SearchFacture) fr).getNumIndice().getText())) {
+					((SearchFacture) fr).dispose();
+					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "Termes",
+							"NumIndice = " + ((SearchFacture) fr).getNumIndice().getText() + " AND NumCommande = "
+									+ ((SearchFacture) fr).getNumCom().getText());
+					if (((SearchFacture) fr).getF().equals("Modif")) {
+						new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+					} /*
+						 * else if (((SearchFacture) fr).getF().equals("Suppr"))
+						 * { new SupprTerme(bdd, ((SearchFacture) fr).getFr(),
+						 * ((SearchFacture) fr).getNumCom().getText(),
+						 * ((SearchFacture) fr).getNumIndice().getText()); }
+						 * else if (((SearchFacture)
+						 * fr).getF().equals("Recherche")) { new
+						 * LookTerme(bdd,((SearchFacture)fr).getFr(),((
+						 * SearchFacture)fr).getNumCom().getText(),
+						 * ((SearchFacture)fr).getNumIndice().getText()); }
+						 */
+
+				} else {
+					JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			else if (((SearchFacture) fr).getNumCom().getText().isEmpty()
+					&& ((SearchFacture) fr).getNumIndice().getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Les champs sont vides !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		} else if (utile == 1) {
+			// Num Facture
+			if (!((SearchFacture) fr).getNumFacture().getText().isEmpty()) {
+				if (donnees.exist("Termes", "NumCommande, NumIndice, NumFacture",
+						"NumFacture = " + ((SearchFacture) fr).getNumFacture().getText())) {
+					((SearchFacture) fr).dispose();
+					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "Termes",
+							"NumCommande = " + ((SearchFacture) fr).getNumFacture().getText());
+					if (((SearchFacture) fr).getF().equals("Modif")) {
+						new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+					} /*
+						 * else if (((SearchFacture) fr).getF().equals("Suppr"))
+						 * { new SupprTerme(bdd, ((SearchFacture) fr).getFr(),
+						 * ((SearchFacture) fr).getNumCom().getText(),
+						 * ((SearchFacture) fr).getNumIndice().getText()); }
+						 * else if (((SearchFacture)
+						 * fr).getF().equals("Recherche")) { new
+						 * LookTerme(bdd,((SearchFacture)fr).getFr(),((
+						 * SearchFacture)fr).getNumCom().getText(),
+						 * ((SearchFacture)fr).getNumIndice().getText()); }
+						 */
+
+				} else {
+					JOptionPane.showMessageDialog(null, "Aucune facture avec ce numéro !", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Le champs est vide !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	}
 }

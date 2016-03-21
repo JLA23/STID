@@ -2,10 +2,13 @@ package View.Bar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Parameters.Categorie;
 import View.Parameters.ParametreTaux;
 
 public class AddParametres{
@@ -13,9 +16,11 @@ public class AddParametres{
 	private JMenu menu;
 	private JMenuItem menuItem;
 	private Base base;
+	private JFrame fenetre;
 	
-	public AddParametres(Base bdd, String typeCompte){
+	public AddParametres(Base bdd, String typeCompte, JFrame frame){
 		base = bdd;
+		fenetre = frame;
 		menu = new JMenu("Paramètres");
 		menu.getAccessibleContext().setAccessibleDescription("Clients");		
 		
@@ -25,7 +30,7 @@ public class AddParametres{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new Devis();
+					new Categorie(base, fenetre);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Définition des catégories de personnes");

@@ -1,13 +1,18 @@
 package View.Devis;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import BDD.Base;
+import Controller.ActionDroite;
 import Controller.ActionFermer;
+import Controller.ActionGauche;
 import Controller.FocusClient;
 import Controller.TestContenu;
 import Controller.ActionRechercher;
@@ -21,8 +26,8 @@ public class LookDevis extends Devis {
 		this.setTitle("STID Gestion 2.0 (Fiche Devis)");
 		this.base = bdd;
 		valider.setVisible(false);
-		nouveau.setText("Recherche");
-		nouveau.setBounds(20, 510, 100, 25);
+		nouveau.setVisible(false);
+		//nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
 		String[] res = donnees.fiche("*, c.nomclient", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " + numd);
 		jNumDevis.setText(res[0]);
@@ -77,8 +82,29 @@ public class LookDevis extends Devis {
 		calcul6.setVisible(false);
 		calcul7.setVisible(false);
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche", "Devis"));
+		//nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche", "Devis"));
 		fermer.setBounds(670, 510, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
+		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		gauche = new JButton(icon);
+		gauche.setBounds(20, 510, 25, 25);
+		gauche.addActionListener(new ActionGauche(this, "Devis"));
+		this.add(gauche);
+		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		droite = new JButton(icon2);
+		droite.setBounds(80, 510, 25, 25);
+		droite.addActionListener(new ActionDroite(this, "Devis"));
+		this.add(droite);
+		if(res[0].equals("1")){
+			gauche.setVisible(false);
+		}
+		if(res[0].equals(donnees.max("NumDevis", "Devis"))){
+			droite.setVisible(false);
+		}
+		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
+		feuille = new JButton(icon3);	
+		feuille.setBounds(50, 510, 25, 25);
+		feuille.addActionListener(new ActionRechercher(this, frame, "Recherche", "Devis"));
+		this.add(feuille);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

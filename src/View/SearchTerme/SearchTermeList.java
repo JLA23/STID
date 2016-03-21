@@ -13,6 +13,7 @@ import BDD.Base;
 import Controller.ActionFermer;
 import Controller.Search;
 import Controller.RetourAction;
+import Controller.RowListener;
 import Controller.SelectionAction;
 import View.SearchList.SearchList;
 
@@ -40,13 +41,13 @@ public class SearchTermeList extends SearchList {
 		this.setPreferredSize(new Dimension(800, 500));
 		this.setTitle("STID Gestion 2.0 (Chercher Termes)");
 
-        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel();
         model.addColumn("N° Commande");
         model.addColumn("N° Indice");
         model.addColumn("N° Client");
         model.addColumn("Nom Client");
         model.addColumn("Libellé");
-    	for(int m = 0; m< data.length ; m++){
+    	for(int m = 0; m < data.length ; m++){
 			model.addRow(data[m]);
 		}
     	RowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
@@ -81,7 +82,8 @@ public class SearchTermeList extends SearchList {
 		valider.addActionListener(new SelectionAction(this, "Termes", fonction));
 		retour.addActionListener(new RetourAction(this, "Termes", fonction));
 		annuler.addActionListener(new ActionFermer(this));
-        search.addKeyListener(new Search(search, data, layerTable));
+        search.addKeyListener(new Search(this, 0));
+        sorter.addRowSorterListener(new RowListener(this));
 		this.add(layerPanel);
 		this.pack();
 		this.setResizable(false);

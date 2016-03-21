@@ -8,7 +8,7 @@ import javax.swing.JFormattedTextField;
 public class EcouteAction implements KeyListener {
 
 	JFormattedTextField text1;
-	String l = "1234567890,";
+	String l = "1234567890";
 	boolean point = true;
 
 	public EcouteAction(JFormattedTextField jtext1) {
@@ -35,7 +35,16 @@ public class EcouteAction implements KeyListener {
 			} else {
 				e.consume();
 			}
-		} else if (!l.contains(e.getKeyChar() + "")) {
+		} 
+		else if(e.getKeyChar() == '-' && !text1.getText().contains('-' + "") && point){
+			text1.setText("-" + text1.getText());
+			e.consume();
+		}
+		else if(e.getKeyChar() == '+' && text1.getText().contains('-' + "") && point){
+			text1.setText(text1.getText().substring(1, text1.getText().length()));
+			e.consume();
+		}
+		else if (!l.contains(e.getKeyChar() + "")) {
 			e.consume();
 		}
 	}

@@ -13,6 +13,7 @@ import BDD.Base;
 import Controller.ActionFermer;
 import Controller.Search;
 import Controller.RetourAction;
+import Controller.RowListener;
 import Controller.SelectionAction;
 import View.SearchList.SearchList;
 
@@ -34,7 +35,7 @@ public class SearchCommandeList extends SearchList {
 		this.setPreferredSize(new Dimension(800, 500));
 		this.setTitle("STID Gestion 2.0 (Chercher Commande)");
 
-        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel();
         model.addColumn("N° Commande");
         model.addColumn("N° Client");
         model.addColumn("Nom Client");
@@ -73,7 +74,8 @@ public class SearchCommandeList extends SearchList {
 		valider.addActionListener(new SelectionAction(this, "Commandes", fonction));
 		retour.addActionListener(new RetourAction(this, "Commandes", fonction));
 		annuler.addActionListener(new ActionFermer(this));
-        search.addKeyListener(new Search(search, data, layerTable));
+        search.addKeyListener(new Search(this, 0));
+        sorter.addRowSorterListener(new RowListener(this));
 		this.add(layerPanel);
 		this.pack();
 		this.setResizable(false);

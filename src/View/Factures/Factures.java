@@ -25,10 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
-
 import com.sun.glass.events.KeyEvent;
 import com.toedter.calendar.JDateChooser;
-
 import BDD.Base;
 import Controller.ActionCalculatrice;
 import Controller.ActionFermer;
@@ -37,8 +35,6 @@ import Controller.ExecuteClick;
 import Controller.FocusPosition;
 import Controller.ItemChange;
 import Model.Donnees;
-import View.Options.ClickDroit;
-
 
 public class Factures extends JFrame{
     protected JButton calcul1, valider, fermer, calcul2, calcul3, nouveau;
@@ -196,16 +192,6 @@ public class Factures extends JFrame{
 		jPanel3.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.<AWTKeyStroke> emptySet());
 		this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.<AWTKeyStroke> emptySet());
         ExecuteClick click = new ExecuteClick(this, "Factures");
-        new ClickDroit(jNumFacture, true, true);
-        new ClickDroit(jFournitures, true, true);
-        new ClickDroit(jCout, true, true);
-        new ClickDroit(jPrefabrication, true, true);
-        new ClickDroit(jTotalHT, true, false);
-        new ClickDroit(jTotalTTC, true, false);
-        new ClickDroit(jTotalDevise, true, false);
-        new ClickDroit(jPrecision, true, true);
-        new ClickDroit(jAnneeValeur, true, true);
-        new ClickDroit(jTVA, true, true);
 		jNumFacture.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jNumFacture.getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;
@@ -714,6 +700,8 @@ public class Factures extends JFrame{
 	public void setValeursTerme(String[] valeursTerme) {
 		this.valeursTerme = valeursTerme;
 	}
+	
+	
 	
 	
 	

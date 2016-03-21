@@ -8,6 +8,7 @@ import Controller.ActionFermer;
 import Controller.ActionNouveau;
 import Controller.Factures.NewFacture.ActionValiderFacture;
 import Model.Calcul;
+import View.Options.ClickDroit;
 
 public class NewFacture extends Factures{
 	
@@ -50,7 +51,16 @@ public class NewFacture extends Factures{
         new Calcul().calculerMontantTTC(jFournitures, jCout, jPrefabrication, jTotalHT, jTotalTTC, jTotalDevise, valeurDevise, valeurTVA, this);
         System.out.println(recupTVA);
         InsertModesPaiements(res[8]);
-        
+        new ClickDroit(jNumFacture, true, true);
+        new ClickDroit(jFournitures, true, true);
+        new ClickDroit(jCout, true, true);
+        new ClickDroit(jPrefabrication, true, true);
+        new ClickDroit(jTotalHT, true, false);
+        new ClickDroit(jTotalTTC, true, false);
+        new ClickDroit(jTotalDevise, true, false);
+        new ClickDroit(jPrecision, true, true);
+        new ClickDroit(jAnneeValeur, true, true);
+        new ClickDroit(jTVA, true, true);
         valider.addActionListener(new ActionValiderFacture(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionNouveau(this, "Factures"));

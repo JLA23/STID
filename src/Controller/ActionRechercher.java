@@ -107,7 +107,6 @@ public class ActionRechercher implements ActionListener {
 					new SearchTerme(((Termes) classe).getBase(), null, f);
 				}
 			}
-
 		}
 		else if (f.equals("Recherche")) {
 			if (type.equals("Devis")) {

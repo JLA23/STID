@@ -15,6 +15,7 @@ import Controller.ActionFermer;
 import Controller.Search;
 import Controller.SelectionAction;
 import Controller.RetourAction;
+import Controller.RowListener;
 import View.SearchList.SearchList;
 import fr.julien.autocomplete.view.AutoComplete;
 
@@ -74,7 +75,8 @@ public class SearchClientList extends SearchList {
         valider.addActionListener(new SelectionAction(this, "Client", fonction));
         annuler.addActionListener(new ActionFermer(this));
         retour.addActionListener(new RetourAction(this, "Client", fonction));
-        search.addKeyListener(new Search(search, data, layerTable));   
+        search.addKeyListener(new Search(this, 0));
+        sorter.addRowSorterListener(new RowListener(this));
         this.add(layerPanel);
         this.pack();
 	    this.setResizable(false);

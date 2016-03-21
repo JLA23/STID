@@ -62,6 +62,7 @@ public class SearchTerme extends JDialog{
 	    pane.add(list);
 	    bouton.addActionListener(new ActionValiderVerif(this, "Termes"));
 	    list.addActionListener(new ActionList(this, base, frame, fonction, "Termes"));
+	    this.getRootPane().setDefaultButton(bouton);
 	    this.add(pane);
 	    this.pack();
 	    this.setResizable(false);

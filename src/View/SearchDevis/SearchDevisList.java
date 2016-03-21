@@ -16,6 +16,7 @@ import Controller.ActionFermer;
 import Controller.Search;
 import Controller.SelectionAction;
 import Controller.RetourAction;
+import Controller.RowListener;
 import View.Commandes.SelectDevis;
 import View.SearchList.SearchList;
 
@@ -45,7 +46,7 @@ public class SearchDevisList extends SearchList {
 			this.sd = select;
 			this.frame = frame;
 			this.setTitle("STID Gestion 2.0 (Chercher Devis)");
-	        DefaultTableModel model = new DefaultTableModel();
+	        model = new DefaultTableModel();
 	        model.addColumn("N° Devis");
 	        model.addColumn("N° Client");
 	        model.addColumn("Nom Client");
@@ -84,12 +85,14 @@ public class SearchDevisList extends SearchList {
 			valider.addActionListener(new SelectionAction(this, "Devis", fonction));
 		 	annuler.addActionListener(new ActionFermer(this));
 	        retour.addActionListener(new RetourAction(this, "Devis", fonction));
-	        search.addKeyListener(new Search(search, data, layerTable));
+	        search.addKeyListener(new Search(this, 0));
+	        sorter.addRowSorterListener(new RowListener(this));
 			this.add(layerPanel);
 			this.pack();
 			this.setResizable(false);
 			this.setLocationRelativeTo(null);
 			this.setVisible(true);
+			
 		} else {
 			JOptionPane.showMessageDialog(null, "Erreur : Aucun devis en attente", "ATTENTION",
 					JOptionPane.WARNING_MESSAGE);

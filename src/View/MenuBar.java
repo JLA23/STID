@@ -17,7 +17,6 @@ import View.Bar.AddTermes;
 	
 		private static final long serialVersionUID = 1L;
 
-
 		public MenuBar(JFrame frame, Base bdd, String typeCompte) {
 			this.add(new AddSTID(bdd, frame).getMenu());
 			this.add(new AddDevis(bdd, typeCompte, frame).getMenu());
@@ -26,7 +25,7 @@ import View.Bar.AddTermes;
 			this.add(new AddTermes(bdd, typeCompte, frame).getMenu());
 			this.add(new AddFacturation(bdd, typeCompte, frame).getMenu());
 			this.add(new AddPointages(bdd, typeCompte).getMenu());
-			this.add(new AddParametres(bdd, typeCompte).getMenu());
+			this.add(new AddParametres(bdd, typeCompte, frame).getMenu());
 			this.add(new AddPropos(bdd).getMenu());
 
 		}
