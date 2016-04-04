@@ -13,7 +13,7 @@ import BDD.Base;
 import Controller.ActionDroite;
 import Controller.ActionFermer;
 import Controller.ActionGauche;
-import Controller.FocusClient;
+import Controller.FocusJText;
 import Controller.TestContenu;
 import Controller.ActionRechercher;
 import Model.Donnees;
@@ -51,7 +51,7 @@ public class LookDevis extends Devis {
 		new TestContenu(this, jHeureAtelier, 2, "Devis");
 		new TestContenu(this, jPrevu, 3, "Devis");
 		new TestContenu(this, jCommande, 3, "Devis");
-		new FocusClient(this, "Devis").nameClient();
+		new FocusJText(this, "Devis").name();
 		jFournitures.setEditable(false);
 		jFournitures.setBackground(new Color(204, 204, 204));
 		jCout.setEditable(false);

@@ -3,7 +3,6 @@ package Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,9 +18,13 @@ import View.Devis.LookDevis;
 import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
 import View.Factures.NewFacture;
+import View.Parameters.Salarie;
+import View.Pointage.SaisiePointage;
 import View.SearchClients.SearchClientList;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevisList;
+import View.SearchDevis.SearchDevisPointage;
+import View.SearchParameters.SearchSalarieList;
 import View.SearchTerme.SearchTermeList;
 import View.Termes.LookTerme;
 import View.Termes.ModifTerme;
@@ -41,6 +44,7 @@ public class SelectionAction implements ActionListener {
 	private JDialog dialog;
 	private AutoComplete autos;
 	private SelectDevis select;
+	private SaisiePointage saisie;
 
 	public SelectionAction(Object frame, String classe, String fonction) {
 		this.f = fonction;
@@ -64,6 +68,8 @@ public class SelectionAction implements ActionListener {
 						new ModifCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
 						new ModifTerme(bdd, fenetre, numero, datas[ligne][1].toString());
+					} else if (type.equals("Salarie")){
+						new Salarie(fenetre, bdd, numero, f);
 					}
 				} else if (f.equals("Suppr")) {
 					if (type.equals("Client")) {
@@ -74,6 +80,8 @@ public class SelectionAction implements ActionListener {
 						new SupprCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
 						new SupprTerme(bdd, fenetre, numero, datas[ligne][1].toString());
+					} else if (type.equals("Salarie")){
+						new Salarie(fenetre, bdd, numero, f);
 					}
 				} else if (f.equals("Recherche")) {
 					if (type.equals("Client")) {
@@ -100,6 +108,10 @@ public class SelectionAction implements ActionListener {
 						JOptionPane.showMessageDialog(null, "Vous l'avez déjà ajoutè", "ATTENTION",
 								JOptionPane.WARNING_MESSAGE);
 					}
+				} else if (f.equals("Pointage") || f.equals("Pointage Code")){
+					autos.getZoneTexte().setText(numero);
+					dialog.dispose();
+					new FocusJText(saisie, "Pointage").name();
 				}
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
@@ -142,6 +154,28 @@ public class SelectionAction implements ActionListener {
 			tables = search.getLayerTable();
 			fenetre = search.getFrame();
 		}
+		else if(f.equals("Pointage")){
+			SearchDevisPointage search = (SearchDevisPointage)clas;
+			dialog = search;
+			autos = search.getAuto();
+			datas = search.getData();
+			bdd = search.getBdd();
+			tables = search.getLayerTable();
+			fenetre = search.getFrame();
+			saisie = search.getSaisie();
+		}
+		
+		else if(f.equals("Pointage Code")){
+			SearchSalarieList search = (SearchSalarieList)clas;
+			dialog = search;
+			autos = search.getAuto();
+			datas = search.getData();
+			bdd = search.getBdd();
+			tables = search.getLayerTable();
+			fenetre = search.getFrame();
+			saisie = search.getSaisie();
+		}
+		
 		else if(f.equals("Modif") || f.equals("Suppr") || f.equals("Recherche")){
 			if(type.equals("Devis")){
 				SearchDevisList search = (SearchDevisList)clas;
@@ -169,6 +203,14 @@ public class SelectionAction implements ActionListener {
 			}
 			else if(type.equals("Termes")){
 				SearchTermeList search = (SearchTermeList)clas;
+				dialog = search;
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+			}
+			else if(type.equals("Salarie")){
+				SearchSalarieList search = (SearchSalarieList)clas;
 				dialog = search;
 				datas = search.getData();
 				bdd = search.getBdd();

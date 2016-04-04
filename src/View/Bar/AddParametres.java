@@ -10,6 +10,8 @@ import javax.swing.JMenuItem;
 import BDD.Base;
 import View.Parameters.Categorie;
 import View.Parameters.ParametreTaux;
+import View.Parameters.Salarie;
+import View.SearchParameters.SearchSalarie;
 
 public class AddParametres{
 	
@@ -41,7 +43,7 @@ public class AddParametres{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new ModifDevis();
+					new Salarie(fenetre, base);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("ajouter un salarié");
@@ -52,7 +54,18 @@ public class AddParametres{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new SupprDevis();
+				new SearchSalarie(base, fenetre, "Modif");
+			}
+		});
+		menuItem.getAccessibleContext().setAccessibleDescription("Modifier un salarié");
+		menu.add(menuItem);
+		
+		//Supprimer salarié
+		menuItem = new JMenuItem("Supprimer un salarié");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SearchSalarie(base, fenetre, "Suppr");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Modifier un salarié");

@@ -5,7 +5,7 @@ import java.text.ParseException;
 import javax.swing.JFrame;
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.FocusClient;
+import Controller.FocusJText;
 import Controller.TestContenu;
 import Controller.ActionRechercher;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
@@ -49,7 +49,7 @@ public class LookCommande extends Commandes {
 			new TestContenu(this, jHeureAtelier, 2, "Commandes");
 			new TestContenu(this, jPrevu, 3, "Commandes");
 			new TestContenu(this, jCommande, 3, "Commandes");
-			new FocusClient(this, "Commandes").nameClient();
+			new FocusJText(this, "Commandes").name();
 			jFournitures.setEditable(false);
 			jFournitures.setBackground(new Color(204, 204, 204));
 			jCout.setEditable(false);

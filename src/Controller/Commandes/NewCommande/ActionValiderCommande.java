@@ -43,7 +43,7 @@ public class ActionValiderCommande implements ActionListener {
 					commande.getFenetre().setEnabled(true);
 					commande.getFenetre().setVisible(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "Erreur : Aucun Devis Selectioné", "ATTENTION",
+					JOptionPane.showMessageDialog(null, "Erreur : Aucun Devis Selectionné", "ATTENTION",
 							JOptionPane.WARNING_MESSAGE);
 				}
 			} else {

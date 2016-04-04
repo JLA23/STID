@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import View.Commandes.Commandes;
 import View.Devis.Devis;
 import View.Factures.Factures;
+import View.Parameters.Salarie;
 import View.Termes.Termes;
 
 public class ActionGauche implements ActionListener {
@@ -18,6 +19,7 @@ public class ActionGauche implements ActionListener {
 	private Commandes commandes;
 	private Termes termes;
 	private Factures factures;
+	private Salarie salarie;
 	
 	public ActionGauche(Devis d, String classe) throws ParseException{
 		this.devis = d;
@@ -35,12 +37,25 @@ public class ActionGauche implements ActionListener {
 		this.factures = f;
 		this.classe = classe;
 	}
+	
+	public ActionGauche(Salarie s, String classe) throws ParseException{
+		this.salarie = s;
+		this.classe = classe;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(classe.equals("Devis")){
 			try {
 				actionDevis();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if(classe.equals("Salarie")){
+			try {
+				actionSalarie();
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -104,16 +119,51 @@ public class ActionGauche implements ActionListener {
 		}
 	}
 	
+	private void actionSalarie() throws ParseException{
+		if (salarie.getDonnees().exist("Personne", "NumPersonnel", "numpersonnel = " + salarie.getCode().getText())) {
+			if (!salarie.getNom().getText().equals("") && !salarie.getPrenom().getText().equals("")) {
+				String[] re = salarie.getValeur().get(salarie.getjType().getSelectedItem());
+				String[] valeursInit = salarie.getDonnees().fiche("*", "personne", "numPersonnel = " + salarie.getCode().getText());
+				String[] valeursModifie = new String [4] ;
+				valeursModifie[0] = salarie.getCode().getText();
+				valeursModifie[1] = salarie.getNom().getText();
+				valeursModifie[2] = salarie.getPrenom().getText();
+				valeursModifie[3] = re[0];
+				if(!ModifieOuIdentique(valeursInit, valeursModifie)){
+					salarie.getBdd().update("personne",
+						"Nom = '" + salarie.getNom().getText() + "', Prenom = '" + salarie.getPrenom().getText() + "', CodeTypePersonne = "	+ re[0], "NumPersonnel = " + salarie.getCode().getText());
+					JOptionPane.showMessageDialog(null, "salarie validé !");
+					//devis.dispose();
+					//devis.getFenetre().setEnabled(true);
+					//devis.getFenetre().setVisible(true);
+				}
+				int numero = Integer.parseInt(salarie.getCode().getText()) - 1;
+				String [] res = salarie.getDonnees().fiche("*", "personne", "numpersonnel = " + numero);
+				salarie.initModif(res);
+				if(res[0].equals("1") && salarie.getGauche().isVisible()){
+					salarie.getGauche().setVisible(false);
+				}
+				if(!res[0].equals(salarie.getDonnees().max("NumPersonnel", "personne")) && !salarie.getDroite().isVisible()){
+					salarie.getDroite().setVisible(true);
+				}
+				
+			} else {
+				JOptionPane.showMessageDialog(null, "Erreur : un champ est vide", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Numéro de salarié inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
 	private boolean ModifieOuIdentique(String[] valeursInit, String [] valeursMaintenant){
 		boolean verifie = true;
 		for(int i = 0; i < valeursInit.length; i ++){
-			//System.out.println(i + " : " + valeursInit[i] + " - " + valeursMaintenant[i]);
 			if(!valeursInit[i].equals(valeursMaintenant[i])){
 				verifie = false;
 				break;
 			}
 		}
-		//System.out.println(verifie);
 		return verifie;
 		
 	}

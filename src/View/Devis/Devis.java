@@ -32,7 +32,7 @@ import Controller.ActionCalculatrice;
 import Controller.ActionFermer;
 import Controller.EcouteAction;
 import Controller.ExecuteClick;
-import Controller.FocusClient;
+import Controller.FocusJText;
 import Controller.ActionSearch;
 import Controller.FocusPosition;
 import Controller.ItemChange;
@@ -362,7 +362,7 @@ public class Devis extends JFrame {
 		calcul5.addActionListener(new ActionCalculatrice(this, jHeureSite, 2, "Devis"));
 		calcul6.addActionListener(new ActionCalculatrice(this, jPrevu, 3, "Devis"));
 		calcul7.addActionListener(new ActionCalculatrice(this, jCommande, 3, "Devis"));
-		numClient.getZoneTexte().addFocusListener(new FocusClient(this, "Devis"));
+		numClient.getZoneTexte().addFocusListener(new FocusJText(this, "Devis"));
 		this.addWindowListener(new ActionFermer(this, frame));
 		if(fenetre != null){
 			fenetre.setEnabled(false);
@@ -627,7 +627,7 @@ public class Devis extends JFrame {
 		new TestContenu(this, jHeureAtelier, 2, "Devis");
 		new TestContenu(this, jPrevu, 3, "Devis");
 		new TestContenu(this, jCommande, 3, "Devis");
-		new FocusClient(this, "Devis").nameClient();
+		new FocusJText(this, "Devis").name();
 	}
 
 	protected void InsertDevises() {

@@ -18,7 +18,9 @@ import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
 import View.Factures.ModifFacture;
 import View.Factures.NewFacture;
+import View.Parameters.Salarie;
 import View.SearchClients.SearchClient;
+import View.SearchParameters.SearchSalarie;
 import View.SearchCommandes.SearchCommande;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevis;
@@ -63,6 +65,13 @@ public class ActionValiderVerif implements ActionListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else if (type.equals("Salarie")) {
+			try {
+				verifSalarie();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -87,6 +96,19 @@ public class ActionValiderVerif implements ActionListener {
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
+	
+	private void verifSalarie() throws ParseException {
+		Base bdd = ((SearchSalarie) fr).getBdd();
+		Donnees donnees = new Donnees(bdd);
+			if (donnees.exist("Personne", "NumPersonnel", "NumPersonnel = " + ((SearchSalarie) fr).getNumPersonnel().getText())) {
+				((SearchSalarie) fr).dispose();
+				new Salarie(((SearchSalarie) fr).getFr(), bdd, ((SearchSalarie) fr).getNumPersonnel().getText(), ((SearchSalarie) fr).getF());
+		} else {
+			JOptionPane.showMessageDialog(null, "Aucun Salarié avec ce numèro !", "ATTENTION",
+					JOptionPane.WARNING_MESSAGE);
+		} 
+	}
+
 
 	private void verifDevis() {
 		Base bdd = ((SearchDevis) fr).getBdd();

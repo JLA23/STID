@@ -2,6 +2,8 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -15,6 +17,7 @@ import View.Commandes.Commandes;
 import View.Commandes.NewCommande;
 import View.Devis.Devis;
 import View.Devis.NewDevis;
+import View.Pointage.SaisiePointage;
 import View.SearchCommandes.SearchCommande;
 import View.Termes.Termes;
 
@@ -97,6 +100,47 @@ public class ActionNouveau implements ActionListener {
 				if (!((Termes)frame).isShowing()) {
 					new SearchCommande(((Termes)frame).getBase(), ((Termes)frame).getFenetre(), "NewTerme");
 				}
+			}
+		}
+		else if (typeClasse.equals("Pointage")){
+			SaisiePointage pointage = ((SaisiePointage)frame);
+			if(!pointage.getjNumDevis().getZoneTexte().getText().equals("") && !pointage.getjNumDevis().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("Devis", "NumDevis", "NumDevis = " + pointage.getjNumDevis().getZoneTexte().getText())){
+				if (!pointage.getjCode().getZoneTexte().getText().equals("") && !pointage.getjCode().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("Personne", "NumPersonnel", "NumPersonnel = " + pointage.getjCode().getZoneTexte().getText())){
+					if(!pointage.getjHN().getText().equals("0,00")){
+						if(!pointage.getjHN().getText().contains("-") && !pointage.getjHSC125().getText().contains("-") && !pointage.getjHSC15().getText().contains("-")&& !pointage.getjHSC2().getText().contains("-")){
+							if(pointage.getDonnees().exist("pointage", "NumPersonnel, NumDevis, NumSem, Annee", "NumPersonnel = " + pointage.getjCode().getText() + " AND NumDevis = " + pointage.getjNumDevis().getText() + " AND NumSem = " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + " AND Annee = " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()))){
+								pointage.getBase().update("pointage", "HrPassNormal = " + pointage.getjHN().getText().replaceAll(",", "\\.") + ", HrPassSup = " + pointage.getjHSC125().getText().replaceAll(",", "\\.") + ", HrPassSup50 = " + pointage.getjHSC15().getText().replaceAll(",", "\\.") + ", HrPassSup25 = " + pointage.getjHSC2().getText().replaceAll(",", "\\."), "NumPersonnel = " + pointage.getjCode().getText() + " AND NumDevis = " + pointage.getjNumDevis().getText() + " AND NumSem = " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + " AND Annee = " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()));
+							}
+							else{
+								pointage.getBase().insert("pointage", pointage.getjCode().getZoneTexte().getText() + ", " + pointage.getjNumDevis().getZoneTexte().getText() + ", " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + ", " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()) +  ", " + pointage.getjHN().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC125().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC15().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC2().getText().replaceAll(",", "\\."));
+							}
+							pointage.getjNumDevis().getZoneTexte().setText("");
+							pointage.getjCode().getZoneTexte().setText("");
+							pointage.getjHN().setText("0,00");
+							pointage.getjHSC125().setText("0,00");
+							pointage.getjHSC15().setText("0,00");
+							pointage.getjHSC2().setText("0,00");
+							pointage.getjDate().setDate(new Date());
+							pointage.repaint();
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Erreur : Pas de valeurs négatif possible", "ATTENTION",
+									JOptionPane.WARNING_MESSAGE);
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Erreur : Heures normales sont à 0", "ATTENTION",
+								JOptionPane.WARNING_MESSAGE);
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Erreur : Aucun Salarié Selectionné ou existant", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Erreur : Aucun Devis Selectionné ou existant", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}

@@ -5,7 +5,7 @@ import java.text.ParseException;
 import javax.swing.JFrame;
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.FocusClient;
+import Controller.FocusJText;
 import Controller.TestContenu;
 import Controller.ActionRechercher;
 import Controller.ValiderModif;
@@ -52,7 +52,7 @@ public class ModifCommande extends Commandes{
 		new TestContenu(this, jHeureAtelier, 2, "Commandes");
 		new TestContenu(this, jPrevu, 3, "Commandes");
 		new TestContenu(this, jCommande, 3, "Commandes");
-		new FocusClient(this, "Commandes").nameClient();
+		new FocusJText(this, "Commandes").name();
 		valider.addActionListener(new ValiderModif(this, "Commandes"));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif", "Commandes"));

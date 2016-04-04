@@ -2,6 +2,8 @@ package View.Bar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -12,11 +14,14 @@ public class AddPointages{
 	
 	private JMenu menu;
 	private JMenuItem menuItem;
+	private Base base;
+	private JFrame fenetre;
 	
-	public AddPointages(Base bdd, String typeCompte){
+	public AddPointages(Base bdd, JFrame frame, String typeCompte){
 		menu = new JMenu("Pointages");
 		menu.getAccessibleContext().setAccessibleDescription("Pointages");		
-		
+		this.base = bdd;
+		this.fenetre = frame;
 		
 		//Saisir des heures spéciales
 		menuItem = new JMenuItem("Saisir des heures spéciales");
@@ -47,7 +52,7 @@ public class AddPointages{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new SaisiePointage();
+				new SaisiePointage(base, fenetre);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Saisir des pointages");

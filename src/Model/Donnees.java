@@ -292,6 +292,24 @@ public class Donnees {
 		}
 		return resultat;
 	}
+	
+	public LinkedHashMap<String, String[]> type() {
+		ResultSet rs = base.Select("*", "typepers", null);
+		LinkedHashMap<String, String[]> resultat = null;
+		try {
+			resultat = new LinkedHashMap<String, String[]>();
+			while (rs.next()) {
+				String cle = rs.getString(2);
+				String[] valeur = new String[1];
+				valeur[0] = rs.getString(1);
+				resultat.put(cle, valeur);
+			}
+		} catch (SQLException e) {
+			resultat = new LinkedHashMap<String, String[]>();
+			resultat.put("Error", new String[] { e.getMessage() });
+		}
+		return resultat;
+	}
 
 	public String[] modeClient(String numero) {
 		String[] resultat;

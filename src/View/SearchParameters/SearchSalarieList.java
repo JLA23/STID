@@ -1,4 +1,4 @@
-package View.SearchDevis;
+package View.SearchParameters;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,40 +17,45 @@ import Controller.Search;
 import Controller.SelectionAction;
 import Controller.RetourAction;
 import Controller.RowListener;
-import View.Commandes.SelectDevis;
+import View.Pointage.SaisiePointage;
 import View.SearchList.SearchList;
+import fr.julien.autocomplete.view.AutoComplete;
 
-public class SearchDevisList extends SearchList {
+public class SearchSalarieList extends SearchList {
 
 	private static final long serialVersionUID = 1L;
-	protected SelectDevis sd;
+	protected String f;
+	protected AutoComplete auto;
+	protected SaisiePointage saisie;
 	
-	public SearchDevisList(Base bdd, JFrame frame, SelectDevis select, String numCommande, String fonction) {
+	public SearchSalarieList(Base bdd, JFrame frame, String fonction) {
 		super(bdd, frame);
 		this.setPreferredSize(new Dimension(800, 480));
+		this.bdd = bdd;
+		this.frame = frame;
+		this.f = fonction;
+		init();
+	}
+	
+	public SearchSalarieList(Base bdd, SaisiePointage frame, String fonction, AutoComplete auto) {
+		super(bdd, frame);
+		this.setPreferredSize(new Dimension(800, 480));
+		this.bdd = bdd;
+		this.frame = frame;
+		this.saisie = frame;
+		this.f = fonction;
+		this.auto = auto;
+		init();
+	}
+	private void init(){
 		data = null;
-		if(fonction.equals("Commandes")){
-			if(numCommande != null){
-				data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c",
-					"d.numclient = c.numclient and (d.numcommande is null || d.numCommande = " + numCommande + ")");
-			}
-			else{
-				data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande is null");
-			}
-		}
-		else{
-			data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numClient = c.numClient");
-		}
+		data = donnees.liste("p.NumPersonnel, p.Nom, p.Prenom", "Personne as p", null);
 		if (data != null) {
-			this.bdd = bdd;
-			this.sd = select;
-			this.frame = frame;
-			this.setTitle("STID Gestion 2.0 (Recherche Devis)");
+			this.setTitle("STID Gestion 2.0 (Chercher Salarié)");
 	        model = new DefaultTableModel();
-	        model.addColumn("N° Devis");
-	        model.addColumn("N° Client");
-	        model.addColumn("Nom Client");
-	        model.addColumn("Libelle");
+	        model.addColumn("N°");
+	        model.addColumn("Nom");
+	        model.addColumn("Prénom");
 	    	for(int m = 0; m< data.length ; m++){
 				model.addRow(data[m]);
 			}
@@ -66,10 +71,9 @@ public class SearchDevisList extends SearchList {
 	        };
 	        layerTable.setRowSorter(sorter);
 			layerTable.getTableHeader().setReorderingAllowed(false);
-			layerTable.getColumnModel().getColumn(0).setPreferredWidth(1);
-			layerTable.getColumnModel().getColumn(1).setPreferredWidth(1);
-			layerTable.getColumnModel().getColumn(2).setPreferredWidth(220);
-			layerTable.getColumnModel().getColumn(3).setPreferredWidth(330);
+			layerTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+			layerTable.getColumnModel().getColumn(1).setPreferredWidth(30);
+			layerTable.getColumnModel().getColumn(2).setPreferredWidth(100);
 			layerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			centrerTable(layerTable);
 			JScrollPane scroll = new JScrollPane(layerTable);
@@ -82,9 +86,9 @@ public class SearchDevisList extends SearchList {
 		    layerPanel.add(retour, BorderLayout.SOUTH);
 		    layerPanel.add(valider, BorderLayout.SOUTH);
 		    layerPanel.add(annuler, BorderLayout.SOUTH);
-			valider.addActionListener(new SelectionAction(this, "Devis", fonction));
+			valider.addActionListener(new SelectionAction(this, "Salarie", f));
 		 	annuler.addActionListener(new ActionFermer(this));
-	        retour.addActionListener(new RetourAction(this, "Devis", fonction));
+	        retour.addActionListener(new RetourAction(this, "Salarie", f));
 	        search.addKeyListener(new Search(this, 0));
 	        sorter.addRowSorterListener(new RowListener(this));
 			this.add(layerPanel);
@@ -94,7 +98,7 @@ public class SearchDevisList extends SearchList {
 			this.setVisible(true);
 			
 		} else {
-			JOptionPane.showMessageDialog(null, "Erreur : Aucun devis en attente", "ATTENTION",
+			JOptionPane.showMessageDialog(null, "Erreur : Aucun personnel", "ATTENTION",
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -107,17 +111,6 @@ public class SearchDevisList extends SearchList {
 	public void setBdd(Base bdd) {
 		this.bdd = bdd;
 	}
-
-
-	public SelectDevis getSd() {
-		return sd;
-	}
-
-
-	public void setSd(SelectDevis sd) {
-		this.sd = sd;
-	}
-
 
 	public Object[][] getData() {
 		return data;
@@ -146,4 +139,31 @@ public class SearchDevisList extends SearchList {
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}
+
+	public String getF() {
+		return f;
+	}
+
+	public void setF(String f) {
+		this.f = f;
+	}
+
+	public AutoComplete getAuto() {
+		return auto;
+	}
+
+	public void setAuto(AutoComplete auto) {
+		this.auto = auto;
+	}
+
+	public SaisiePointage getSaisie() {
+		return saisie;
+	}
+
+	public void setSaisie(SaisiePointage saisie) {
+		this.saisie = saisie;
+	}
+	
+	
+	
 }

@@ -66,6 +66,17 @@ public class AddClients {
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Supprime un client");
 		menu.add(menuItem);
+		
+		// Rechercher Client
+		menuItem = new JMenuItem("Rechercher Client");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					//new SearchClient(base, null, "Suppr");
+			}
+		});
+		menuItem.getAccessibleContext().setAccessibleDescription("Rechercher un client");
+		menu.add(menuItem);
 
 		menu.addSeparator();
 

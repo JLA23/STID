@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +32,8 @@ import Controller.EcouteAction;
 import Controller.FocusPosition;
 import Controller.ExecuteClick;
 import Controller.ItemChange;
-import Controller.FocusClient;
+import Controller.TestContenu;
+import Controller.FocusJText;
 import Model.Donnees;
 import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
@@ -342,7 +344,7 @@ public class Commandes extends JFrame{
 		jPrevu.addKeyListener(new EcouteAction(jPrevu));
 		jCommande.addKeyListener(new EcouteAction(jCommande));
 
-		numClient.getZoneTexte().addFocusListener(new FocusClient(this, "Commandes"));
+		numClient.getZoneTexte().addFocusListener(new FocusJText(this, "Commandes"));
 		search.addActionListener(new ActionSearch(this, "Commandes"));
         this.getContentPane().add(nouveau);
         this.setResizable(false);
@@ -782,6 +784,32 @@ public class Commandes extends JFrame{
 			devises.addItem(entry.getKey());
 		}
 		devises.setSelectedItem("EUR");
+	}
+	
+	public void initModif(String [] res) throws ParseException{
+		jNumCommande.setText(res[0]);
+		jNumCommande.setEditable(false);
+		jNumCommande.setBackground(new Color(204, 204, 204));
+		numClient.getZoneTexte().setText(res[1]);
+		//jDate.setDate((res[3]));
+		jLibelle.setText(res[4]);
+		jFournitures.setText(res[5].replaceAll("\\.", ","));
+		jCout.setText(res[6].replaceAll("\\.", ","));
+		jPrefabrication.setText(res[9].replaceAll("\\.", ","));
+		jHeureSite.setText(res[7].replaceAll("\\.", ","));
+		jHeureAtelier.setText(res[8].replaceAll("\\.", ","));;
+		jPrevu.setText(res[10].replaceAll("\\.", ","));
+		jCommande.setText(res[11].replaceAll("\\.", ","));
+		//newClient.setVisible(false);
+		devises.setSelectedIndex(Integer.parseInt(res[12]) - 1);
+		new TestContenu(this, jFournitures, 1, "Devis");
+		new TestContenu(this, jCout, 1, "Devis");
+		new TestContenu(this, jPrefabrication, 1, "Devis");
+		new TestContenu(this, jHeureSite, 2, "Devis");
+		new TestContenu(this, jHeureAtelier, 2, "Devis");
+		new TestContenu(this, jPrevu, 3, "Devis");
+		new TestContenu(this, jCommande, 3, "Devis");
+		new FocusJText(this, "Devis").name();
 	}
 
 	public ArrayList<Object[]> getListDevis() {
