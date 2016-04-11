@@ -59,7 +59,7 @@ public class Client extends JDialog {
 		numClient = new JLabel("N° Client");
 		nameClient = new JLabel("Nom");
 		jNumClient = new JFormattedTextField(num);
-		jNumClient.setText(donnees.newNum("Clients", "NumClient", null) + "");
+		jNumClient.setText(donnees.newNum("clients", "NumClient", null) + "");
 		panelClient = new JPanel();
 		panelClient.setBorder(BorderFactory.createTitledBorder("Client"));
 		initClient();

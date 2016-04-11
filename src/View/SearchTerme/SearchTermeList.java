@@ -27,16 +27,16 @@ public class SearchTermeList extends SearchList {
 		this.frame = frame;
 		data = null;
 		if(fonction.equals("NewFacture") && numCom == null){
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "Termes as t, Commandes as co, Clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null");
+			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null");
 		}
 		else if(fonction.equals("NewFacture") && numCom != null){
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "Termes as t, Commandes as co, Clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom);
+			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom);
 		}
 		else if(!fonction.equals("NewFacture") && numCom != null){
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "Termes as t, Commandes as co, Clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom);
+			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom);
 		}
 		else{
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "Termes as t, Commandes as co, Clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient");
+			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient");
 		}
 		this.setPreferredSize(new Dimension(800, 500));
 		this.setTitle("STID Gestion 2.0 (Chercher Termes)");

@@ -15,14 +15,14 @@ public class NewTerme extends Termes{
 		super(bdd, frame);
 		numero.setText(numero.getText() + num);
 		numeroCommande = num;
-		int nbCommande = donnees.newNum("Termes","NumIndice", "NumCommande = " + num);
+		int nbCommande = donnees.newNum("termes","NumIndice", "NumCommande = " + num);
 		numeroIndice = num + "";
 		String [] res = null;
 		if(nbCommande > 1){
-			res = donnees.fiche("c.lblcommande, cl.nomclient, Round(c.MntFour - Sum(t.MntFour), 2), Round(c.CoutMo - Sum(t.CoutMo), 2), Round(c.Prefabrication - Sum(t.Prefabrication),2), c.CodeDevise", "Commandes as c, Clients as cl, Termes as t", "c.numCommande = " + num + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+			res = donnees.fiche("c.lblcommande, cl.nomclient, Round(c.MntFour - Sum(t.MntFour), 2), Round(c.CoutMo - Sum(t.CoutMo), 2), Round(c.Prefabrication - Sum(t.Prefabrication),2), c.CodeDevise", "commandes as c, clients as cl, termes as t", "c.numCommande = " + num + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		}
 		else{
-			res = donnees.fiche("c.lblcommande, cl.nomclient, c.MntFour, c.CoutMo, c.Prefabrication, c.CodeDevise", "Commandes as c, Clients as cl", "c.numCommande = " + num + " and c.numclient = cl.numclient");
+			res = donnees.fiche("c.lblcommande, cl.nomclient, c.MntFour, c.CoutMo, c.Prefabrication, c.CodeDevise", "commandes as c, clients as cl", "c.numCommande = " + num + " and c.numclient = cl.numclient");
 		}
 		
 		jNumIndice.setText(nbCommande + "");

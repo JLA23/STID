@@ -14,10 +14,10 @@ public class AjoutDevis implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (!select.getjNumDevis().getText().isEmpty()
-				&& select.getDonnees().exist("Devis", "NumDevis", "NumDevis = " + select.getjNumDevis().getText())) {
+				&& select.getDonnees().exist("devis", "NumDevis", "NumDevis = " + select.getjNumDevis().getText())) {
 			if (!select.containt(select.getjNumDevis().getText())) {
-				if (!select.getDonnees().lier("numCommande", "Devis", "numDevis = " + select.getjNumDevis().getText())) {
-					String[] devis = select.getDonnees().fiche("*, c.nomclient", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " +select.getjNumDevis().getText());
+				if (!select.getDonnees().lier("numCommande", "devis", "numDevis = " + select.getjNumDevis().getText())) {
+					String[] devis = select.getDonnees().fiche("*, c.nomclient", "devis as d, clients as c", "d.numclient = c.numclient and d.numDevis = " +select.getjNumDevis().getText());
 					String[] res = new String[4];
 					res[0] = devis[0];
 					res[1] = devis[1];

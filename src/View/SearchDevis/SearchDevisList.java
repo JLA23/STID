@@ -29,17 +29,17 @@ public class SearchDevisList extends SearchList {
 		super(bdd, frame);
 		this.setPreferredSize(new Dimension(800, 480));
 		data = null;
-		if(fonction.equals("Commandes")){
+		if(fonction.equals("SelectDevis")){
 			if(numCommande != null){
-				data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c",
+				data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c",
 					"d.numclient = c.numclient and (d.numcommande is null || d.numCommande = " + numCommande + ")");
 			}
 			else{
-				data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande is null");
+				data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numclient = c.numclient and d.numcommande is null");
 			}
 		}
 		else{
-			data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numClient = c.numClient");
+			data = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numClient = c.numClient");
 		}
 		if (data != null) {
 			this.bdd = bdd;

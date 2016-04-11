@@ -183,6 +183,8 @@ public class SaisiePointage extends JFrame{
 	    this.add(fermer); 
 	    fermer.addActionListener(new ActionFermer(this, fenetre));
 	    
+	    this.addWindowListener(new ActionFermer(this, fenetre));
+	    
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 	    this.setVisible(true);
@@ -190,7 +192,7 @@ public class SaisiePointage extends JFrame{
 	}
 	
 	protected ArrayList<String> listDevis() {
-		listDevis = donnees.liste("NumDevis, LblDevis", "Devis", null);
+		listDevis = donnees.liste("NumDevis, LblDevis", "devis", null);
 		ArrayList<String> res = new ArrayList<String>();
 		for (int i = 0; i < listDevis.length; i++) {
 			res.add(listDevis[i][0].toString());

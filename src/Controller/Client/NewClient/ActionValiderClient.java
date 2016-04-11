@@ -28,7 +28,7 @@ public class ActionValiderClient implements ActionListener {
 
 	public void valider() {
 		ArrayList<String> valeur = client.getModes().modesSelect();
-		if (!client.getDonnees().exist("Clients", "NumClient", "NumClient = " + client.getjNumClient().getText())) {
+		if (!client.getDonnees().exist("clients", "NumClient", "NumClient = " + client.getjNumClient().getText())) {
 			if (client.getjMail().getText().isEmpty() || mail(client.getjMail().getText())) {
 				if (!client.getjName().getText().isEmpty()) {
 					if (!client.getjJourSuivant().getText().isEmpty() || Integer.parseInt(client.getjJourSuivant().getText()) < 32) {

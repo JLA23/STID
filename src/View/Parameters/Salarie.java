@@ -53,8 +53,9 @@ public class Salarie extends JFrame {
 
 	public Salarie(JFrame frame, Base base, String num, String fonction) throws ParseException {
 		this.bdd = base;
-		donnees = new Donnees(base);
+		this.donnees = new Donnees(base);
 		this.frame = frame;
+		this.fonction = fonction;
 		init();
 		code.setText(num);
 		code.setEditable(false);
@@ -79,7 +80,7 @@ public class Salarie extends JFrame {
 		if(fiche[0].equals("1")){
 			gauche.setVisible(false);
 		}
-		if(fiche[0].equals(donnees.max("NumDevis", "Devis"))){
+		if(fiche[0].equals(donnees.max("Numpersonnel", "personne"))){
 			droite.setVisible(false);
 		}
 		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
@@ -189,24 +190,28 @@ public class Salarie extends JFrame {
 			if (e.getActionCommand().equals("Valider")) {
 				if (!code.getText().isEmpty() && !nom.getText().isEmpty() && !prenom.getText().isEmpty()) {
 					String [] re = valeur.get(jType.getSelectedItem());
-					if (fonction.equals("Modif")) {
-						if (donnees.exist("personne", "NumPersonnel", "numpersonnel = " + numero)) {
-							bdd.update("personne", "Nom = '" + nom.getText() + "', Prenom = '" + prenom.getText() + "', CodeTypePersonne = " + re[0], "Numpersonnel = " + numero);
-							JOptionPane.showMessageDialog(null, "Personnel modifié !");
-							ici.dispose();
-							frame.setEnabled(true);
-						}
-					} else if (fonction.equals("Suppr")) {
-						if (donnees.exist("personne", "NumPersonnel", "numpersonnel = " + numero)){
-							if(!donnees.lier("numpersonnel", "pointage", "NumPersonnel = " + numero)) {
+					if(fonction != null){
+						if (fonction.equals("Modif")) {
+							if (donnees.exist("personne", "NumPersonnel", "numpersonnel = " + numero)) {
 								bdd.update("personne", "Nom = '" + nom.getText() + "', Prenom = '" + prenom.getText() + "', CodeTypePersonne = " + re[0], "Numpersonnel = " + numero);
 								JOptionPane.showMessageDialog(null, "Personnel modifié !");
 								ici.dispose();
 								frame.setEnabled(true);
+								frame.setVisible(true);
 							}
-							else{
-								JOptionPane.showMessageDialog(null, "Erreur : impossible de supprimer le salarié", "ATTENTION",
+						} 	else if (fonction.equals("Suppr")) {
+							if (donnees.exist("personne", "NumPersonnel", "numpersonnel = " + numero)){
+								if(!donnees.lier("numpersonnel", "pointage", "NumPersonnel = " + numero)) {
+									bdd.update("personne", "Nom = '" + nom.getText() + "', Prenom = '" + prenom.getText() + "', CodeTypePersonne = " + re[0], "Numpersonnel = " + numero);
+									JOptionPane.showMessageDialog(null, "Personnel modifié !");
+									ici.dispose();
+									frame.setEnabled(true);
+									frame.setVisible(true);
+								}
+								else{
+									JOptionPane.showMessageDialog(null, "Erreur : impossible de supprimer le salarié", "ATTENTION",
 										JOptionPane.WARNING_MESSAGE);
+								}
 							}
 						}
 					} else {
@@ -215,6 +220,7 @@ public class Salarie extends JFrame {
 							JOptionPane.showMessageDialog(null, "Salarié rajouté !");
 							ici.dispose();
 							frame.setEnabled(true);
+							frame.setVisible(true);
 						}
 					}
 				} else {

@@ -31,7 +31,7 @@ public class SearchDevisPointage extends SearchList {
 		super(bdd, frame);
 		this.setPreferredSize(new Dimension(900, 480));
 		data = null;
-		data = donnees.liste("d.numDevis, d.numcommande, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numClient = c.numClient");
+		data = donnees.liste("d.numDevis, d.numcommande, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numClient = c.numClient");
 		if (data != null) {
 			this.bdd = bdd;
 			this.frame = frame;

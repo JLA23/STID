@@ -39,7 +39,7 @@ public class Donnees {
 	
 	
 	public String searchNumCommandeClient(String num) {
-		ResultSet rs = base.Select("numCommande", "Commandes", "CdeComClient = '" + num + "'");
+		ResultSet rs = base.Select("numCommande", "commandes", "CdeComClient = '" + num + "'");
 		String resultat = "";
 		try {
 			while (rs.next()) {
@@ -52,7 +52,7 @@ public class Donnees {
 	}
 	
 	public String searchTerme(String num){
-		ResultSet rs = base.Select("numindice", "Termes", "NumFacture is null AND Numcommande = '" + num + "'");
+		ResultSet rs = base.Select("numindice", "termes", "NumFacture is null AND Numcommande = '" + num + "'");
 		String resultat = "";
 		try {
 			while (rs.next()) {
@@ -102,7 +102,7 @@ public class Donnees {
 	}
 	
 	public HashMap<String, String[]> devises() {
-		ResultSet rs = base.Select("*", "Devises", null);
+		ResultSet rs = base.Select("*", "devises", null);
 		HashMap<String, String[]> resultat = null;
 		try {
 			resultat = new HashMap<String, String[]>();
@@ -140,7 +140,7 @@ public class Donnees {
 	}
 
 	public ArrayList<String> listNumClient() {
-		ResultSet rs = base.Select("NumClient", "Clients", null);
+		ResultSet rs = base.Select("NumClient", "clients", null);
 		ArrayList<String> resultat = null;
 		try {
 			resultat = new ArrayList<String>();
@@ -153,7 +153,7 @@ public class Donnees {
 	}
 
 	public double valeurDevise(String symbole) {
-		ResultSet rs = base.Select("Valeur", "Devises", "symbole = '" + symbole + "'");
+		ResultSet rs = base.Select("Valeur", "devises", "symbole = '" + symbole + "'");
 		double res = -1;
 		try {
 			while (rs.next()) {
@@ -166,7 +166,7 @@ public class Donnees {
 	}
 
 	public String codeDevise(String symbole) {
-		ResultSet rs = base.Select("CodeDevise", "Devises", "symbole = '" + symbole + "'");
+		ResultSet rs = base.Select("CodeDevise", "devises", "symbole = '" + symbole + "'");
 		String resultat = null;
 		try {
 			while (rs.next()) {
@@ -313,7 +313,7 @@ public class Donnees {
 
 	public String[] modeClient(String numero) {
 		String[] resultat;
-		ResultSet rs = base.Select("ModePaiement", "paiementClient", "numClient = " + numero);
+		ResultSet rs = base.Select("ModePaiement", "paiementclient", "numClient = " + numero);
 
 		try {
 			rs.last();

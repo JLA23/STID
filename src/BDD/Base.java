@@ -50,7 +50,7 @@ public class Base  {
 	public String typeCompte(String pseudo){
 		String user = null;
 		try{
-			String query = "Select c.type from Users as u, Compte as c where u.TypeCompte = c.id and u.pseudo = '" + pseudo+ "'";
+			String query = "Select c.type from users as u, compte as c where u.TypeCompte = c.id and u.pseudo = '" + pseudo+ "'";
 			ResultSet rs = stmt.executeQuery(query);
 			ResultSetMetaData metadata = rs.getMetaData();
 			while(rs.next()){
@@ -148,11 +148,11 @@ public class Base  {
 			String query2 = null;
 			if(typeCompte.equals("Admin")){
 				query = "GRANT ALL PRIVILEGES ON *.* TO '" + newPseudo + "'@'%' IDENTIFIED BY '" + newMdp + "' WITH GRANT OPTION";
-				query2 = "Insert into Users values('" + newPseudo + "', 1)";
+				query2 = "Insert into users values('" + newPseudo + "', 1)";
 			}
 			else{
 				query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + newPseudo + "'@'%' IDENTIFIED BY '" + newMdp + "'";
-				query2 = "Insert into Users values('" + newPseudo + "', 2)";;
+				query2 = "Insert into users values('" + newPseudo + "', 2)";;
 			}
 				stmt.executeUpdate(query); 
 				stmt.executeUpdate(query2);
@@ -168,7 +168,7 @@ public class Base  {
 		try{
 			String query = "DROP USER '" + pseudo + "'@'%'";
 			stmt.executeUpdate(query); 
-			String res = delete("Users", "pseudo = '" + pseudo +"'");
+			String res = delete("users", "pseudo = '" + pseudo +"'");
 			if(res.equals("Suppression effectué avec succée !")){
 				message = "Utilisateur supprimés !";
 			}
@@ -188,7 +188,7 @@ public class Base  {
 		try{
 			String query = "RENAME USER '"+ pseudo + "'@'%' TO '" + newPseudo + "'@'%'";
 			stmt.executeUpdate(query); 
-			String res = update("Users", "pseudo = '" + newPseudo + "'", "pseudo = '" + pseudo + "'");
+			String res = update("users", "pseudo = '" + newPseudo + "'", "pseudo = '" + pseudo + "'");
 			if(res.equals("Modification effectué avec succée !")){
 				message = "Nom utilisateur modifié !";
 			}
@@ -208,12 +208,12 @@ public class Base  {
 			if(compte.equals("Admin")){
 				String query = "GRANT ALL PRIVILEGES ON *.* TO '" + pseudo + "'@'%' WITH GRANT OPTION";
 				stmt.executeUpdate(query);
-				res = update("Users", "typecompte = 1", "pseudo = '" + pseudo + "'");
+				res = update("users", "typecompte = 1", "pseudo = '" + pseudo + "'");
 			}
 			else{
 				String query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + pseudo + "'@'%'";
 				stmt.executeUpdate(query);
-				res = update("Users", "typecompte = 2", "pseudo = '" + pseudo + "'");
+				res = update("users", "typecompte = 2", "pseudo = '" + pseudo + "'");
 			}
 			if(res.equals("Modification effectué avec succée !")){
 				message = "Compte utilisateur modifié !";

@@ -49,7 +49,7 @@ public class SearchSalarieList extends SearchList {
 	}
 	private void init(){
 		data = null;
-		data = donnees.liste("p.NumPersonnel, p.Nom, p.Prenom", "Personne as p", null);
+		data = donnees.liste("p.NumPersonnel, p.Nom, p.Prenom", "personne as p", null);
 		if (data != null) {
 			this.setTitle("STID Gestion 2.0 (Chercher Salarié)");
 	        model = new DefaultTableModel();

@@ -46,11 +46,11 @@ public class ValiderModif implements ActionListener {
 
 	private void validerDevis() {
 		Devis devis = (Devis) classe;
-		if (devis.getDonnees().exist("Devis", "NumDevis", "numDevis = " + devis.getjNumDevis().getText())) {
-			if (!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("Clients", "NumClient",
+		if (devis.getDonnees().exist("devis", "NumDevis", "numDevis = " + devis.getjNumDevis().getText())) {
+			if (!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("clients", "NumClient",
 					"NumClient = " + devis.getNumClient().getText())) {
 				String[] re = devis.getValeurDevises().get(devis.getDevises().getSelectedItem());
-				String[] valeursInit = devis.getDonnees().fiche("NumDevis, NumClient, DateDevis, LblDevis, Round(MntFour, 2), Round(CoutMo,2), Round(HeureSite, 2), Round(HeureAtelier,2), Round(Prefabrication, 2), Round(MatierePrevu,2), Round(MatiereCommande, 2), CodeDevise", "Devis", "numDevis = " + devis.getjNumDevis().getText());
+				String[] valeursInit = devis.getDonnees().fiche("NumDevis, NumClient, DateDevis, LblDevis, Round(MntFour, 2), Round(CoutMo,2), Round(HeureSite, 2), Round(HeureAtelier,2), Round(Prefabrication, 2), Round(MatierePrevu,2), Round(MatiereCommande, 2), CodeDevise", "devis", "numDevis = " + devis.getjNumDevis().getText());
 				String[] valeursModifie = new String [12] ;
 				valeursModifie[0] = devis.getjNumDevis().getText();
 				valeursModifie[1] = devis.getNumClient().getText();
@@ -65,7 +65,7 @@ public class ValiderModif implements ActionListener {
 				valeursModifie[10] = devis.getjCommande().getText().replaceAll(",", "\\.");
 				valeursModifie[11] = re[0];
 				if(!ModifieOuIdentique(valeursInit, valeursModifie)){
-				devis.getBase().update("Devis",
+				devis.getBase().update("devis",
 						"numClient = " + devis.getNumClient().getText() + ", DateDevis = '"
 								+ new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate())
 								+ "', LblDevis = '" + devis.getjLibelle().getText() + "', MntFour = "
@@ -98,7 +98,7 @@ public class ValiderModif implements ActionListener {
 	private void validerClient() {
 		Client client = (Client) classe;
 		ArrayList<String> valeur = client.getModes().modesSelect();
-		if (!client.getjNumClient().getText().equals("") && client.getDonnees().exist("Clients", "NumClient",
+		if (!client.getjNumClient().getText().equals("") && client.getDonnees().exist("clients", "NumClient",
 				"NumClient = " + client.getjNumClient().getText())) {
 			if (client.getjMail().getText().isEmpty() || mail(client.getjMail().getText())) {
 				if (!client.getjName().getText().isEmpty()) {
@@ -175,10 +175,10 @@ public class ValiderModif implements ActionListener {
 	
 	private void validerCommandes(){
 		Commandes commandes = (Commandes)classe;
-		if(commandes.getDonnees().exist("Commandes", "NumCommande", "NumCommande = " + commandes.getjNumCommande().getText())){
-			if(!commandes.getNumClient().getText().equals("") && commandes.getDonnees().exist("Clients", "NumClient", "NumClient = " + commandes.getNumClient().getText())){
+		if(commandes.getDonnees().exist("commandes", "NumCommande", "NumCommande = " + commandes.getjNumCommande().getText())){
+			if(!commandes.getNumClient().getText().equals("") && commandes.getDonnees().exist("clients", "NumClient", "NumClient = " + commandes.getNumClient().getText())){
 				String [] re = commandes.getValeurDevises().get(commandes.getDevises().getSelectedItem());
-				commandes.getBase().update("Commandes", "numClient = " + commandes.getNumClient().getText() + ", CdeComClient = '" + commandes.getjNumCommandeClient().getText() + "', Lblcommandes = '" + commandes.getjLibelle().getText()
+				commandes.getBase().update("commandes", "numClient = " + commandes.getNumClient().getText() + ", CdeComClient = '" + commandes.getjNumCommandeClient().getText() + "', Lblcommande = '" + commandes.getjLibelle().getText()
 				+  "', MntFour = " + commandes.getjFournitures().getText().replaceAll(",", "\\.")
 				+ ", CoutMO = " + commandes.getjCout().getText().replaceAll(",", "\\.")
 				+ ", HeureSite = " + commandes.getjHeureSite().getText().replaceAll(",", "\\.")
@@ -187,7 +187,7 @@ public class ValiderModif implements ActionListener {
 				+ ", Prefabrication = " + commandes.getjPrefabrication().getText().replaceAll(",", "\\.")
 				+ ", MatierePrevu = " + commandes.getjPrevu().getText().replaceAll(",", "\\.")
 				+ ", MatiereCommande = " + commandes.getjCommande().getText().replaceAll(",", "\\.")
-				+ ", CodeDevise = " + re[0], "numCommandes = " + commandes.getjNumCommande().getText());
+				+ ", CodeDevise = " + re[0], "numCommande = " + commandes.getjNumCommande().getText());
 				comparaisonDevis(commandes);
 				JOptionPane.showMessageDialog(null, "commandes validé !");
 				commandes.dispose();
@@ -205,9 +205,9 @@ public class ValiderModif implements ActionListener {
 	
 	private void validerTermes(){
 		Termes termes = (Termes)classe;
-		if(termes.getDonnees().exist("Termes", "NumCommande, NumIndice", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice())){
-			if(termes.getDonnees().exist("Commandes", "NumCommande", "NumCommande = " + termes.getNumeroCommande())){
-				termes.getBase().update("Termes", "Lblterme = '" + termes.getjLibelle().getText()
+		if(termes.getDonnees().exist("termes", "NumCommande, NumIndice", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice())){
+			if(termes.getDonnees().exist("commandes", "NumCommande", "NumCommande = " + termes.getNumeroCommande())){
+				termes.getBase().update("termes", "Lblterme = '" + termes.getjLibelle().getText()
 				+  "', MntFour = " + termes.getjFournitures().getText().replaceAll(",", "\\.")
 				+ ", CoutMO = " + termes.getjCout().getText().replaceAll(",", "\\.")
 				+ ", Prefabrication = " + termes.getjPrefabrication().getText().replaceAll(",", "\\.")
@@ -228,8 +228,8 @@ public class ValiderModif implements ActionListener {
 	
 	private void validerFactures(){
 		Factures factures = (Factures)classe;
-		if(factures.getDonnees().exist("Factures", "NumFacture", "NumFacture = " + factures.getjNumFacture().getText())){
-			if(factures.getDonnees().exist("Termes", "NumCommande, NumIndice", "NumCommande = " + factures.getNumeroCommande() + " AND NumIndice = " + factures.getNumeroIndice())){
+		if(factures.getDonnees().exist("factures", "NumFacture", "NumFacture = " + factures.getjNumFacture().getText())){
+			if(factures.getDonnees().exist("termes", "NumCommande, NumIndice", "NumCommande = " + factures.getNumeroCommande() + " AND NumIndice = " + factures.getNumeroIndice())){
 				factures.getBase().update("factures", "MontantTaxe = " + factures.getRecupTVA()
 				+  ", valeur = " + factures.getjValeur().getText()
 				+ ", ModePaiement = " + factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem())[0]
@@ -253,7 +253,7 @@ public class ValiderModif implements ActionListener {
 		String [] ancienNum = new String [commandes.getDevisdelaCommande().length];
 		String [] num = new String[commandes.getListDevis().size()];
 		for (int i = 0; i < commandes.getListDevis().size(); i++) {
-			commandes.getBase().update("Devis", "numcommande = " + commandes.getjNumCommande().getText(), "numdevis = " + (String)commandes.getListDevis().get(i)[0]);
+			commandes.getBase().update("devis", "numcommande = " + commandes.getjNumCommande().getText(), "numdevis = " + (String)commandes.getListDevis().get(i)[0]);
 			num[i] = (String)commandes.getListDevis().get(i)[0];
 		}
 		for (int i = 0; i < commandes.getDevisdelaCommande().length; i++) {
@@ -268,7 +268,7 @@ public class ValiderModif implements ActionListener {
 				}
 			}
 			if(!ok){
-				commandes.getBase().update("Devis", "numcommande = null", "numdevis = " + ancienNum[i]);
+				commandes.getBase().update("devis", "numcommande = null", "numdevis = " + ancienNum[i]);
 			}
 		}
 	}

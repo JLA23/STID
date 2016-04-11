@@ -78,12 +78,12 @@ public class ActionValiderVerif implements ActionListener {
 	private void verifClient() {
 		Base bdd = ((SearchClient) fr).getBdd();
 		Donnees donnees = new Donnees(bdd);
-		if (donnees.exist("Clients", "NumClient", "NumClient = " + ((SearchClient) fr).getNumClient().getText())) {
+		if (donnees.exist("clients", "NumClient", "NumClient = " + ((SearchClient) fr).getNumClient().getText())) {
 			((SearchClient) fr).dispose();
 			if (((SearchClient) fr).getF().equals("Modif")) {
 				new ModifClient(bdd, ((SearchClient) fr).getNumClient().getText());
 			} else if (((SearchClient) fr).getF().equals("Suppr")) {
-				if (!donnees.lier("numClient", "Devis",
+				if (!donnees.lier("numClient", "devis",
 						"numClient = " + ((SearchClient) fr).getNumClient().getText())) {
 					new SupprClient(bdd, ((SearchClient) fr).getNumClient().getText());
 				} else {
@@ -100,7 +100,7 @@ public class ActionValiderVerif implements ActionListener {
 	private void verifSalarie() throws ParseException {
 		Base bdd = ((SearchSalarie) fr).getBdd();
 		Donnees donnees = new Donnees(bdd);
-			if (donnees.exist("Personne", "NumPersonnel", "NumPersonnel = " + ((SearchSalarie) fr).getNumPersonnel().getText())) {
+			if (donnees.exist("personne", "NumPersonnel", "NumPersonnel = " + ((SearchSalarie) fr).getNumPersonnel().getText())) {
 				((SearchSalarie) fr).dispose();
 				new Salarie(((SearchSalarie) fr).getFr(), bdd, ((SearchSalarie) fr).getNumPersonnel().getText(), ((SearchSalarie) fr).getF());
 		} else {
@@ -113,7 +113,7 @@ public class ActionValiderVerif implements ActionListener {
 	private void verifDevis() {
 		Base bdd = ((SearchDevis) fr).getBdd();
 		Donnees donnees = new Donnees(bdd);
-		if (donnees.exist("Devis", "NumDevis", "numDevis = " + ((SearchDevis) fr).getNumDevis().getText())) {
+		if (donnees.exist("devis", "NumDevis", "numDevis = " + ((SearchDevis) fr).getNumDevis().getText())) {
 			((SearchDevis) fr).dispose();
 			try {
 				if (((SearchDevis) fr).getF().equals("Modif")) {
@@ -137,7 +137,7 @@ public class ActionValiderVerif implements ActionListener {
 		Donnees donnees = new Donnees(bdd);
 		if (!((SearchCommande) fr).getNumCom().getText().isEmpty()
 				&& ((SearchCommande) fr).getNumComClient().getText().isEmpty()) {
-			if (donnees.exist("Commandes", "NumCommande",
+			if (donnees.exist("commandes", "NumCommande",
 					"NumCommande = " + ((SearchCommande) fr).getNumCom().getText())) {
 				((SearchCommande) fr).dispose();
 				try {
@@ -164,10 +164,10 @@ public class ActionValiderVerif implements ActionListener {
 			}
 		} else if (((SearchCommande) fr).getNumCom().getText().isEmpty()
 				&& !((SearchCommande) fr).getNumComClient().getText().isEmpty()) {
-			if (donnees.exist("Commandes", "NumCommande",
+			if (donnees.exist("commandes", "NumCommande",
 					"CdeComClient = " + ((SearchCommande) fr).getNumComClient().getText())) {
 				((SearchCommande) fr).dispose();
-				if (donnees.existPlusieur("numCommande", "Commandes",
+				if (donnees.existPlusieur("numCommande", "commandes",
 						"CdeComClient = '" + ((SearchCommande) fr).getNumComClient().getText() + "'")) {
 					new SearchCommandeList(bdd, ((SearchCommande) fr).getFr(), ((SearchCommande) fr).getF(),
 							((SearchCommande) fr).getNumComClient().getText());
@@ -200,7 +200,7 @@ public class ActionValiderVerif implements ActionListener {
 			}
 		} else if (!((SearchCommande) fr).getNumCom().getText().isEmpty()
 				&& !((SearchCommande) fr).getNumComClient().getText().isEmpty()) {
-			if (donnees.exist("Commandes", "NumCommande", "NumCommane = " + ((SearchCommande) fr).getNumCom().getText()
+			if (donnees.exist("commandes", "NumCommande", "NumCommane = " + ((SearchCommande) fr).getNumCom().getText()
 					+ " AND CdeComClient = " + ((SearchCommande) fr).getNumComClient().getText())) {
 				((SearchCommande) fr).dispose();
 
@@ -237,14 +237,14 @@ public class ActionValiderVerif implements ActionListener {
 		Donnees donnees = new Donnees(bdd);
 		if (!((SearchTerme) fr).getNumCom().getText().isEmpty()
 				&& ((SearchTerme) fr).getNumIndice().getText().isEmpty()) {
-			if (donnees.exist("Termes", "NumCommande", "NumCommande = " + ((SearchTerme) fr).getNumCom().getText())) {
+			if (donnees.exist("termes", "NumCommande", "NumCommande = " + ((SearchTerme) fr).getNumCom().getText())) {
 				((SearchTerme) fr).dispose();
 				boolean exist = false;
 				if (((SearchTerme) fr).getF().equals("NewFacture")) {
-					exist = donnees.existPlusieur("NumIndice", "Termes",
+					exist = donnees.existPlusieur("NumIndice", "termes",
 							"Numfacture is null and NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
 				} else {
-					exist = donnees.existPlusieur("NumIndice", "Termes",
+					exist = donnees.existPlusieur("NumIndice", "termes",
 							"NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
 				}
 				if (exist) {
@@ -278,7 +278,7 @@ public class ActionValiderVerif implements ActionListener {
 					JOptionPane.WARNING_MESSAGE);
 		} else if (!((SearchTerme) fr).getNumCom().getText().isEmpty()
 				&& !((SearchTerme) fr).getNumIndice().getText().isEmpty()) {
-			if (donnees.exist("Termes", "NumCommande, NumIndice",
+			if (donnees.exist("termes", "NumCommande, NumIndice",
 					"NumCommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND numIndice = "
 							+ ((SearchTerme) fr).getNumIndice().getText())) {
 				((SearchTerme) fr).dispose();
@@ -313,17 +313,17 @@ public class ActionValiderVerif implements ActionListener {
 			// vide
 			if (!((SearchFacture) fr).getNumCom().getText().isEmpty()
 					&& ((SearchFacture) fr).getNumIndice().getText().isEmpty()) {
-				if (donnees.exist("Termes", "NumCommande",
+				if (donnees.exist("termes", "NumCommande",
 						"NumCommande = " + ((SearchFacture) fr).getNumCom().getText())) {
 					((SearchFacture) fr).dispose();
 					boolean exist = false;
-					exist = donnees.existPlusieur("NumIndice", "Termes",
+					exist = donnees.existPlusieur("NumIndice", "termes",
 							"Numfacture is not null and NumCommande = " + ((SearchFacture) fr).getNumCom().getText());
 					if (exist) {
 						new SearchTermeList(bdd, ((SearchFacture) fr).getFr(), ((SearchFacture) fr).getF(),
 								((SearchFacture) fr).getNumCom().getText());
 					} else {
-						String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "Termes",
+						String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "termes",
 								"NumIndice = 1 AND NumCommande = " + ((SearchFacture) fr).getNumCom().getText());
 						if (((SearchFacture) fr).getF().equals("Modif")) {
 							new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
@@ -362,11 +362,11 @@ public class ActionValiderVerif implements ActionListener {
 			// num facture vide
 			else if (!((SearchFacture) fr).getNumCom().getText().isEmpty()
 					&& !((SearchFacture) fr).getNumIndice().getText().isEmpty()) {
-				if (donnees.exist("Termes", "NumCommande, NumIndice",
+				if (donnees.exist("termes", "NumCommande, NumIndice",
 						"NumCommande = " + ((SearchFacture) fr).getNumCom().getText() + " AND NumIndice = "
 								+ ((SearchFacture) fr).getNumIndice().getText())) {
 					((SearchFacture) fr).dispose();
-					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "Termes",
+					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "termes",
 							"NumIndice = " + ((SearchFacture) fr).getNumIndice().getText() + " AND NumCommande = "
 									+ ((SearchFacture) fr).getNumCom().getText());
 					if (((SearchFacture) fr).getF().equals("Modif")) {
@@ -396,10 +396,10 @@ public class ActionValiderVerif implements ActionListener {
 		} else if (utile == 1) {
 			// Num Facture
 			if (!((SearchFacture) fr).getNumFacture().getText().isEmpty()) {
-				if (donnees.exist("Termes", "NumCommande, NumIndice, NumFacture",
+				if (donnees.exist("termes", "NumCommande, NumIndice, NumFacture",
 						"NumFacture = " + ((SearchFacture) fr).getNumFacture().getText())) {
 					((SearchFacture) fr).dispose();
-					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "Termes",
+					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "termes",
 							"NumCommande = " + ((SearchFacture) fr).getNumFacture().getText());
 					if (((SearchFacture) fr).getF().equals("Modif")) {
 						new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);

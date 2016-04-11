@@ -18,10 +18,10 @@ public class ActionValiderTerme implements ActionListener {
 	}
 
 	public void valider() {
-		if (!terme.getDonnees().exist("Termes", "NumCommande , Numindice", "NumCommande = " + terme.getNumeroCommande() + " and numIndice = " + terme.getjNumIndice().getText())) {
-				if (terme.getDonnees().exist("Commandes", "NumCommande", "NumCommande = " + terme.getNumeroCommande())) {
+		if (!terme.getDonnees().exist("termes", "NumCommande , Numindice", "NumCommande = " + terme.getNumeroCommande() + " and numIndice = " + terme.getjNumIndice().getText())) {
+				if (terme.getDonnees().exist("commandes", "NumCommande", "NumCommande = " + terme.getNumeroCommande())) {
 				if (!terme.getjFournitures().getText().equals("0,00") || !terme.getjPrefabrication().getText().equals("0,00") || !terme.getjCout().getText().equals("0,00")) {
-					terme.getBase().insert("Termes",
+					terme.getBase().insert("termes",
 							terme.getNumeroCommande() + ", " + terme.getjNumIndice().getText() + ", null, '"
 									+ terme.getjLibelle().getText() + "', "
 									+ terme.getjPrefabrication().getText().replaceAll(",", "\\.") + ", "

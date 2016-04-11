@@ -27,10 +27,10 @@ public class SearchCommandeList extends SearchList {
 		this.frame = frame;
 		data = null;
 		if(numComClient != null){
-			data = donnees.liste("d.numCommande, d.numClient, c.nomclient, d.lblCommande", "Commandes as d, Clients as c", "d.numClient = c.numClient and d.CdeComClient = '" + numComClient + "'");
+			data = donnees.liste("d.numCommande, d.numClient, c.nomclient, d.lblCommande", "commandes as d, clients as c", "d.numClient = c.numClient and d.CdeComClient = '" + numComClient + "'");
 		}
 		else{
-			data = donnees.liste("d.numCommande, d.numClient, c.nomclient, d.lblCommande", "Commandes as d, Clients as c", "d.numClient = c.numClient");
+			data = donnees.liste("d.numCommande, d.numClient, c.nomclient, d.lblCommande", "commandes as d, clients as c", "d.numClient = c.numClient");
 		}
 		this.setPreferredSize(new Dimension(800, 500));
 		this.setTitle("STID Gestion 2.0 (Chercher Commande)");

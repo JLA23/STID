@@ -90,7 +90,7 @@ public class Devis extends JFrame {
 		jPanel3 = new JPanel();
 
 		jDate = new JDateChooser();
-		int nbDevis = donnees.newNum("Devis", "NumDevis", null);
+		int nbDevis = donnees.newNum("devis", "NumDevis", null);
 		AutoCompleteModel model = new AutoCompleteModel();
 		model.addAll(listClient());
 		numClient = new AutoComplete(model);
@@ -645,7 +645,7 @@ public class Devis extends JFrame {
 	}
 	
 	protected ArrayList<String> listClient() {
-		listClient = donnees.liste("NumClient, NomClient", "Clients", null);
+		listClient = donnees.liste("NumClient, NomClient", "clients", null);
 		ArrayList<String> res = new ArrayList<String>();
 		for (int i = 0; i < listClient.length; i++) {
 			res.add(listClient[i][0].toString());

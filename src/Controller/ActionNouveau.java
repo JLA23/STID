@@ -104,8 +104,8 @@ public class ActionNouveau implements ActionListener {
 		}
 		else if (typeClasse.equals("Pointage")){
 			SaisiePointage pointage = ((SaisiePointage)frame);
-			if(!pointage.getjNumDevis().getZoneTexte().getText().equals("") && !pointage.getjNumDevis().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("Devis", "NumDevis", "NumDevis = " + pointage.getjNumDevis().getZoneTexte().getText())){
-				if (!pointage.getjCode().getZoneTexte().getText().equals("") && !pointage.getjCode().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("Personne", "NumPersonnel", "NumPersonnel = " + pointage.getjCode().getZoneTexte().getText())){
+			if(!pointage.getjNumDevis().getZoneTexte().getText().equals("") && !pointage.getjNumDevis().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("devis", "NumDevis", "NumDevis = " + pointage.getjNumDevis().getZoneTexte().getText())){
+				if (!pointage.getjCode().getZoneTexte().getText().equals("") && !pointage.getjCode().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("personne", "NumPersonnel", "NumPersonnel = " + pointage.getjCode().getZoneTexte().getText())){
 					if(!pointage.getjHN().getText().equals("0,00")){
 						if(!pointage.getjHN().getText().contains("-") && !pointage.getjHSC125().getText().contains("-") && !pointage.getjHSC15().getText().contains("-")&& !pointage.getjHSC2().getText().contains("-")){
 							if(pointage.getDonnees().exist("pointage", "NumPersonnel, NumDevis, NumSem, Annee", "NumPersonnel = " + pointage.getjCode().getText() + " AND NumDevis = " + pointage.getjNumDevis().getText() + " AND NumSem = " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + " AND Annee = " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()))){

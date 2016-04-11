@@ -81,7 +81,7 @@ public class Commandes extends JFrame{
 	    this.setSize(screenSize);
 		NumberFormat num =  NumberFormat.getIntegerInstance();
         DecimalFormat nf = new DecimalFormat("#0.00");
-		int nbCommande = donnees.newNum("Commandes","NumCommande", null);
+		int nbCommande = donnees.newNum("commandes","NumCommande", null);
 		AutoCompleteModel model = new AutoCompleteModel();
 		model.addAll(listClient());
 		numClient = new AutoComplete(model);
@@ -762,7 +762,7 @@ public class Commandes extends JFrame{
 	
 	protected ArrayList<String> listClient() {
 		listClient = donnees.liste("NumClient, NomClient, Adresse2, Adresse3, Adresse4, Adresse5, Adresse6, Adresse7",
-				"Clients", null);
+				"clients", null);
 		ArrayList<String> res = new ArrayList<String>();
 		for (int i = 0; i < listClient.length; i++) {
 			res.add(listClient[i][0].toString());

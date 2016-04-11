@@ -23,18 +23,17 @@ public class SearchClientList extends SearchList {
 	
 	private static final long serialVersionUID = 1L;
 
-	protected AutoComplete auto;
-
 	public SearchClientList(Base bdd, JFrame frame, String fonction, AutoComplete auto){
 		super(bdd, frame);
+		System.out.println(auto == null);
 		this.auto = auto;
 		if(fonction.equals("Suppr")){
 			data = donnees.liste("NumClient, NomClient, CONCAT(Adresse2, ' ', Adresse3, ' ', Adresse4, ' ', Adresse5, ' ' ,Adresse6, ' ', Adresse7)",
-					"Clients", "not exists (select * from devis as d where d.numclient = c.numclient)");
+					"clients", "not exists (select * from devis as d where d.numclient = c.numclient)");
 		}
 		else{
 			data = donnees.liste("NumClient, NomClient, CONCAT(Adresse2, ' ', Adresse3, ' ', Adresse4, ' ', Adresse5, ' ' ,Adresse6, ' ', Adresse7)",
-					"Clients", null);
+					"clients", null);
 		}
 		this.setTitle("STID Gestion 2.0 (Chercher Client)");
         DefaultTableModel model = new DefaultTableModel();

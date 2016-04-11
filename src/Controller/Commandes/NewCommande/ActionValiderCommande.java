@@ -18,12 +18,12 @@ public class ActionValiderCommande implements ActionListener {
 	}
 
 	public void valider() {
-		if (!commande.getDonnees().exist("Commandes", "NumCommande", "NumCommande = " + commande.getjNumCommande().getText())) {
+		if (!commande.getDonnees().exist("commandes", "NumCommande", "NumCommande = " + commande.getjNumCommande().getText())) {
 			if (!commande.getNumClient().getText().equals("")
-					&& commande.getDonnees().exist("Clients", "NumClient", "NumClient = " + commande.getNumClient().getText())) {
+					&& commande.getDonnees().exist("clients", "NumClient", "NumClient = " + commande.getNumClient().getText())) {
 				if (!commande.getListDevis().isEmpty()) {
 					String[] re = commande.getValeurDevises().get(commande.getDevises().getSelectedItem());
-					commande.getBase().insert("Commandes",
+					commande.getBase().insert("commandes",
 							commande.getjNumCommande().getText() + ", " + commande.getNumClient().getText() + ", '"
 									+ commande.getjNumCommandeClient().getText() + "', '"
 									+ commande.getjLibelle().getText() + "', "
@@ -36,7 +36,7 @@ public class ActionValiderCommande implements ActionListener {
 									+ commande.getjPrevu().getText().replaceAll(",", "\\.") + ", "
 									+ commande.getjCommande().getText().replaceAll(",", "\\.") + ", " + re[0] + ", 0,(Select tauxchange from taux where id in (Select typetva as id from clients where numclient = " + commande.getNumClient().getText() + "))" );
 					for (int i = 0; i < commande.getListDevis().size(); i++) {
-						commande.getBase().update("Devis", "numcommande = " + commande.getjNumCommande().getText(), "numdevis = " + (String)commande.getListDevis().get(i)[0]);
+						commande.getBase().update("devis", "numcommande = " + commande.getjNumCommande().getText(), "numdevis = " + (String)commande.getListDevis().get(i)[0]);
 					}
 					JOptionPane.showMessageDialog(null, "Commande enregistré !");
 					commande.dispose();

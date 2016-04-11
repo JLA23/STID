@@ -19,7 +19,7 @@ public class ModifClient extends Client{
 		this.setTitle("STID Gestion 2.0 (Modifier Client)");
 		nouveau.setText("Recherche");
 		donnees = new Donnees(base);
-		String [] res = donnees.fiche("*", "Clients", "numClient = " + numero);
+		String [] res = donnees.fiche("*", "clients", "numClient = " + numero);
 		jNumClient.setText(numero);
 		jNumClient.setEditable(false);
 		jNumClient.setBackground(new Color(204, 204, 204));

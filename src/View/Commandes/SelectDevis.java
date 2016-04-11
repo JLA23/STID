@@ -49,8 +49,7 @@ public class SelectDevis extends JFrame {
 		model.addColumn("Nom Client");
 		model.addColumn("Libelle");
 		if(numCommande != null){
-			System.out.println("entre");
-			Object[][] liees = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande = " + numCommande);
+			Object[][] liees = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numclient = c.numclient and d.numcommande = " + numCommande);
 			for(int m = 0; m< liees.length ; m++){
 				model.addRow(liees[m]);
 			}

@@ -42,7 +42,7 @@ public class FocusJText implements FocusListener {
 	public void name() {
 		if (classe.equals("Devis")) {
 			if (!((Devis)devis).getNumClient().getText().equals("") && !((Devis)devis).getNumClient().getText().equals("(vide)") && ((Devis)devis)
-					.getDonnees().exist("Clients", "NumClient", "NumClient = " + ((Devis)devis).getNumClient().getText())) {
+					.getDonnees().exist("clients", "NumClient", "NumClient = " + ((Devis)devis).getNumClient().getText())) {
 				int i = 0;
 				while (!((Devis)devis).getListClient()[i][0].toString().equals(((Devis)devis).getNumClient().getText())
 						&& i < ((Devis)devis).getListClient().length) {
@@ -65,7 +65,7 @@ public class FocusJText implements FocusListener {
 		
 		else if (classe.equals("Commandes")) {
 			if (!((Commandes)devis).getNumClient().getText().equals("") && !((Commandes)devis).getNumClient().getText().equals("(vide)") && ((Commandes)devis)
-					.getDonnees().exist("Clients", "NumClient", "NumClient = " + ((Commandes)devis).getNumClient().getText())) {
+					.getDonnees().exist("clients", "NumClient", "NumClient = " + ((Commandes)devis).getNumClient().getText())) {
 				int i = 0;
 				while (!((Commandes)devis).getListClient()[i][0].toString().equals(((Commandes)devis).getNumClient().getText())
 						&& i < ((Commandes)devis).getListClient().length) {
@@ -89,8 +89,8 @@ public class FocusJText implements FocusListener {
 		
 		else if (classe.equals("Pointage")) {
 			if (!((SaisiePointage)devis).getjNumDevis().getZoneTexte().getText().equals("") && !((SaisiePointage)devis).getjNumDevis().getZoneTexte().getText().equals("(vide)") && ((SaisiePointage)devis)
-					.getDonnees().exist("Devis", "NumDevis", "NumDevis = " + ((SaisiePointage)devis).getjNumDevis().getZoneTexte().getText()) && !((SaisiePointage)devis).getjCode().getZoneTexte().getText().equals("") && !((SaisiePointage)devis).getjCode().getZoneTexte().getText().equals("(vide)") && ((SaisiePointage)devis)
-					.getDonnees().exist("Personne", "NumPersonnel", "NumPersonnel = " + ((SaisiePointage)devis).getjCode().getZoneTexte().getText())) {
+					.getDonnees().exist("devis", "NumDevis", "NumDevis = " + ((SaisiePointage)devis).getjNumDevis().getZoneTexte().getText()) && !((SaisiePointage)devis).getjCode().getZoneTexte().getText().equals("") && !((SaisiePointage)devis).getjCode().getZoneTexte().getText().equals("(vide)") && ((SaisiePointage)devis)
+					.getDonnees().exist("personne", "NumPersonnel", "NumPersonnel = " + ((SaisiePointage)devis).getjCode().getZoneTexte().getText())) {
 				int i = 0;
 				while (!((SaisiePointage)devis).getListDevis()[i][0].toString().equals(((SaisiePointage)devis).getjNumDevis().getText())
 						&& i < ((SaisiePointage)devis).getListDevis().length) {

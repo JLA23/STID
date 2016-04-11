@@ -57,6 +57,7 @@ public class SelectionAction implements ActionListener {
 		int ligne = tables.getSelectedRow();
 		if (ligne != -1) {
 			String numero = datas[tables.convertRowIndexToModel(ligne)][0].toString();
+			System.out.println(numero);
 			dialog.dispose();
 			try {
 				if (f.equals("Modif")) {
@@ -94,7 +95,7 @@ public class SelectionAction implements ActionListener {
 						 new LookTerme(bdd, fenetre, numero, datas[ligne][1].toString());
 					}
 				} else if (f.equals("SearchClient")) {
-					autos.setText(numero);
+					autos.getZoneTexte().setText(numero);
 					dialog.dispose();
 				} else if (f.equals("NewTerme")){ 
 					new NewTerme(bdd, fenetre, numero);

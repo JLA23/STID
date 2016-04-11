@@ -18,10 +18,10 @@ public class ActionValiderDevis implements ActionListener {
 		valider();
 	}
 	public void valider(){
-		if(!devis.getDonnees().exist("Devis", "NumDevis", "numDevis = " + devis.getjNumDevis().getText())){
-			if(!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("Clients", "NumClient", "NumClient = " + devis.getNumClient().getText())){
+		if(!devis.getDonnees().exist("devis", "NumDevis", "numDevis = " + devis.getjNumDevis().getText())){
+			if(!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("clients", "NumClient", "NumClient = " + devis.getNumClient().getText())){
 				String [] re = devis.getValeurDevises().get(devis.getDevises().getSelectedItem());
-				devis.getBase().insert("Devis", devis.getjNumDevis().getText() + ", " + devis.getNumClient().getText() + ", null, '" +new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate()) + "', '" + devis.getjLibelle().getText()
+				devis.getBase().insert("devis", devis.getjNumDevis().getText() + ", " + devis.getNumClient().getText() + ", null, '" +new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate()) + "', '" + devis.getjLibelle().getText()
 				+  "', " + devis.getjFournitures().getText().replaceAll(",", "\\.")
 				+ ", " + devis.getjCout().getText().replaceAll(",", "\\.")
 				+ ", " + devis.getjHeureAtelier().getText().replaceAll(",", "\\.")

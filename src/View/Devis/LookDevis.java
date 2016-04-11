@@ -29,7 +29,7 @@ public class LookDevis extends Devis {
 		nouveau.setVisible(false);
 		//nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
-		String[] res = donnees.fiche("*, c.nomclient", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " + numd);
+		String[] res = donnees.fiche("*, c.nomclient", "devis as d, clients as c", "d.numclient = c.numclient and d.numDevis = " + numd);
 		jNumDevis.setText(res[0]);
 		numClient.getZoneTexte().setText(res[1]);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

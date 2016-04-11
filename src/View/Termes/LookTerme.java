@@ -27,7 +27,7 @@ public class LookTerme extends Termes {
 		numeroIndice = indice;
 		String[] res = donnees.fiche(
 				"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient",
-				"Commandes as c, Clients as cl, Termes as t", "t.numCommande = " + num + " and t.numIndice = "
+				"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
 						+ nbindice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		jNumIndice.setText(nbindice);
 		jLibelle.setText(res[0]);

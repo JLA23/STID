@@ -64,11 +64,11 @@ public class ActionGauche implements ActionListener {
 	}
 	
 	private void actionDevis() throws ParseException{
-		if (devis.getDonnees().exist("Devis", "NumDevis", "numDevis = " + devis.getjNumDevis().getText())) {
-			if (!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("Clients", "NumClient",
+		if (devis.getDonnees().exist("devis", "NumDevis", "numDevis = " + devis.getjNumDevis().getText())) {
+			if (!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("clients", "NumClient",
 					"NumClient = " + devis.getNumClient().getText())) {
 				String[] re = devis.getValeurDevises().get(devis.getDevises().getSelectedItem());
-				String[] valeursInit = devis.getDonnees().fiche("NumDevis, NumClient, DateDevis, LblDevis, Round(MntFour, 2), Round(CoutMo,2), Round(HeureSite, 2), Round(HeureAtelier,2), Round(Prefabrication, 2), Round(MatierePrevu,2), Round(MatiereCommande, 2), CodeDevise", "Devis", "numDevis = " + devis.getjNumDevis().getText());
+				String[] valeursInit = devis.getDonnees().fiche("NumDevis, NumClient, DateDevis, LblDevis, Round(MntFour, 2), Round(CoutMo,2), Round(HeureSite, 2), Round(HeureAtelier,2), Round(Prefabrication, 2), Round(MatierePrevu,2), Round(MatiereCommande, 2), CodeDevise", "devis", "numDevis = " + devis.getjNumDevis().getText());
 				String[] valeursModifie = new String [12] ;
 				valeursModifie[0] = devis.getjNumDevis().getText();
 				valeursModifie[1] = devis.getNumClient().getText();
@@ -83,7 +83,7 @@ public class ActionGauche implements ActionListener {
 				valeursModifie[10] = devis.getjCommande().getText().replaceAll(",", "\\.");
 				valeursModifie[11] = re[0];
 				if(!ModifieOuIdentique(valeursInit, valeursModifie)){
-					devis.getBase().update("Devis",
+					devis.getBase().update("devis",
 						"numClient = " + devis.getNumClient().getText() + ", DateDevis = '"
 								+ new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate())
 								+ "', LblDevis = '" + devis.getjLibelle().getText() + "', MntFour = "
@@ -101,12 +101,12 @@ public class ActionGauche implements ActionListener {
 					//devis.getFenetre().setVisible(true);
 				}
 				int numero = Integer.parseInt(devis.getjNumDevis().getText()) - 1;
-				String [] res = devis.getDonnees().fiche("*, c.nomclient", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " + numero);
+				String [] res = devis.getDonnees().fiche("*, c.nomclient", "devis as d, Clients as c", "d.numclient = c.numclient and d.numDevis = " + numero);
 				devis.initModif(res);
 				if(res[0].equals("1") && devis.getGauche().isVisible()){
 					devis.getGauche().setVisible(false);
 				}
-				if(!res[0].equals(devis.getDonnees().max("NumDevis", "Devis")) && !devis.getDroite().isVisible()){
+				if(!res[0].equals(devis.getDonnees().max("NumDevis", "devis")) && !devis.getDroite().isVisible()){
 					devis.getDroite().setVisible(true);
 				}
 				
@@ -120,7 +120,7 @@ public class ActionGauche implements ActionListener {
 	}
 	
 	private void actionSalarie() throws ParseException{
-		if (salarie.getDonnees().exist("Personne", "NumPersonnel", "numpersonnel = " + salarie.getCode().getText())) {
+		if (salarie.getDonnees().exist("personne", "NumPersonnel", "numpersonnel = " + salarie.getCode().getText())) {
 			if (!salarie.getNom().getText().equals("") && !salarie.getPrenom().getText().equals("")) {
 				String[] re = salarie.getValeur().get(salarie.getjType().getSelectedItem());
 				String[] valeursInit = salarie.getDonnees().fiche("*", "personne", "numPersonnel = " + salarie.getCode().getText());

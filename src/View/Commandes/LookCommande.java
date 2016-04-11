@@ -18,8 +18,8 @@ public class LookCommande extends Commandes {
 			this.setTitle("STID Gestion 2.0 (Fiche Commande)");
 			nouveau.setText("Recherche");
 			nouveau.setBounds(20, 510, 100, 25);
-			DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "Devis as d, Clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);
-			String [] res = donnees.fiche("*", "Commandes", "numCommande = " + numd);
+			DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);
+			String [] res = donnees.fiche("*", "commandes", "numCommande = " + numd);
 			jNumCommande.setText(res[0]);
 			jNumCommande.setEditable(false);
 			jNumCommande.setBackground(new Color(204, 204, 204));

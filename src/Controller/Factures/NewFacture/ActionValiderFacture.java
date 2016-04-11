@@ -23,10 +23,10 @@ public class ActionValiderFacture implements ActionListener {
 	}
 
 	public void valider() {
-		if (!facture.getDonnees().exist("Factures", "NumFacture", "NumFacture = " + facture.getjNumFacture().getText())) {
-				if (facture.getDonnees().exist("Termes", "NumCommande , Numindice", "NumCommande = " + facture.getNumeroCommande() + " and numIndice = " + facture.getNumeroIndice())) {
+		if (!facture.getDonnees().exist("factures", "NumFacture", "NumFacture = " + facture.getjNumFacture().getText())) {
+				if (facture.getDonnees().exist("termes", "NumCommande , Numindice", "NumCommande = " + facture.getNumeroCommande() + " and numIndice = " + facture.getNumeroIndice())) {
 				if (!facture.getjFournitures().getText().equals("0,00") || !facture.getjPrefabrication().getText().equals("0,00") || !facture.getjCout().getText().equals("0,00")) {
-						facture.getBase().insert("Factures",
+						facture.getBase().insert("factures",
 							facture.getjNumFacture().getText() + ", " + facture.getRecupTVA() + ", " + facture.getjValeur().getText() + ", "
 									+ facture.getModespaiements().get(facture.getBoxModePaiement().getSelectedItem())[0] + ", '"
 									+ facture.getjPrecision().getText() + "', '"
@@ -36,14 +36,14 @@ public class ActionValiderFacture implements ActionListener {
 									+ facture.getjAnneeValeur().getText() + ", "
 									+ facture.getValeurDevises().get(facture.getDevises().getSelectedItem())[0] + ", " + facture.getjTVA().getText().replaceAll(",", "\\."));
 					if(!facture.getjFournitures().getText().equals(facture.getValeursTerme()[2].replaceAll("\\.", ",")) || !facture.getjCout().getText().equals(facture.getValeursTerme()[3].replaceAll("\\.", ",")) || !facture.getjPrefabrication().getText().equals(facture.getValeursTerme()[4].replaceAll("\\.", ","))){
-						facture.getBase().update("Termes", "Prefabrication = " + facture.getjPrefabrication().getText() + ", CoutMO = " + facture.getjCout().getText() + ", MntFour = " + facture.getjFournitures() + ", NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
+						facture.getBase().update("termes", "Prefabrication = " + facture.getjPrefabrication().getText() + ", CoutMO = " + facture.getjCout().getText() + ", MntFour = " + facture.getjFournitures() + ", NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
 					}
 					else {
-						facture.getBase().update("Termes", "NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
+						facture.getBase().update("termes", "NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
 					}
 
 
-					double num = 2718.28;
+					double num = Double.parseDouble(facture.getjTotalTTC().getText().replaceAll(",", "\\."));
 					int i = new Double(num).intValue(); //recuperer la partie entiere
 					double decimale = num-(new Double(i).doubleValue());
 					decimale = decimale * 100;

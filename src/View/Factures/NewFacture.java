@@ -19,10 +19,10 @@ public class NewFacture extends Factures{
 		numero.setText(numero.getText() + num + " / " + indice);
 		numeroCommande = num;
 		numeroIndice = indice;
-		int nbFacture = donnees.newNum("Factures","NumFacture", null);
+		int nbFacture = donnees.newNum("factures","NumFacture", null);
 		jNumFacture.setText(nbFacture + "");
 		String [] res = null;
-		res = donnees.fiche("t.lblterme, cl.nomclient, Round(t.MntFour, 2), Round(t.CoutMo, 2), Round(t.Prefabrication, 2), c.CodeDevise, c.CdeComClient, Round(c.tva,2), cl.numClient", "Commandes as c, Clients as cl, Termes as t", "c.numCommande = " + num + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+		res = donnees.fiche("t.lblterme, cl.nomclient, Round(t.MntFour, 2), Round(t.CoutMo, 2), Round(t.Prefabrication, 2), c.CodeDevise, c.CdeComClient, Round(c.tva,2), cl.numClient", "commandes as c, clients as cl, termes as t", "c.numCommande = " + num + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		libelle2.setText(res[0]);
 		client.setText(res[1]);
 		numCommandeClient.setText(res[6]);

@@ -18,7 +18,7 @@ public class NewCommande extends Commandes{
 		jDevis.addActionListener(new ActionSelectDevis(sd));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		valider.addActionListener(new ActionValiderCommande(this));
-		nouveau.addActionListener(new ActionNouveau(this, "Commandes"));
+		nouveau.addActionListener(new ActionNouveau(this, "commandes"));
         this.setVisible(true);
 	}
 	

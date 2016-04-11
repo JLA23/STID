@@ -27,13 +27,13 @@ public class SelectionActionValider implements ActionListener {
 			for (int i = 0; i < listnum.length; i++) {
 				listnum[i] = (String) (select.getModel().getValueAt(i, 0));
 			}
-			double MntFour = select.getDonnees().somme("MntFour", "Devis", listnum);
-			double coutmo = select.getDonnees().somme("CoutMo", "Devis", listnum);
-			double prefabrication = select.getDonnees().somme("prefabrication", "Devis", listnum);
-			double hrsite = select.getDonnees().somme("heuresite", "Devis", listnum);
-			double hratelier = select.getDonnees().somme("heureatelier", "Devis", listnum);
-			double matiereprevu = select.getDonnees().somme("Matiereprevu", "Devis", listnum);
-			double matierecommande = select.getDonnees().somme("MatiereCommande", "Devis", listnum);
+			double MntFour = select.getDonnees().somme("MntFour", "devis", listnum);
+			double coutmo = select.getDonnees().somme("CoutMo", "devis", listnum);
+			double prefabrication = select.getDonnees().somme("prefabrication", "devis", listnum);
+			double hrsite = select.getDonnees().somme("heuresite", "devis", listnum);
+			double hratelier = select.getDonnees().somme("heureatelier", "devis", listnum);
+			double matiereprevu = select.getDonnees().somme("Matiereprevu", "devis", listnum);
+			double matierecommande = select.getDonnees().somme("MatiereCommande", "devis", listnum);
 			commandes.getjFournitures().setText(new Double(MntFour).toString().replaceAll("\\.", ","));
 			commandes.getjCout().setText(new Double(coutmo).toString().replaceAll("\\.", ","));
 			commandes.getjPrefabrication().setText(new Double(prefabrication).toString().replaceAll("\\.", ","));

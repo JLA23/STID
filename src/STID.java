@@ -34,6 +34,7 @@ public class STID {
 	        		}
 	        		Base bdd = new Base(line[0],line[1], "test", "test");
 					String message = bdd.connect();
+					System.out.println(message);
 					if(message.equals("Connexion ètablie")){
 						bdd.close();
 						new Identification(line[0],line[1]);
