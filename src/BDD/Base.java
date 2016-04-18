@@ -132,7 +132,7 @@ public class Base  {
 	public String modifierMDP(String newMdp){
 		String message = null;
 		try{
-			String query = "SET PASSWORD FOR " + pseudo + "@'%' = PASSWORD('" + newMdp + "')";
+			String query = "SET PASSWORD FOR " + pseudo + "@'192.168.%' = PASSWORD('" + newMdp + "')";
 			stmt.executeUpdate(query); 
 			message = "Mot de passe modifié avec succés !";
 		}
@@ -166,7 +166,7 @@ public class Base  {
 	public String supprUtilisateur(String pseudo){
 		String message = null;
 		try{
-			String query = "DROP USER '" + pseudo + "'@'%'";
+			String query = "DROP USER '" + pseudo + "'@'192.168.%'";
 			stmt.executeUpdate(query); 
 			String res = delete("users", "pseudo = '" + pseudo +"'");
 			if(res.equals("Suppression effectué avec succée !")){
@@ -186,7 +186,7 @@ public class Base  {
 	public String modifPseudo(String newPseudo){
 		String message = null;
 		try{
-			String query = "RENAME USER '"+ pseudo + "'@'%' TO '" + newPseudo + "'@'%'";
+			String query = "RENAME USER '"+ pseudo + "'@'192.168.%' TO '" + newPseudo + "'@'%'";
 			stmt.executeUpdate(query); 
 			String res = update("users", "pseudo = '" + newPseudo + "'", "pseudo = '" + pseudo + "'");
 			if(res.equals("Modification effectué avec succée !")){

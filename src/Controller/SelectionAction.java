@@ -57,7 +57,6 @@ public class SelectionAction implements ActionListener {
 		int ligne = tables.getSelectedRow();
 		if (ligne != -1) {
 			String numero = datas[tables.convertRowIndexToModel(ligne)][0].toString();
-			System.out.println(numero);
 			dialog.dispose();
 			try {
 				if (f.equals("Modif")) {

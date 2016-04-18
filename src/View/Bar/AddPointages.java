@@ -8,6 +8,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Pointage.HeureSpe;
 import View.Pointage.SaisiePointage;
 
 public class AddPointages{
@@ -28,7 +29,7 @@ public class AddPointages{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new Devis();
+					new HeureSpe(base, fenetre);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Saisir des heures spéciales");
