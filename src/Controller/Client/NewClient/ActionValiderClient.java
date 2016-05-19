@@ -52,7 +52,8 @@ public class ActionValiderClient implements ActionListener {
 									}
 									query += client.getjNbExemplaire().getText() + ", "
 											+ client.getjJourSuivant().getText() + ", " + re[0] + ", '"
-											+ client.getJnumTVA().getText() + "'";
+											+ client.getJnumTVA().getText() + "', 1";
+									System.out.println(query);
 									client.getBase().insert("clients", query);
 									client.getVal();
 									

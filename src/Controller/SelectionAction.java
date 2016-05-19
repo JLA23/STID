@@ -2,12 +2,15 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.ParseException;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import BDD.Base;
+import View.Clients.LookClient;
 import View.Clients.ModifClient;
 import View.Clients.SupprClient;
 import View.Commandes.LookCommande;
@@ -17,6 +20,7 @@ import View.Commandes.SupprCommande;
 import View.Devis.LookDevis;
 import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
+import View.Factures.ModifFacture;
 import View.Factures.NewFacture;
 import View.Parameters.Salarie;
 import View.Pointage.SaisiePointage;
@@ -24,6 +28,7 @@ import View.SearchClients.SearchClientList;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevisList;
 import View.SearchDevis.SearchDevisPointage;
+import View.SearchFactures.SearchFactureList;
 import View.SearchParameters.SearchSalarieList;
 import View.SearchTerme.SearchTermeList;
 import View.Termes.LookTerme;
@@ -32,7 +37,7 @@ import View.Termes.NewTerme;
 import View.Termes.SupprTerme;
 import fr.julien.autocomplete.view.AutoComplete;
 
-public class SelectionAction implements ActionListener {
+public class SelectionAction implements ActionListener, MouseListener {
 
 	private Object clas;
 	private String f;
@@ -45,6 +50,7 @@ public class SelectionAction implements ActionListener {
 	private AutoComplete autos;
 	private SelectDevis select;
 	private SaisiePointage saisie;
+	
 
 	public SelectionAction(Object frame, String classe, String fonction) {
 		this.f = fonction;
@@ -53,6 +59,10 @@ public class SelectionAction implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		action();
+	}
+	
+	private void action(){
 		initVerif();
 		int ligne = tables.getSelectedRow();
 		if (ligne != -1) {
@@ -67,9 +77,11 @@ public class SelectionAction implements ActionListener {
 					} else if (type.equals("Commandes")) {
 						new ModifCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						new ModifTerme(bdd, fenetre, numero, datas[ligne][1].toString());
+						new ModifTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
 					} else if (type.equals("Salarie")){
 						new Salarie(fenetre, bdd, numero, f);
+					} else if (type.equals("Factures")){
+						new ModifFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), datas[tables.convertRowIndexToModel(ligne)][2].toString());
 					}
 				} else if (f.equals("Suppr")) {
 					if (type.equals("Client")) {
@@ -79,19 +91,19 @@ public class SelectionAction implements ActionListener {
 					} else if (type.equals("Commandes")) {
 						new SupprCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						new SupprTerme(bdd, fenetre, numero, datas[ligne][1].toString());
+						new SupprTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
 					} else if (type.equals("Salarie")){
 						new Salarie(fenetre, bdd, numero, f);
 					}
 				} else if (f.equals("Recherche")) {
 					if (type.equals("Client")) {
-						// new LookClient(bdd, numero);
+						new LookClient(bdd, numero);
 					} else if (type.equals("Devis")) {
 						new LookDevis(bdd, numero, fenetre);
 					} else if (type.equals("Commandes")) {
 						new LookCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						 new LookTerme(bdd, fenetre, numero, datas[ligne][1].toString());
+						 new LookTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
 					}
 				} else if (f.equals("SearchClient")) {
 					autos.getZoneTexte().setText(numero);
@@ -99,10 +111,10 @@ public class SelectionAction implements ActionListener {
 				} else if (f.equals("NewTerme")){ 
 					new NewTerme(bdd, fenetre, numero);
 				}  else if (f.equals("NewFacture")){ 
-					new NewFacture(bdd, fenetre, numero, datas[ligne][1].toString());
+					new NewFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
 				} else if (f.equals("SelectDevis")) {
-					if (!select.containt((String) datas[ligne][0])) {
-						select.getModel().addRow(datas[ligne]);
+					if (!select.containt((String) datas[tables.convertRowIndexToModel(ligne)][0])) {
+						select.getModel().addRow(datas[tables.convertRowIndexToModel(ligne)]);
 						dialog.dispose();
 					} else {
 						JOptionPane.showMessageDialog(null, "Vous l'avez déjà ajoutè", "ATTENTION",
@@ -218,6 +230,47 @@ public class SelectionAction implements ActionListener {
 				fenetre = search.getFrame();
 			}
 			
+			else if(type.equals("Factures")){
+				SearchFactureList search = (SearchFactureList)clas;
+				dialog = search;
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+			}
+			
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		 if (e.getClickCount() == 2) {
+			 action();
+		 }
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

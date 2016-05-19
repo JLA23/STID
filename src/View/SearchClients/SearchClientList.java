@@ -28,15 +28,15 @@ public class SearchClientList extends SearchList {
 		System.out.println(auto == null);
 		this.auto = auto;
 		if(fonction.equals("Suppr")){
-			data = donnees.liste("NumClient, NomClient, CONCAT(Adresse2, ' ', Adresse3, ' ', Adresse4, ' ', Adresse5, ' ' ,Adresse6, ' ', Adresse7)",
-					"clients", "not exists (select * from devis as d where d.numclient = c.numclient)");
+			data = donnees.liste("c.NumClient, c.NomClient, CONCAT(c.Adresse2, ' ', c.Adresse3, ' ', c.Adresse4, ' ', c.Adresse5, ' ' , c.Adresse6, ' ', c.Adresse7)",
+					"clients as c", "not exists (select d.numClient from devis as d where d.numclient = c.numclient)");
 		}
 		else{
 			data = donnees.liste("NumClient, NomClient, CONCAT(Adresse2, ' ', Adresse3, ' ', Adresse4, ' ', Adresse5, ' ' ,Adresse6, ' ', Adresse7)",
 					"clients", null);
 		}
 		this.setTitle("STID Gestion 2.0 (Chercher Client)");
-        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel();
         model.addColumn("N° Client");
         model.addColumn("Nom");
         model.addColumn("Adresse");
@@ -83,6 +83,8 @@ public class SearchClientList extends SearchList {
 	    this.setVisible(true);
 
 	}
+	
+	
 
 	
 

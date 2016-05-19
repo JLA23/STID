@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -25,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
-import com.sun.glass.events.KeyEvent;
+
 import com.toedter.calendar.JDateChooser;
 import BDD.Base;
 import Controller.ActionCalculatrice;
@@ -699,6 +700,30 @@ public class Factures extends JFrame{
 
 	public void setValeursTerme(String[] valeursTerme) {
 		this.valeursTerme = valeursTerme;
+	}
+
+	public JButton getCalcul1() {
+		return calcul1;
+	}
+
+	public void setCalcul1(JButton calcul1) {
+		this.calcul1 = calcul1;
+	}
+
+	public JButton getCalcul2() {
+		return calcul2;
+	}
+
+	public void setCalcul2(JButton calcul2) {
+		this.calcul2 = calcul2;
+	}
+
+	public JButton getCalcul3() {
+		return calcul3;
+	}
+
+	public void setCalcul3(JButton calcul3) {
+		this.calcul3 = calcul3;
 	}
 	
 	

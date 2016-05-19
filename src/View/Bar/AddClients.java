@@ -72,7 +72,7 @@ public class AddClients {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new SearchClient(base, null, "Suppr");
+					new SearchClient(base, null, "Recherche");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Rechercher un client");

@@ -87,6 +87,7 @@ public class SearchDevisList extends SearchList {
 	        retour.addActionListener(new RetourAction(this, "Devis", fonction));
 	        search.addKeyListener(new Search(this, 0));
 	        sorter.addRowSorterListener(new RowListener(this));
+	        layerTable.addMouseListener(new SelectionAction(this, "Devis", fonction));
 			this.add(layerPanel);
 			this.pack();
 			this.setResizable(false);

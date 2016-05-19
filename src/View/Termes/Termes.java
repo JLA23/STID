@@ -33,14 +33,14 @@ import View.Options.ClickDroit;
 
 
 public class Termes extends JFrame{
-    protected JButton calcul1, valider, fermer, calcul2, calcul3, nouveau;
+    protected JButton calcul1, valider, fermer, calcul2, calcul3, nouveau, jfacture, jcommande, gauche, droite, feuille;
     protected JFormattedTextField jNumIndice;
     protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis;
-    protected JLabel numIndice, libelle, fournitures;
+    protected JLabel numIndice, libelle, fournitures, facture, dateEmission;
     protected JLabel coutMO, totalDevisdevise, devise, nameClient, deviselabel;
-    protected JPanel jPanel1, jPanel2, jPanel6;
+    protected JPanel jPanel1, jPanel2, jPanel6, jPanel7;
     protected JSeparator jSeparator1;
-    protected JFormattedTextField jTotalDevisDevise, jFournitures, jPrefabrication, jCout, jTotalDevis, jNumCommande, jNumCommandeClient;
+    protected JFormattedTextField jTotalDevisDevise, jFournitures, jPrefabrication, jCout, jTotalDevis, jNumCommandeClient;
     protected JTextField jLibelle;
     protected JComboBox<String> devises;
     protected double valeurDevise;
@@ -400,14 +400,6 @@ public class Termes extends JFrame{
 		this.jTotalDevis = jTotalDevis;
 	}
 
-	public JFormattedTextField getjNumCommande() {
-		return jNumCommande;
-	}
-
-	public void setjNumCommande(JFormattedTextField jNumCommande) {
-		this.jNumCommande = jNumCommande;
-	}
-
 	public JLabel getDevise() {
 		return devise;
 	}
@@ -503,5 +495,71 @@ public class Termes extends JFrame{
 	public void setNumeroIndice(String numeroIndice) {
 		this.numeroIndice = numeroIndice;
 	}
+
+	public JButton getGauche() {
+		return gauche;
+	}
+
+	public void setGauche(JButton gauche) {
+		this.gauche = gauche;
+	}
+
+	public JButton getDroite() {
+		return droite;
+	}
+
+	public void setDroite(JButton droite) {
+		this.droite = droite;
+	}
+
+	public JButton getFeuille() {
+		return feuille;
+	}
+
+	public void setFeuille(JButton feuille) {
+		this.feuille = feuille;
+	}
 	
+	public void initModif(String [] res){
+		numeroCommande = res[0];
+		numero.setText("N° de Commande : " + numeroCommande);
+		jNumIndice.setText(res[1]);
+		jLibelle.setText(res[2]);
+		nameClient.setText("Client : " + res[3]);
+		jFournitures.setText(res[4].replaceAll("\\.", ","));
+		jCout.setText(res[5].replaceAll("\\.", ","));
+		jPrefabrication.setText(res[6].replaceAll("\\.", ","));
+		devises.setSelectedIndex(Integer.parseInt(res[7]) - 1);
+		if(res[9] != null){
+			if(!jPanel7.isShowing()){
+			jPanel6.setBounds(10, 65, jPanel6.getPreferredSize().width, jPanel6.getPreferredSize().height);
+			jPanel7 = new JPanel();
+			jPanel7.setLayout(null);
+			jPanel7.setBorder(BorderFactory.createTitledBorder("Facture"));
+	        jPanel7.setPreferredSize(new Dimension(190, 230));
+	        jPanel7.setBounds(12 + jPanel6.getPreferredSize().width , 65, jPanel7.getPreferredSize().width, jPanel7.getPreferredSize().height);
+	        facture = new JLabel("N° Facture : " + res[9]);
+	        String [] date = donnees.fiche("DATE_FORMAT(DateEmission, '%d/%m/%Y')", "factures", "numfacture = " + res[9]);
+	        dateEmission = new JLabel("Emise le : " + date[0]);
+	        facture.setBounds(30, 80, facture.getPreferredSize().width, facture.getPreferredSize().height);
+	        dateEmission.setBounds(30, 110, dateEmission.getPreferredSize().width, dateEmission.getPreferredSize().height);
+	        jfacture = new JButton("Voir facture");
+	        jfacture.setBounds(50, 150, jfacture.getPreferredSize().width, jfacture.getPreferredSize().height);
+	        jPanel7.add(facture);
+	        jPanel7.add(dateEmission);
+	        jPanel7.add(jfacture);
+	        jPanel2.add(jPanel7);
+			}
+			else{
+				facture.setText("N° Facture : " + res[9]);
+				String [] date = donnees.fiche("DATE_FORMAT(DateEmission, '%d/%m/%Y')", "factures", "numfacture = " + res[9]);
+				dateEmission.setText("Emise le : " + date[0]);
+			}
+		}
+		else if(res[9] == null && jPanel7.isShowing()){
+			jPanel7.setVisible(false);
+			jPanel6.setBounds(100, 65, jPanel6.getPreferredSize().width, jPanel6.getPreferredSize().height);
+		}
+		
+	}
 }

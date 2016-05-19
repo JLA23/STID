@@ -67,7 +67,7 @@ public class ActionFermer implements ActionListener, WindowListener {
 
 	}
 
-	protected void fermer() {
+	private void fermer() {
 		if (fenetre != null && dialog == null) {
 			fenetre.dispose();
 			if (fenetre2 != null) {

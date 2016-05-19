@@ -51,7 +51,7 @@ public class SaisiePointage extends JFrame{
 		screenSize.height = 350;
 		ImageIcon icon = new ImageIcon("lib/images/1447428838_calculate_16x16.gif");
 		ImageIcon icon2 = new ImageIcon("lib/images/loupe.png");
-		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
+		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setSize(screenSize);
 	    
 		this.base = bdd;

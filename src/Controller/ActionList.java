@@ -10,6 +10,7 @@ import BDD.Base;
 import View.SearchClients.SearchClientList;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevisList;
+import View.SearchFactures.SearchFactureList;
 import View.SearchParameters.SearchSalarieList;
 import View.SearchTerme.SearchTermeList;
 
@@ -53,7 +54,7 @@ public class ActionList implements ActionListener {
 				new SearchTermeList(bdd, windo, fonction, null);	
 			}
 			else{
-				//new SearchTermeList(bdd, windo, fonction, null);
+				new SearchFactureList(bdd, windo, fonction, null, null);
 			}
 		}
 		else if(type.equals("Salarie")){

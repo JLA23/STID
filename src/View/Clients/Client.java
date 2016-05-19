@@ -2,14 +2,21 @@ package View.Clients;
 
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JRadioButton;
@@ -18,39 +25,43 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import BDD.Base;
 import Controller.LimiteCaratere;
+import Controller.FocusJText;
 import Controller.ItemChange;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class Client extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	protected JTextField jName, jMail, jnumTVA;
 	protected JTextField[] jAdresses;
-	protected JLabel numClient, nameClient, moisSuivant, raisonAdresse, TVA, taux, delais, nbex, numTVA, fr, mail;
+	protected JLabel numClient, nameClient, moisSuivant, raisonAdresse, TVA, taux, delais, nbex, numTVA, fr, mail, actif;
 	protected JFormattedTextField jNumClient;
 	protected JFormattedTextField jJourSuivant;
 	protected JFormattedTextField jDelais;
 	protected JFormattedTextField jNbExemplaire;
-	protected JPanel panelClient, panelPaiement, panelDetails;
+	protected JPanel panelClient, panelPaiement;
 	protected JRadioButton br1, br2;
+	protected JCheckBox check;
 	protected JComboBox<String> boxTva;
-	protected JButton jmodePaiement;
-	protected JButton valider;
-	protected JButton fermer;
-	protected JButton nouveau;
+	protected JButton jmodePaiement, valider, fermer, nouveau, gauche, droite, feuille;
 	protected Base base;
 	protected Donnees donnees;
 	protected NumberFormat num;
 	protected LinkedHashMap<String, String[]> valeurTaux;
 	protected LinkedHashMap<String, Object[]> vals;
 	protected ModePaiement modes;
+	protected JFrame frame;
 
 	public Client(Base bdd, JFrame frame) {
 		super(frame, null, true);
 		this.setLayout(null);
-		this.setTitle("Nouveau Client");
+		this.setTitle("STID Gestion 2.0 (Nouveau Client)");
+		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
+		this.frame = frame;
 		this.base = bdd;
 		this.donnees = new Donnees(base);
 		num = NumberFormat.getIntegerInstance();
@@ -62,6 +73,9 @@ public class Client extends JDialog {
 		jNumClient.setText(donnees.newNum("clients", "NumClient", null) + "");
 		panelClient = new JPanel();
 		panelClient.setBorder(BorderFactory.createTitledBorder("Client"));
+		valider = new JButton("Valider");
+		fermer = new JButton("Fermer");
+		nouveau = new JButton("Nouveau");
 		initClient();
 		panelClient.add(panelPaiement);
 		panelClient.setPreferredSize(new Dimension(610, 305));
@@ -71,9 +85,6 @@ public class Client extends JDialog {
 		panelPaiement.setPreferredSize(new Dimension(200, 75));
 		size = panelPaiement.getPreferredSize();
 		panelPaiement.setBounds(400, 10, size.width, size.height);
-		valider = new JButton("Valider");
-		fermer = new JButton("Fermer");
-		nouveau = new JButton("Nouveau");
 		valider.setBounds(290, 325, 80, 25);
 		fermer.setBounds(380, 325, 80, 25);
 		nouveau.setBounds(175, 325, 105, 25);
@@ -83,9 +94,9 @@ public class Client extends JDialog {
 		insertTaux();
 		Insets insets = this.getInsets();
 		this.setSize(640 + insets.left + insets.right, 400 + insets.top + insets.bottom);
-
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initClient() {
 		panelClient.setLayout(null);
 		panelClient.add(numClient);
@@ -136,6 +147,13 @@ public class Client extends JDialog {
 		boxTva.setBounds(o, k - 2, size.width, size.height);
 		panelClient.add(boxTva);
 		boxTva.addItemListener(new ItemChange(this, "Client"));
+		
+		check = new JCheckBox();
+		actif = new JLabel("Actif");
+		actif.setBounds(o - 10 - actif.getPreferredSize().width, k + 23, actif.getPreferredSize().width, actif.getPreferredSize().height);
+		panelClient.add(actif);
+		check.setBounds(o, k + 22, check.getPreferredSize().width, check.getPreferredSize().height);
+		panelClient.add(check);
 		
 		taux = new JLabel("Taux TVA : ");
 		o = o + 10 + size.width;
@@ -236,6 +254,159 @@ public class Client extends JDialog {
 		l = l + size.height + 2;
 		size = br2.getPreferredSize();
 		br2.setBounds(10, l, size.width, size.height);
+		
+		panelClient.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		panelPaiement.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		
+		new ClickDroit(jNumClient, true, true);
+		jNumClient.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jNumClient.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jName.requestFocus();
+			}
+		});
+		
+		new ClickDroit(jName, true, true);
+		jName.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jName.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jJourSuivant.requestFocus();
+			}
+		});
+		
+		new ClickDroit(jJourSuivant, true, true);
+		jJourSuivant.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jJourSuivant.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAdresses[0].requestFocus();
+			}
+		});
+		
+		new ClickDroit(jAdresses[0], true, true);
+		jAdresses[0].getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAdresses[0].getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAdresses[1].requestFocus();
+			}
+		});
+		
+		new ClickDroit(jAdresses[1], true, true);
+		jAdresses[1].getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAdresses[1].getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAdresses[2].requestFocus();
+			}
+		});
+		
+		new ClickDroit(jAdresses[2], true, true);
+		jAdresses[2].getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAdresses[2].getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAdresses[3].requestFocus();
+			}
+		});
+		
+		new ClickDroit(jAdresses[3], true, true);
+		jAdresses[3].getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAdresses[3].getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAdresses[4].requestFocus();
+			}
+		});
+		
+		new ClickDroit(jAdresses[4], true, true);
+		jAdresses[4].getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAdresses[4].getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAdresses[5].requestFocus();
+			}
+		});
+		
+		new ClickDroit(jAdresses[5], true, true);
+		jAdresses[5].getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAdresses[5].getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAdresses[6].requestFocus();
+			}
+		});
+		
+		new ClickDroit(jAdresses[6], true, true);
+		jAdresses[6].getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAdresses[6].getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jDelais.requestFocus();
+			}
+		});
+		
+		new ClickDroit(jDelais, true, true);
+		jDelais.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jDelais.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jNbExemplaire.requestFocus();
+			}
+		});
+		
+		new ClickDroit(jNbExemplaire, true, true);
+		jNbExemplaire.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jNbExemplaire.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jMail.requestFocus();
+			}
+		});
+		
+		new ClickDroit(jMail, true, true);
+		jMail.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jMail.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jnumTVA.requestFocus();
+			}
+		});
+		
+		new ClickDroit(jnumTVA, true, true);
+		jnumTVA.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jnumTVA.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				valider.requestFocus();
+			}
+		});
+		
+		valider.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		valider.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jNumClient.requestFocus();
+			}
+		});
 	}
 	
 	public JRadioButton getBr2() {
@@ -252,6 +423,52 @@ public class Client extends JDialog {
 			boxTva.addItem(entry.getKey());
 		}
 		boxTva.setSelectedItem("Normal");
+	}
+	
+	public void initModif(String [] res) throws ParseException{
+		jNumClient.setText(res[0]);
+		jName.setText(res[1]);
+		for (int j = 0; j < jAdresses.length; j++) {
+			jAdresses[j].setText(res[2 + j]);
+		}
+		for (Entry<String, String[]> entry : valeurTaux.entrySet()) {
+			if(((String)entry.getValue()[0]).equals(res[14])){
+				boxTva.setSelectedItem(entry.getKey());
+				break;
+			}
+		}
+		jDelais.setText(res[10]);
+		jNbExemplaire.setText(res[12]);
+		jMail.setText(res[9]);
+		jnumTVA.setText(res[15]);
+		if(res[11].equals("1")){
+			br1.setSelected(true);
+		}
+		else if(res[11].equals("2")){
+			br2.setSelected(true);
+		}
+		if(res[16].equals("1")){
+			check.setSelected(true);
+		}
+		jJourSuivant.setText(res[13]);
+		LinkedHashMap<String, Object[]> val = donnees.modesPaiements();
+		val = verifPaiement(val, res[0]);
+		modes = new ModePaiement(donnees, null, val);
+		vals = donnees.modesPaiements();
+		vals = verifPaiement(vals, res[0]);
+		new FocusJText(this, "Client").name();
+	}
+	
+	private LinkedHashMap<String, Object[]> verifPaiement(LinkedHashMap<String, Object[]> val, String numero){
+		String [] result = donnees.modeClient(numero);
+		for (Entry<String, Object[]> entry : val.entrySet()) {
+			for(int i = 0; i < result.length; i++){
+				if(result[i].equals((String)entry.getValue()[0])){
+					val.get(entry.getKey())[1] = true;
+				}
+			}
+		}
+		return val;
 	}
 
 	public JLabel getTVA() {
@@ -421,6 +638,46 @@ public class Client extends JDialog {
 
 	public void setVal(LinkedHashMap<String, Object[]> val) {
 		this.vals = val;
+	}
+
+	public JCheckBox getCheck() {
+		return check;
+	}
+
+	public void setCheck(JCheckBox check) {
+		this.check = check;
+	}
+
+	public JButton getGauche() {
+		return gauche;
+	}
+
+	public void setGauche(JButton gauche) {
+		this.gauche = gauche;
+	}
+
+	public JButton getDroite() {
+		return droite;
+	}
+
+	public void setDroite(JButton droite) {
+		this.droite = droite;
+	}
+
+	public JButton getFeuille() {
+		return feuille;
+	}
+
+	public void setFeuille(JButton feuille) {
+		this.feuille = feuille;
+	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
 	}
 
 }

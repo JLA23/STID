@@ -40,7 +40,7 @@ import fr.julien.autocomplete.model.AutoCompleteModel;
 import fr.julien.autocomplete.view.AutoComplete;
 
 public class Commandes extends JFrame{
-    protected JButton calcul1, valider, fermer, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7, nouveau, search;
+    protected JButton calcul1, valider, fermer, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7, nouveau, search, gauche, droite, feuille;
     protected JComboBox<String> devises;
 	protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1, euro5;
     protected JLabel hrs2, hrs3, totalHeures, commande, euro6, resteCommande, euro7, deviselabel, libelle, numClientLabel, fournitures;
@@ -791,25 +791,27 @@ public class Commandes extends JFrame{
 		jNumCommande.setEditable(false);
 		jNumCommande.setBackground(new Color(204, 204, 204));
 		numClient.getZoneTexte().setText(res[1]);
-		//jDate.setDate((res[3]));
-		jLibelle.setText(res[4]);
+		jNumCommandeClient.setText(res[2]);
+		jLibelle.setText(res[3]);
 		jFournitures.setText(res[5].replaceAll("\\.", ","));
-		jCout.setText(res[6].replaceAll("\\.", ","));
+		jCout.setText(res[4].replaceAll("\\.", ","));
 		jPrefabrication.setText(res[9].replaceAll("\\.", ","));
-		jHeureSite.setText(res[7].replaceAll("\\.", ","));
-		jHeureAtelier.setText(res[8].replaceAll("\\.", ","));;
+		jHeureSite.setText(res[6].replaceAll("\\.", ","));
+		jHeureAtelier.setText(res[7].replaceAll("\\.", ","));;
 		jPrevu.setText(res[10].replaceAll("\\.", ","));
 		jCommande.setText(res[11].replaceAll("\\.", ","));
-		//newClient.setVisible(false);
 		devises.setSelectedIndex(Integer.parseInt(res[12]) - 1);
-		new TestContenu(this, jFournitures, 1, "Devis");
-		new TestContenu(this, jCout, 1, "Devis");
-		new TestContenu(this, jPrefabrication, 1, "Devis");
-		new TestContenu(this, jHeureSite, 2, "Devis");
-		new TestContenu(this, jHeureAtelier, 2, "Devis");
-		new TestContenu(this, jPrevu, 3, "Devis");
-		new TestContenu(this, jCommande, 3, "Devis");
-		new FocusJText(this, "Devis").name();
+		if(res[8].equals("1")){
+			check.setSelected(true);
+		}
+		new TestContenu(this, jFournitures, 1, "Commandes");
+		new TestContenu(this, jCout, 1, "Commandes");
+		new TestContenu(this, jPrefabrication, 1, "Commandes");
+		new TestContenu(this, jHeureSite, 2, "Commandes");
+		new TestContenu(this, jHeureAtelier, 2, "Commandes");
+		new TestContenu(this, jPrevu, 3, "Commandes");
+		new TestContenu(this, jCommande, 3, "Commandes");
+		new FocusJText(this, "Commandes").name();
 	}
 
 	public ArrayList<Object[]> getListDevis() {
@@ -836,5 +838,21 @@ public class Commandes extends JFrame{
 		this.check = check;
 	}
 
+	public JButton getGauche() {
+		return gauche;
+	}
+
+	public void setGauche(JButton gauche) {
+		this.gauche = gauche;
+	}
+
+	public JButton getDroite() {
+		return droite;
+	}
+
+	public void setDroite(JButton droite) {
+		this.droite = droite;
+	}
+	
 
 }

@@ -32,7 +32,7 @@ public class SearchTermeList extends SearchList {
 		else if(fonction.equals("NewFacture") && numCom != null){
 			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom);
 		}
-		else if(!fonction.equals("NewFacture") && numCom != null){
+		else if(numCom != null && !fonction.equals("NewFacture")){
 			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom);
 		}
 		else{

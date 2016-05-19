@@ -54,13 +54,13 @@ public class SearchCommande extends JDialog{
 	   
 	    JButton bouton = new JButton("Valider");
 	    JButton list = new JButton("Liste");
-	    bouton.setMnemonic(KeyEvent.VK_ENTER);
-	    this.getRootPane().setDefaultButton(bouton); 
 	    pane.add(bouton);
 	    pane.add(list);
 	    bouton.addActionListener(new ActionValiderVerif(this, "Commandes"));
+	    bouton.setMnemonic(KeyEvent.VK_ENTER);
+	    this.getRootPane().setDefaultButton(bouton); 
 	    list.addActionListener(new ActionList(this, base, frame, fonction, "Commandes"));
-	    this.add(pane);
+	    this.add(pane); 
 	    this.pack();
 	    this.setResizable(false);
 	    this.setLocationRelativeTo(null);

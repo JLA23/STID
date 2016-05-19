@@ -1,6 +1,7 @@
 package View.Clients;
 
 import java.awt.Color;
+import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -14,7 +15,7 @@ public class SupprClient extends Client {
 
 	private static final long serialVersionUID = 1L;
 
-	public SupprClient(Base bdd, String numero) {
+	public SupprClient(Base bdd, String numero) throws ParseException {
 		super(bdd, null);
 		this.setTitle("STID Gestion 2.0 (Supprimer Client)");
 		nouveau.setText("Recherche");
@@ -55,6 +56,10 @@ public class SupprClient extends Client {
 		} else if (res[11] == "2") {
 			br2.setSelected(true);
 		}
+		if(res[16].equals("1")){
+			check.setSelected(true);
+		}
+		check.setEnabled(false);
 		br1.setEnabled(false);
 		br2.setEnabled(false);
 		jJourSuivant.setText(res[13]);
@@ -71,7 +76,7 @@ public class SupprClient extends Client {
 		fermer.setBounds(400, 325, 80, 25);
 		nouveau.setBounds(155, 325, 105, 25);
 		fermer.addActionListener(new ActionFermer(this));
-		nouveau.addActionListener(new ActionRechercher(this, null, "Suppr", "Client"));
+		nouveau.addActionListener(new ActionRechercher(this, "Client", "Suppr"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

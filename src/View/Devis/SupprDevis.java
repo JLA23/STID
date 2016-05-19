@@ -81,7 +81,7 @@ public class SupprDevis extends Devis{
 		jLibelle.setBackground(new Color(204, 204, 204));
 		valider.addActionListener(new ValiderSuppr(this, "Devis"));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Suppr", "Devis"));
+		nouveau.addActionListener(new ActionRechercher(this, "Devis", "Suppr"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

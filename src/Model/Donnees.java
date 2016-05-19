@@ -365,5 +365,44 @@ public class Donnees {
 		}
 		return i + "";
 	}
+	
+	public String min(String colonne, String table){
+		ResultSet rs = base.Select("MIN("+colonne+")", table, null);
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return i + "";
+	}
+	
+	public int max(String colonne, String table, String condition){
+		ResultSet rs = base.Select("MAX("+colonne+")", table, condition);
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return i ;
+	}
+	
+	public int min(String colonne, String table, String condition){
+		ResultSet rs = base.Select("MIN("+colonne+")", table, condition);
+		int i = 0;
+		try {
+			while (rs.next()) {
+				i = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return i ;
+	}
 
 }

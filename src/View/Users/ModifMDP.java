@@ -38,7 +38,7 @@ public class ModifMDP extends JDialog{
 	    
 	    JPanel pane2 = new JPanel();
 	    pane2.setPreferredSize(new Dimension(100, 300));;
-	    JLabel label2 = new JLabel("Nouveau Pseudo");
+	    JLabel label2 = new JLabel("Nouveau Mot de Passe :");
 	    pane2.add(label2);
 	    JPasswordField newPassword = new JPasswordField();
 	    newPassword.setPreferredSize(new Dimension(100, 25));
@@ -46,13 +46,11 @@ public class ModifMDP extends JDialog{
 	    
 	    JPanel pane3 = new JPanel();
 	    pane3.setPreferredSize(new Dimension(100, 300));
-	    //this.setLocationRelativeTo(null);
 	    JButton bouton = new JButton("Valider");
 	    bouton.setMnemonic(KeyEvent.VK_ENTER);
 	    pane3.add(bouton);
 	    
 	    bouton.addActionListener(new ActionValider(base, oldPassword, newPassword, frame, this));
-	    
 	    
 	    this.add(pane);
 	    this.add(pane2);

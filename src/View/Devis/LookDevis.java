@@ -13,9 +13,9 @@ import BDD.Base;
 import Controller.ActionDroite;
 import Controller.ActionFermer;
 import Controller.ActionGauche;
+import Controller.ActionRechercher;
 import Controller.FocusJText;
 import Controller.TestContenu;
-import Controller.ActionRechercher;
 import Model.Donnees;
 
 public class LookDevis extends Devis {
@@ -82,28 +82,27 @@ public class LookDevis extends Devis {
 		calcul6.setVisible(false);
 		calcul7.setVisible(false);
 		fermer.addActionListener(new ActionFermer(this, frame));
-		//nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche", "Devis"));
 		fermer.setBounds(670, 510, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		gauche = new JButton(icon);
 		gauche.setBounds(20, 510, 25, 25);
-		gauche.addActionListener(new ActionGauche(this, "Devis"));
+		gauche.addActionListener(new ActionGauche(this, "Devis", "Recherche"));
 		this.add(gauche);
 		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		droite = new JButton(icon2);
 		droite.setBounds(80, 510, 25, 25);
-		droite.addActionListener(new ActionDroite(this, "Devis"));
+		droite.addActionListener(new ActionDroite(this, "Devis", "Recherche"));
 		this.add(droite);
 		if(res[0].equals("1")){
 			gauche.setVisible(false);
 		}
-		if(res[0].equals(donnees.max("NumDevis", "Devis"))){
+		if(res[0].equals(donnees.max("NumDevis", "devis"))){
 			droite.setVisible(false);
 		}
 		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
 		feuille = new JButton(icon3);	
 		feuille.setBounds(50, 510, 25, 25);
-		feuille.addActionListener(new ActionRechercher(this, frame, "Recherche", "Devis"));
+		feuille.addActionListener(new ActionRechercher(this, "Devis", "Recherche"));
 		this.add(feuille);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);

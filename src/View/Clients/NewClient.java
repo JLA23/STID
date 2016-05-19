@@ -15,6 +15,8 @@ public class NewClient extends Client{
 		valider.addActionListener(new ActionValiderClient(this));
 		fermer.addActionListener(new ActionFermer(this));
 		nouveau.addActionListener(new ActionNouveau(this, "Client"));
+		actif.setVisible(false);
+		check.setVisible(false);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -25,6 +27,8 @@ public class NewClient extends Client{
 		valider.addActionListener(new ActionValiderClient(this, devis));
 		fermer.addActionListener(new ActionFermer(this));
 		nouveau.setVisible(false);
+		actif.setVisible(false);
+		check.setVisible(false);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

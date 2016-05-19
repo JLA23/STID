@@ -70,12 +70,12 @@ public class Salarie extends JFrame {
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		gauche = new JButton(icon);
 		gauche.setBounds(20, 150, 25, 25);
-		gauche.addActionListener(new ActionGauche(this, "Salarie"));
+		gauche.addActionListener(new ActionGauche(this, "Salarie", null));
 		this.add(gauche);
 		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		droite = new JButton(icon2);
 		droite.setBounds(80, 150, 25, 25);
-		droite.addActionListener(new ActionDroite(this, "Salarie"));
+		droite.addActionListener(new ActionDroite(this, "Salarie", null));
 		this.add(droite);
 		if(fiche[0].equals("1")){
 			gauche.setVisible(false);

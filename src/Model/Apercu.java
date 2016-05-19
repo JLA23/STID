@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
@@ -12,13 +13,14 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 import BDD.Base;
+import Thread.ThreadImpression;
 
 public class Apercu {
 	
 	protected Base bdd;
 		
     @SuppressWarnings("unchecked")
-	public Apercu(String numFacture, Base base) {
+	public Apercu(String numFacture, Base base, String valeurtext, ThreadImpression thread) {
     	this.bdd = base;
         org.apache.log4j.BasicConfigurator.configure();
         try {
@@ -30,10 +32,14 @@ public class Apercu {
             @SuppressWarnings("rawtypes")
 			Map parameters = new HashMap();
             parameters.put("NumFacture", Integer.parseInt(numFacture));
+            parameters.put("ValeurText", valeurtext);
+            String path = new File("lib/images/STID.png").getAbsolutePath();
+            parameters.put("Logo", path);
 
             // - Execution du rapport
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, bdd.getCon());
             JasperViewer jReportsViewer = new JasperViewer(jasperPrint, "Eric", 3);
+            thread.getFrame().setVisible(false);
             jReportsViewer.setVisible(true);
         } catch (JRException e) {
 

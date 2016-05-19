@@ -1,10 +1,16 @@
 package View.Commandes;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.text.ParseException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import BDD.Base;
+import Controller.ActionDroite;
 import Controller.ActionFermer;
+import Controller.ActionGauche;
 import Controller.FocusJText;
 import Controller.TestContenu;
 import Controller.ActionRechercher;
@@ -26,8 +32,8 @@ public class LookCommande extends Commandes {
 			numClient.getZoneTexte().setText(res[1]);
 			jNumCommandeClient.setText(res[2]);
 			jLibelle.setText(res[3]);
-			jFournitures.setText(res[4].replaceAll("\\.", ","));
-			jCout.setText(res[5].replaceAll("\\.", ","));
+			jFournitures.setText(res[5].replaceAll("\\.", ","));
+			jCout.setText(res[4].replaceAll("\\.", ","));
 			jPrefabrication.setText(res[9].replaceAll("\\.", ","));
 			jHeureSite.setText(res[6].replaceAll("\\.", ","));
 			jHeureAtelier.setText(res[7].replaceAll("\\.", ","));;
@@ -85,7 +91,30 @@ public class LookCommande extends Commandes {
 			calcul7.setVisible(false);
 			valider.setVisible(false);
 			fermer.addActionListener(new ActionFermer(this, frame));
-			nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche", "Commandes"));
+			
+			nouveau.setVisible(false);
+			ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+			gauche = new JButton(icon);
+			gauche.setBounds(20, 510, 25, 25);
+			gauche.addActionListener(new ActionGauche(this, "Commandes", "Recherche"));
+			this.add(gauche);
+			ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+			droite = new JButton(icon2);
+			droite.setBounds(80, 510, 25, 25);
+			droite.addActionListener(new ActionDroite(this, "Commandes", "Recherche"));
+			this.add(droite);
+			if(res[0].equals(donnees.min("NumCommande", "commandes"))){
+				gauche.setVisible(false);
+			}
+			if(res[0].equals(donnees.max("NumCommande", "commandes"))){
+				droite.setVisible(false);
+			}
+			ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
+			feuille = new JButton(icon3);	
+			feuille.setBounds(50, 510, 25, 25);
+			this.add(feuille);
+			 
+			feuille.addActionListener(new ActionRechercher(this, "Commandes", "Recherche"));
 			this.setResizable(false);
 			this.setLocationRelativeTo(null);
 			this.setVisible(true);

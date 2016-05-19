@@ -13,11 +13,20 @@ public class TestContenu {
 	public TestContenu(Object d, JFormattedTextField jtext, int methode, String typeClasse) {
 		if (jtext.getText().toString().isEmpty() || jtext.getText().toString().equals("")) {
 			jtext.setText("0,00");
-		} else if (!jtext.getText().contains(",")) {
+		} else if(jtext.getText().matches(".*[a-zA-Z].*")){
+			jtext.setText("0,00");
+		}
+		else if(!jtext.getText().matches(".*[a-zA-Z].*") && jtext.getText().contains(".")){
+			jtext.setText(jtext.getText().replaceAll("\\.", ","));
+		}
+		else if (!jtext.getText().contains(",") && !jtext.getText().contains(".")) {
 			jtext.setText(jtext.getText() + ",00");
-		} else {
+		} else if (jtext.getText().contains(",") && jtext.getText().split(",")[1].length() == 1){
+			jtext.setText(jtext.getText() + "0");
+		}
+		else {
 			jtext.setText((Math
-					.round(((Double.parseDouble(jtext.getText().replaceAll(",", "\\."))) + 0.004) * Math.pow(10, 2))
+					.round(((Double.parseDouble(jtext.getText().replaceAll(",", "\\.")))) * Math.pow(10, 2))
 					/ Math.pow(10, 2) + "").replaceAll("\\.", ","));
 		}
 		if (typeClasse != null && typeClasse.equals("Devis")) {

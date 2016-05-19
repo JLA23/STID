@@ -1,9 +1,20 @@
 package View.Termes;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.text.ParseException;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import BDD.Base;
+import Controller.ActionDroite;
 import Controller.ActionFermer;
+import Controller.ActionGauche;
 import Controller.ActionRechercher;
 import Model.Calcul;
 import Model.Donnees;
@@ -12,13 +23,12 @@ public class LookTerme extends Termes {
 
 	private static final long serialVersionUID = 1L;
 
-	public LookTerme(Base bdd, JFrame frame, String num, String indice) {
+	public LookTerme(Base bdd, JFrame frame, String num, String indice) throws ParseException {
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Supprimer Terme)");
 		this.base = bdd;
 		valider.setVisible(false);
-		nouveau.setText("Recherche");
-		nouveau.setBounds(20, 410, 100, 25);
+		nouveau.setVisible(false);
 		fermer.setBounds(470, 410, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
 		donnees = new Donnees(base);
 		numero.setText(numero.getText() + num);
@@ -26,7 +36,7 @@ public class LookTerme extends Termes {
 		String nbindice = indice;
 		numeroIndice = indice;
 		String[] res = donnees.fiche(
-				"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient",
+				"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient, t.numfacture",
 				"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
 						+ nbindice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		jNumIndice.setText(nbindice);
@@ -59,7 +69,46 @@ public class LookTerme extends Termes {
 		jLibelle.setBackground(new Color(204, 204, 204));
 		jNumIndice.setBackground(new Color(204, 204, 204));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Recherche", "Termes"));
+		if(res[7] != null){
+			jPanel6.setBounds(10, 65, jPanel6.getPreferredSize().width, jPanel6.getPreferredSize().height);
+			jPanel7 = new JPanel();
+			jPanel7.setLayout(null);
+			jPanel7.setBorder(BorderFactory.createTitledBorder("Facture"));
+	        jPanel7.setPreferredSize(new Dimension(190, 230));
+	        jPanel7.setBounds(12 + jPanel6.getPreferredSize().width , 65, jPanel7.getPreferredSize().width, jPanel7.getPreferredSize().height);
+	        facture = new JLabel("N° Facture : " + res[7]);
+	        String [] date = donnees.fiche("DATE_FORMAT(DateEmission, '%d/%m/%Y')", "factures", "numfacture = " + res[7]);
+	        dateEmission = new JLabel("Emise le : " + date[0]);
+	        facture.setBounds(30, 80, facture.getPreferredSize().width, facture.getPreferredSize().height);
+	        dateEmission.setBounds(30, 110, dateEmission.getPreferredSize().width, dateEmission.getPreferredSize().height);
+	        jfacture = new JButton("Voir facture");
+	        jfacture.setBounds(50, 150, jfacture.getPreferredSize().width, jfacture.getPreferredSize().height);
+	        jPanel7.add(facture);
+	        jPanel7.add(dateEmission);
+	        jPanel7.add(jfacture);
+	        jPanel2.add(jPanel7);
+		}
+		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		gauche = new JButton(icon);
+		gauche.setBounds(20, 410, 25, 25);
+		gauche.addActionListener(new ActionGauche(this, "Termes", "Recherche"));
+		this.add(gauche);
+		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		droite = new JButton(icon2);
+		droite.setBounds(80, 410, 25, 25);
+		droite.addActionListener(new ActionDroite(this, "Termes", "Recherche"));
+		this.add(droite);
+		if(numeroCommande.equals(donnees.min("NumCommande", "termes"))){
+			gauche.setVisible(false);
+		}
+		if(numeroCommande.equals(donnees.max("NumCommande", "termes"))){
+			droite.setVisible(false);
+		}
+		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
+		feuille = new JButton(icon3);	
+		feuille.setBounds(50, 410, 25, 25);
+		feuille.addActionListener(new ActionRechercher(this, "Termes", "Recherche"));
+		this.add(feuille);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

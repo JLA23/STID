@@ -65,6 +65,7 @@ public class ValiderSuppr implements ActionListener {
 		Client client = (Client) classe;
 		if (client.getDonnees().exist("clients", "NumClient", "NumClient = " + client.getjNumClient().getText())) {
 			if (!client.getDonnees().lier("numClient", "devis", "numClient = " + client.getjNumClient().getText())) {
+				client.getBase().delete("paiementclient", "NumClient = " + client.getjNumClient().getText());
 				client.getBase().delete("clients", "numclient = " + client.getjNumClient().getText());
 				JOptionPane.showMessageDialog(null, "Client supprimé !");
 				client.dispose();

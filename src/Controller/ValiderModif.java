@@ -126,7 +126,13 @@ public class ValiderModif implements ActionListener {
 									}
 									query += "NbEx = " + client.getjNbExemplaire().getText() + ", JourDansMois = "
 											+ client.getjJourSuivant().getText() + ", TypeTVA = " + re[0]
-											+ ", NumTVA = '" + client.getJnumTVA().getText() + "'";
+											+ ", NumTVA = '" + client.getJnumTVA().getText() + "', Actif = ";
+									if(client.getCheck().isSelected()){
+										query += 1;
+									}
+									else {
+										query += 0;
+									}
 									client.getBase().update("clients", query,
 											"numClient = " + client.getjNumClient().getText());
 									for (Entry<String, Object[]> entry : client.getVal().entrySet()) {
@@ -212,6 +218,8 @@ public class ValiderModif implements ActionListener {
 				+ ", CoutMO = " + termes.getjCout().getText().replaceAll(",", "\\.")
 				+ ", Prefabrication = " + termes.getjPrefabrication().getText().replaceAll(",", "\\.")
 				, "numCommande = " + termes.getNumeroCommande() + " AND numIndice = " + termes.getNumeroIndice());
+				String[] re = termes.getValeurDevises().get(termes.getDevises().getSelectedItem());
+				termes.getBase().update("commandes", "CodeDevise = " + re[0], "numcommande = " + termes.getNumeroCommande());
 				JOptionPane.showMessageDialog(null, "Terme modifié !");
 				termes.dispose();
 				termes.getFenetre().setEnabled(true);

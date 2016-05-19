@@ -1,10 +1,16 @@
 package View.Commandes;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.text.ParseException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import BDD.Base;
+import Controller.ActionDroite;
 import Controller.ActionFermer;
+import Controller.ActionGauche;
 import Controller.FocusJText;
 import Controller.TestContenu;
 import Controller.ActionRechercher;
@@ -18,8 +24,8 @@ public class ModifCommande extends Commandes{
 	public ModifCommande(Base bdd, String numd, JFrame frame) throws ParseException{
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Modifier Commande)");
-		nouveau.setText("Recherche");
-		nouveau.setBounds(20, 510, 100, 25);
+		//nouveau.setText("Recherche");
+		//nouveau.setBounds(20, 510, 100, 25);
 		DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);
 		String [] res = donnees.fiche("*", "commandes", "numCommande = " + numd);
 		jNumCommande.setText(res[0]);
@@ -55,7 +61,30 @@ public class ModifCommande extends Commandes{
 		new FocusJText(this, "Commandes").name();
 		valider.addActionListener(new ValiderModif(this, "Commandes"));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif", "Commandes"));
+		//nouveau.addActionListener(new ActionRechercher(this, frame, "Modif", "Commandes"));
+		nouveau.setVisible(false);
+		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		gauche = new JButton(icon);
+		gauche.setBounds(20, 510, 25, 25);
+		gauche.addActionListener(new ActionGauche(this, "Commandes", "Recherche"));
+		this.add(gauche);
+		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		droite = new JButton(icon2);
+		droite.setBounds(80, 510, 25, 25);
+		droite.addActionListener(new ActionDroite(this, "Commandes", "Recherche"));
+		this.add(droite);
+		if(res[0].equals(donnees.min("NumCommande", "commandes"))){
+			gauche.setVisible(false);
+		}
+		if(res[0].equals(donnees.max("NumCommande", "commandes"))){
+			droite.setVisible(false);
+		}
+		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
+		feuille = new JButton(icon3);	
+		feuille.setBounds(50, 510, 25, 25);
+		this.add(feuille);
+		 
+		feuille.addActionListener(new ActionRechercher(this, "Commandes", "Modif"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

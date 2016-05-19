@@ -86,7 +86,7 @@ private static final long serialVersionUID = 1L;
 		calcul7.setVisible(false);
 		valider.addActionListener(new ValiderSuppr(this, "Commandes"));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Suppr", "Commandes"));
+		nouveau.addActionListener(new ActionRechercher(this, "Commandes", "Suppr"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

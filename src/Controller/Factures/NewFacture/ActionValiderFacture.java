@@ -7,7 +7,7 @@ import java.util.Locale;
 import javax.swing.JOptionPane;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RuleBasedNumberFormat;
-import Model.GeneratePDF;
+import View.Impression;
 import View.Factures.Factures;
 
 public class ActionValiderFacture implements ActionListener {
@@ -41,24 +41,25 @@ public class ActionValiderFacture implements ActionListener {
 					else {
 						facture.getBase().update("termes", "NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
 					}
-
-
-					double num = Double.parseDouble(facture.getjTotalTTC().getText().replaceAll(",", "\\."));
-					int i = new Double(num).intValue(); //recuperer la partie entiere
-					double decimale = num-(new Double(i).doubleValue());
-					decimale = decimale * 100;
-					int d = new Double(decimale).intValue();
-					
-					NumberFormat formatter = new RuleBasedNumberFormat(Locale.FRANCE, RuleBasedNumberFormat.SPELLOUT);
-					String result = formatter.format(new Double(i).doubleValue());
-					result += " euros " + formatter.format(new Double(d).doubleValue()) + " cts";
-					
-					new GeneratePDF(facture.getjNumFacture().getText(), facture.getBase(), result.toUpperCase());
-					
 					JOptionPane.showMessageDialog(null, "Facture enregistré !");
 					facture.dispose();
 					facture.getFenetre().setEnabled(true);
 					facture.getFenetre().setVisible(true);
+					int option = JOptionPane.showConfirmDialog(null, "Voulez-vous imprimer la facture ?", "Impression",
+							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if (option == JOptionPane.YES_OPTION) {
+						double num = Double.parseDouble(facture.getjTotalTTC().getText().replaceAll(",", "\\."));
+						int i = new Double(num).intValue(); //recuperer la partie entiere
+						double decimale = num-(new Double(i).doubleValue());
+						decimale = decimale * 100;
+						int d = new Double(decimale).intValue();
+					
+						NumberFormat formatter = new RuleBasedNumberFormat(Locale.FRANCE, RuleBasedNumberFormat.SPELLOUT);
+						String result = formatter.format(new Double(i).doubleValue());
+						result += " euros " + formatter.format(new Double(d).doubleValue()) + " cts";
+					
+						new Impression(facture.getjNumFacture().getText(), facture.getBase(), result.toUpperCase(), facture.getFenetre());
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Erreur : Les montants sont à zéro", "ATTENTION",
 							JOptionPane.WARNING_MESSAGE);

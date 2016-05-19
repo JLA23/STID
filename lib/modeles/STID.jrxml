@@ -26,7 +26,8 @@
 	<parameter name="NumClient" isForPrompting="false" class="java.lang.Integer"/>
 	<parameter name="NumFacture" isForPrompting="false" class="java.lang.Integer"/>
 	<parameter name="ValeurText" isForPrompting="false" class="java.lang.String"/>
-	<queryString><![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, t.numcommande, t.coutmo, t.mntfour, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, Round(Sum(t.prefabrication + t.coutMo + t.prefabrication + f.montanttaxe), 3) as ttc, f.tva,  DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from Clients as c, Factures as f, Termes as t, Commandes as co where f.NumFacture = $P{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient;]]></queryString>
+	<parameter name="Logo" isForPrompting="false" class="java.lang.String"/>
+	<queryString><![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, t.numcommande, t.coutmo, t.mntfour, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, Round(Sum(t.prefabrication + t.coutMo + t.mntfour + f.montanttaxe), 3) as ttc, f.tva,  DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from clients as c, factures as f, termes as t, commandes as co where f.NumFacture = $P{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient;]]></queryString>
 
 	<field name="NumClient" class="java.lang.Integer"/>
 	<field name="Adresse1" class="java.lang.String"/>
@@ -72,7 +73,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
 </box>
 					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA["D:\\Workspace\\STID\\STID\\lib\\images\\STID.png"]]></imageExpression>
+					<imageExpression class="java.lang.String"><![CDATA[$P{Logo}]]></imageExpression>
 				</image>
 				<staticText>
 					<reportElement
@@ -267,7 +268,7 @@
 						key="textField-5"/>
 					<box></box>
 					<textElement textAlignment="Justified" verticalAlignment="Middle">
-						<font pdfFontName="Times-Roman" size="12"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{preclettre}]]></textFieldExpression>
 				</textField>
@@ -280,7 +281,7 @@
 						key="textField-6"/>
 					<box></box>
 					<textElement>
-						<font pdfFontName="Times-Roman" size="12"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{lblecheance}]]></textFieldExpression>
 				</textField>

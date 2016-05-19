@@ -1,11 +1,18 @@
 package View.Clients;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
 import BDD.Base;
+import Controller.ActionDroite;
 import Controller.ActionFermer;
+import Controller.ActionGauche;
 import Controller.ActionRechercher;
 import Controller.ValiderModif;
 import Model.Donnees;
@@ -14,7 +21,7 @@ public class ModifClient extends Client{
 
 	private static final long serialVersionUID = 1L;
 
-	public ModifClient(Base bdd, String numero) {
+	public ModifClient(Base bdd, String numero) throws ParseException {
 		super(bdd, null);
 		this.setTitle("STID Gestion 2.0 (Modifier Client)");
 		nouveau.setText("Recherche");
@@ -37,11 +44,14 @@ public class ModifClient extends Client{
 		jNbExemplaire.setText(res[12]);
 		jMail.setText(res[9]);
 		jnumTVA.setText(res[15]);
-		if(res[11] == "1"){
+		if(res[11].equals("1")){
 			br1.setSelected(true);
 		}
-		else if(res[11] == "2"){
+		else if(res[11].equals("2")){
 			br2.setSelected(true);
+		}
+		if(res[16].equals("1")){
+			check.setSelected(true);
 		}
 		jJourSuivant.setText(res[13]);
 		LinkedHashMap<String, Object[]> val = donnees.modesPaiements();
@@ -51,7 +61,28 @@ public class ModifClient extends Client{
 		vals = verifPaiement(vals, numero);
 		valider.addActionListener(new ValiderModif(this, "Client"));
 		fermer.addActionListener(new ActionFermer(this));
-		nouveau.addActionListener(new ActionRechercher(this, null, "Modif", "Client"));
+		nouveau.setVisible(false);
+		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		gauche = new JButton(icon);
+		gauche.setBounds(20, 325, 25, 25);
+		gauche.addActionListener(new ActionGauche(this, "Client", "Modif"));
+		this.add(gauche);
+		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		droite = new JButton(icon2);
+		droite.setBounds(80, 325, 25, 25);
+		droite.addActionListener(new ActionDroite(this, "Client", "Modif"));
+		this.add(droite);
+		if(res[0].equals(donnees.min("NumClient", "clients"))){
+			gauche.setVisible(false);
+		}
+		if(res[0].equals(donnees.max("NumClient", "clients"))){
+			droite.setVisible(false);
+		}
+		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
+		feuille = new JButton(icon3);	
+		feuille.setBounds(50, 325, 25, 25);
+		this.add(feuille);		
+		feuille.addActionListener(new ActionRechercher(this, "Client", "Modif"));
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

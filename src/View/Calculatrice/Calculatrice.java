@@ -42,7 +42,7 @@ public class Calculatrice extends JDialog {
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				valeur = ecran.getText();
-				valeur = ((double) Math.round((Double.parseDouble(valeur) + 0.004) * 100) / 100) + "";
+				valeur = ((double) Math.round((Double.parseDouble(valeur)) * 100) / 100) + "";
 				valeur = valeur.replaceAll("\\.", ",");
 			}
 		});

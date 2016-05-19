@@ -1,16 +1,24 @@
 package View.Factures;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.RuleBasedNumberFormat;
+
 import BDD.Base;
 import Controller.ActionFermer;
-import Controller.ActionRechercher;
 import Controller.ValiderModif;
 import Model.Calcul;
+import View.Impression;
 import View.Options.ClickDroit;
 
 public class ModifFacture extends Factures {
@@ -44,7 +52,6 @@ public class ModifFacture extends Factures {
 				valeurDevise, valeurTVA, this);
 		InsertModesPaiements(res[8]);
 		SelectModePaiement(res[9]);
-		//boxModePaiement.setSelectedIndex(Integer.parseInt(res[9]) - 1);
 		jPrecision.setText(res[10]);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		jDateEmission.setDate(simpleDateFormat.parse(res[11]));
@@ -53,7 +60,7 @@ public class ModifFacture extends Factures {
 		jValeur.setText(res[14]);
 		valider.addActionListener(new ValiderModif(this, "Factures"));
 		fermer.addActionListener(new ActionFermer(this, frame));
-		nouveau.addActionListener(new ActionRechercher(this, frame, "Modif", "Factures"));
+
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 440, 100, 25);
 		jNumFacture.setEditable(false);
@@ -81,9 +88,11 @@ public class ModifFacture extends Factures {
         new ClickDroit(jTVA, true, false);
 		JButton facture = new JButton("Factures");
 		facture.setBounds(280, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+		facture.addActionListener(new ActionFacture(this));
 		this.getContentPane().add(facture);
 		JButton avoir = new JButton("Avoir");
 		avoir.setBounds(380, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+		avoir.addActionListener(new ActionAvoir(this));
 		this.getContentPane().add(avoir);
 		this.setVisible(true);
 	}
@@ -106,5 +115,48 @@ public class ModifFacture extends Factures {
 				}
 			}
 		}
+	}
+	
+	public class ActionFacture implements ActionListener {
+		
+		protected ModifFacture modif;
+		
+		public ActionFacture(ModifFacture modif){
+			this.modif = modif;
+		}
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				double num = Double.parseDouble(jTotalTTC.getText().replaceAll(",", "\\."));
+				int i = new Double(num).intValue();
+				double decimale = num-(new Double(i).doubleValue());
+				decimale = decimale * 100;
+				int d = new Double(decimale).intValue();
+			
+				NumberFormat formatter = new RuleBasedNumberFormat(Locale.FRANCE, RuleBasedNumberFormat.SPELLOUT);
+				String result = formatter.format(new Double(i).doubleValue());
+				result += " euros " + formatter.format(new Double(d).doubleValue()) + " cts";
+				new Impression(jNumFacture.getText(), base, result.toUpperCase(), modif);
+			}
+	}
+	
+	public class ActionAvoir implements ActionListener {
+		
+		protected ModifFacture modif;
+		
+		public ActionAvoir(ModifFacture modif){
+			this.modif = modif;
+		}
+		
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int option = JOptionPane.showConfirmDialog(null, "Voulez-vous créer un avoir ?", "Avoir",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if(option == JOptionPane.YES_OPTION){
+				new NewAvoir(modif);
+			}
+		}
+		
 	}
 }
