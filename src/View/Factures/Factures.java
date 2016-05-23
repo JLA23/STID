@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,10 +37,11 @@ import Controller.EcouteAction;
 import Controller.ExecuteClick;
 import Controller.FocusPosition;
 import Controller.ItemChange;
+import Model.Calcul;
 import Model.Donnees;
 
 public class Factures extends JFrame{
-    protected JButton calcul1, valider, fermer, calcul2, calcul3, nouveau;
+    protected JButton calcul1, valider, fermer, calcul2, calcul3, nouveau,jbfacture, javoir, gauche, droite, feuille;
     protected JComboBox<String> devises, boxModePaiement;
     protected JTextArea jPrecision;
     protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalHT, euro5, tva;
@@ -453,7 +456,6 @@ public class Factures extends JFrame{
 		jDateEcheance.setBounds(l, 171, jDateEcheance.getPreferredSize().width, jDateEcheance.getPreferredSize().height);
 		jPanel3.add(jDateEcheance);
 
-		
 	}
 	
 	protected void InsertDevises() {
@@ -470,6 +472,70 @@ public class Factures extends JFrame{
 			boxModePaiement.addItem(entry.getKey());
 		}
 	}
+	
+	public void initModif(String[] res){
+		jNumFacture.setText(res[0]);
+		numero.setText("N° Commande / Indice : " + res[1] + " / " + res[2]);
+		libelle2.setText(res[3]);
+		client.setText(res[4]);
+		numCommandeClient.setText(res[9]);
+		jFournitures.setText(res[5].replaceAll("\\.", ","));
+		jCout.setText(res[6].replaceAll("\\.", ","));
+		jPrefabrication.setText(res[7].replaceAll("\\.", ","));
+		devises.setSelectedIndex(Integer.parseInt(res[8]) - 1);
+		devise.setText(devises.getSelectedItem().toString());
+		valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
+		double valeurTVA = Double.parseDouble(res[10].replaceAll(",", "\\."));
+		valeursTerme = res;
+		jTVA.setText((valeurTVA + "").replaceAll("\\.", ","));
+		new Calcul().calculerMontantTTC(jFournitures, jCout, jPrefabrication, jTotalHT, jTotalTTC, jTotalDevise,
+				valeurDevise, valeurTVA, this);
+		InsertModesPaiements(res[11]);
+		SelectModePaiement(res[12]);
+		jPrecision.setText(res[13]);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			jDateEmission.setDate(simpleDateFormat.parse(res[14]));
+			jDateEcheance.setDate(simpleDateFormat.parse(res[15]));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		jAnneeValeur.setText(res[16]);
+		jValeur.setText(res[17]);
+		double montant = Double.parseDouble(jTotalTTC.getText().replaceAll(",", "\\."));
+        if(montant < 0){
+        	jbfacture.setBounds(340, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+        	javoir.setVisible(false);
+        }
+        else{
+        	jbfacture.setBounds(280, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+        	javoir.setBounds(380, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+        	this.getContentPane().add(javoir);
+        	javoir.setVisible(true);
+        }
+	}
+	
+	private void SelectModePaiement(String modes) {
+		String cle = null;
+		String[] valeurs = null;
+		for (Entry<String, String[]> entry : modespaiements.entrySet()) {
+			if (entry.getValue()[0].equals(modes)) {
+				valeurs = entry.getValue();
+				cle = entry.getKey();
+				break;
+			}
+		}
+		if (cle != null && valeurs != null) {
+			for (int i = 0; i < boxModePaiement.getItemCount(); i++) {
+				if (boxModePaiement.getItemAt(i).equals(cle)) {
+					boxModePaiement.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
+	}
+	
 	public JComboBox<String> getDevises() {
 		return devises;
 	}
@@ -725,9 +791,142 @@ public class Factures extends JFrame{
 	public void setCalcul3(JButton calcul3) {
 		this.calcul3 = calcul3;
 	}
-	
-	
-	
+
+	public JButton getValider() {
+		return valider;
+	}
+
+	public void setValider(JButton valider) {
+		this.valider = valider;
+	}
+
+	public JButton getNouveau() {
+		return nouveau;
+	}
+
+	public void setNouveau(JButton nouveau) {
+		this.nouveau = nouveau;
+	}
+
+	public JLabel getNumero() {
+		return numero;
+	}
+
+	public void setNumero(JLabel numero) {
+		this.numero = numero;
+	}
+
+	public JLabel getTotalHT() {
+		return totalHT;
+	}
+
+	public void setTotalHT(JLabel totalHT) {
+		this.totalHT = totalHT;
+	}
+
+	public JLabel getTva() {
+		return tva;
+	}
+
+	public void setTva(JLabel tva) {
+		this.tva = tva;
+	}
+
+	public JLabel getPrecision() {
+		return precision;
+	}
+
+	public void setPrecision(JLabel precision) {
+		this.precision = precision;
+	}
+
+	public JLabel getValeur() {
+		return valeur;
+	}
+
+	public void setValeur(JLabel valeur) {
+		this.valeur = valeur;
+	}
+
+	public JLabel getTotalDevise() {
+		return totalDevise;
+	}
+
+	public void setTotalDevise(JLabel totalDevise) {
+		this.totalDevise = totalDevise;
+	}
+
+	public JLabel getNameClient() {
+		return nameClient;
+	}
+
+	public void setNameClient(JLabel nameClient) {
+		this.nameClient = nameClient;
+	}
+
+	public JLabel getFacture() {
+		return facture;
+	}
+
+	public void setFacture(JLabel facture) {
+		this.facture = facture;
+	}
+
+	public JLabel getTotalTTC() {
+		return totalTTC;
+	}
+
+	public void setTotalTTC(JLabel totalTTC) {
+		this.totalTTC = totalTTC;
+	}
+
+	public JLabel getNumCommandeClient() {
+		return numCommandeClient;
+	}
+
+	public void setNumCommandeClient(JLabel numCommandeClient) {
+		this.numCommandeClient = numCommandeClient;
+	}
+
+	public JButton getJbfacture() {
+		return jbfacture;
+	}
+
+	public void setJbfacture(JButton jbfacture) {
+		this.jbfacture = jbfacture;
+	}
+
+	public JButton getJavoir() {
+		return javoir;
+	}
+
+	public void setJavoir(JButton javoir) {
+		this.javoir = javoir;
+	}
+
+	public JButton getGauche() {
+		return gauche;
+	}
+
+	public void setGauche(JButton gauche) {
+		this.gauche = gauche;
+	}
+
+	public JButton getDroite() {
+		return droite;
+	}
+
+	public void setDroite(JButton droite) {
+		this.droite = droite;
+	}
+
+	public JButton getFeuille() {
+		return feuille;
+	}
+
+	public void setFeuille(JButton feuille) {
+		this.feuille = feuille;
+	}
 	
 	
 }

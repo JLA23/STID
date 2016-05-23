@@ -24,7 +24,7 @@ public class ModifTerme extends Termes {
 
 	private static final long serialVersionUID = 1L;
 
-	public ModifTerme(Base bdd, JFrame frame, String num, String indice) throws ParseException {
+	public ModifTerme(Base bdd, JFrame frame, String num, String indice, String fact) throws ParseException {
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Modifier Terme)");
 		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
@@ -33,10 +33,18 @@ public class ModifTerme extends Termes {
 		String nbindice = indice;
 		numeroIndice = indice;
 		String[] res = null;
+		if(fact == null){
 		res = donnees.fiche(
 				"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient, t.numfacture",
 				"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
 						+ nbindice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+		}
+		else{
+			res = donnees.fiche(
+					"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient, t.numfacture",
+					"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
+							+ nbindice + " and t.numfacture = " + fact + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+		}
 		jNumIndice.setText(nbindice);
 		jLibelle.setText(res[0]);
 		nameClient.setText(nameClient.getText() + res[1]);
@@ -55,6 +63,7 @@ public class ModifTerme extends Termes {
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.setVisible(false);
 		if(res[7] != null){
+			numFacture = res[7];
 			jPanel6.setBounds(10, 65, jPanel6.getPreferredSize().width, jPanel6.getPreferredSize().height);
 			jPanel7 = new JPanel();
 			jPanel7.setLayout(null);

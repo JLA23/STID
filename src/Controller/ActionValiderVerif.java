@@ -19,6 +19,7 @@ import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
 import View.Factures.ModifFacture;
 import View.Factures.NewFacture;
+import View.Factures.SupprFacture;
 import View.Parameters.Salarie;
 import View.SearchClients.SearchClient;
 import View.SearchParameters.SearchSalarie;
@@ -266,10 +267,10 @@ public class ActionValiderVerif implements ActionListener {
 				}
 				if (exist) {
 					new SearchTermeList(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getF(),
-							((SearchTerme) fr).getNumCom().getText());
+							((SearchTerme) fr).getNumCom().getText(), null);
 				} else {
 					if (((SearchTerme) fr).getF().equals("Modif")) {
-						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
+						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1", null);
 					} else if (((SearchTerme) fr).getF().equals("Suppr")) {
 						new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
 					} else if (((SearchTerme) fr).getF().equals("Recherche")) {
@@ -299,19 +300,26 @@ public class ActionValiderVerif implements ActionListener {
 					"NumCommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND numIndice = "
 							+ ((SearchTerme) fr).getNumIndice().getText())) {
 				((SearchTerme) fr).dispose();
-
-				if (((SearchTerme) fr).getF().equals("Modif")) {
-					new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
-							((SearchTerme) fr).getNumIndice().getText());
-				} else if (((SearchTerme) fr).getF().equals("Suppr")) {
-					new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
-							((SearchTerme) fr).getNumIndice().getText());
-				} else if (((SearchTerme) fr).getF().equals("Recherche")) {
-					new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
-							((SearchTerme) fr).getNumIndice().getText());
-				} else if (((SearchTerme) fr).getF().equals("NewFacture")) {
-					new NewFacture(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
-							((SearchTerme) fr).getNumIndice().getText());
+				boolean exist = donnees.existPlusieur("NumFacture", "termes",
+						"NumCommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND NumIndice = " + ((SearchTerme) fr).getNumIndice().getText());
+				if(!exist){
+					if (((SearchTerme) fr).getF().equals("Modif")) {
+						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
+								((SearchTerme) fr).getNumIndice().getText(), null);
+					} else if (((SearchTerme) fr).getF().equals("Suppr")) {
+						new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
+								((SearchTerme) fr).getNumIndice().getText());
+					} else if (((SearchTerme) fr).getF().equals("Recherche")) {
+						new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
+								((SearchTerme) fr).getNumIndice().getText());
+					} else if (((SearchTerme) fr).getF().equals("NewFacture")) {
+						new NewFacture(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
+								((SearchTerme) fr).getNumIndice().getText());
+					}
+				}
+				else {
+					new SearchTermeList(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getF(),
+							((SearchTerme) fr).getNumCom().getText(), ((SearchTerme) fr).getNumIndice().getText());
 				}
 
 			} else {
@@ -341,12 +349,15 @@ public class ActionValiderVerif implements ActionListener {
 							"Numfacture is not null and NumCommande = " + ((SearchFacture) fr).getNumCom().getText());
 					if (exist) {
 						new SearchFactureList(bdd, ((SearchFacture) fr).getFr(), ((SearchFacture) fr).getF(),
-								((SearchFacture) fr).getNumCom().getText(), null);
+								((SearchFacture) fr).getNumCom().getText(), null, null);
 					} else {
 						String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "termes",
 								"NumIndice = 1 AND NumCommande = " + ((SearchFacture) fr).getNumCom().getText());
 						if (((SearchFacture) fr).getF().equals("Modif")) {
 							new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+						}
+						else if (((SearchFacture) fr).getF().equals("Suppr")) {
+							new SupprFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
 						}
 					}
 				} else {
@@ -368,11 +379,23 @@ public class ActionValiderVerif implements ActionListener {
 						"NumCommande = " + ((SearchFacture) fr).getNumCom().getText() + " AND NumIndice = "
 								+ ((SearchFacture) fr).getNumIndice().getText())) {
 					((SearchFacture) fr).dispose();
+					boolean exist = false;
+					exist = donnees.existPlusieur("NumFacture", "termes",
+							"Numfacture is not null and NumCommande = " + ((SearchFacture) fr).getNumCom().getText() + " and NumIndice = " + ((SearchFacture) fr).getNumIndice().getText());
+					if (exist) {
+						new SearchFactureList(bdd, ((SearchFacture) fr).getFr(), ((SearchFacture) fr).getF(),
+								((SearchFacture) fr).getNumCom().getText(), ((SearchFacture) fr).getNumIndice().getText(), null);
+					}
+					else{
 					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "termes",
 							"NumIndice = " + ((SearchFacture) fr).getNumIndice().getText() + " AND NumCommande = "
 									+ ((SearchFacture) fr).getNumCom().getText());
 					if (((SearchFacture) fr).getF().equals("Modif")) {
 						new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+					}
+					else if (((SearchFacture) fr).getF().equals("Suppr")) {
+						new SupprFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+					}
 					}
 
 				} else {
@@ -391,9 +414,12 @@ public class ActionValiderVerif implements ActionListener {
 						"NumFacture = " + ((SearchFacture) fr).getNumFacture().getText())) {
 					((SearchFacture) fr).dispose();
 					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "termes",
-							"NumCommande = " + ((SearchFacture) fr).getNumFacture().getText());
+							"NumFacture = " + ((SearchFacture) fr).getNumFacture().getText());
 					if (((SearchFacture) fr).getF().equals("Modif")) {
 						new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+					}
+					else if (((SearchFacture) fr).getF().equals("Suppr")) {
+						new SupprFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
 					}
 
 				} else {

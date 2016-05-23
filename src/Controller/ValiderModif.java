@@ -213,11 +213,20 @@ public class ValiderModif implements ActionListener {
 		Termes termes = (Termes)classe;
 		if(termes.getDonnees().exist("termes", "NumCommande, NumIndice", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice())){
 			if(termes.getDonnees().exist("commandes", "NumCommande", "NumCommande = " + termes.getNumeroCommande())){
-				termes.getBase().update("termes", "Lblterme = '" + termes.getjLibelle().getText()
-				+  "', MntFour = " + termes.getjFournitures().getText().replaceAll(",", "\\.")
-				+ ", CoutMO = " + termes.getjCout().getText().replaceAll(",", "\\.")
-				+ ", Prefabrication = " + termes.getjPrefabrication().getText().replaceAll(",", "\\.")
-				, "numCommande = " + termes.getNumeroCommande() + " AND numIndice = " + termes.getNumeroIndice());
+				if(termes.getNumFacture().equals(null)){
+					termes.getBase().update("termes", "Lblterme = '" + termes.getjLibelle().getText()
+					+  "', MntFour = " + termes.getjFournitures().getText().replaceAll(",", "\\.")
+					+ ", CoutMO = " + termes.getjCout().getText().replaceAll(",", "\\.")
+					+ ", Prefabrication = " + termes.getjPrefabrication().getText().replaceAll(",", "\\.")
+					, "numCommande = " + termes.getNumeroCommande() + " AND numIndice = " + termes.getNumeroIndice());
+				}
+				else{
+					termes.getBase().update("termes", "Lblterme = '" + termes.getjLibelle().getText()
+					+  "', MntFour = " + termes.getjFournitures().getText().replaceAll(",", "\\.")
+					+ ", CoutMO = " + termes.getjCout().getText().replaceAll(",", "\\.")
+					+ ", Prefabrication = " + termes.getjPrefabrication().getText().replaceAll(",", "\\.")
+					, "numCommande = " + termes.getNumeroCommande() + " AND numIndice = " + termes.getNumeroIndice() + " AND numFacture = " + termes.getNumFacture());
+				}
 				String[] re = termes.getValeurDevises().get(termes.getDevises().getSelectedItem());
 				termes.getBase().update("commandes", "CodeDevise = " + re[0], "numcommande = " + termes.getNumeroCommande());
 				JOptionPane.showMessageDialog(null, "Terme modifié !");

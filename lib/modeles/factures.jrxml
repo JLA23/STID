@@ -24,7 +24,10 @@
 	<import value="net.sf.jasperreports.engine.data.*" />
 
 	<parameter name="NumClient" isForPrompting="false" class="java.lang.Integer"/>
-	<queryString><![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, t.numcommande, t.coutmo, t.mntfour, Round(Sum(t.prefabrication + t.coutMo + t.prefabrication), 2) as ht, f.numfacture, f.montanttaxe, Round(Sum(t.prefabrication + t.coutMo + t.prefabrication + f.montanttaxe), 2) as ttc, f.tva,  DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from Clients as c, Factures as f, Termes as t, Commandes as co where c.NumClient = $P{NumClient};]]></queryString>
+	<parameter name="NumFacture" isForPrompting="false" class="java.lang.Integer"/>
+	<parameter name="ValeurText" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="Logo" isForPrompting="false" class="java.lang.String"/>
+	<queryString><![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, t.numcommande, t.coutmo, t.mntfour, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, Round(Sum(t.prefabrication + t.coutMo + t.mntfour + f.montanttaxe), 3) as ttc, f.tva,  DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from clients as c, factures as f, termes as t, commandes as co where f.NumFacture = $P{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient;]]></queryString>
 
 	<field name="NumClient" class="java.lang.Integer"/>
 	<field name="Adresse1" class="java.lang.String"/>
@@ -35,6 +38,7 @@
 	<field name="Adresse6" class="java.lang.String"/>
 	<field name="Adresse7" class="java.lang.String"/>
 	<field name="prefabrication" class="java.lang.Float"/>
+	<field name="numtva" class="java.lang.String"/>
 	<field name="numcommande" class="java.lang.Integer"/>
 	<field name="coutmo" class="java.lang.Float"/>
 	<field name="mntfour" class="java.lang.Float"/>
@@ -54,7 +58,7 @@
 			</band>
 		</background>
 		<title>
-			<band height="259"  isSplitAllowed="true" >
+			<band height="571"  isSplitAllowed="true" >
 				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="256"
@@ -69,7 +73,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
 </box>
 					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA["D:\\Workspace\\STID\\STID\\lib\\images\\STID.png"]]></imageExpression>
+					<imageExpression class="java.lang.String"><![CDATA[$P{Logo}]]></imageExpression>
 				</image>
 				<staticText>
 					<reportElement
@@ -80,7 +84,7 @@
 						key="staticText-1"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Sté De Tuyauterie Industrielle Douaisienne]]></text>
 				</staticText>
@@ -93,7 +97,7 @@
 						key="staticText-2"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[80, rue des Colombes]]></text>
 				</staticText>
@@ -106,7 +110,7 @@
 						key="staticText-3"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Z.I D'EMPLOI - 62710 COURRIERES]]></text>
 				</staticText>
@@ -119,21 +123,21 @@
 						key="staticText-4"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[TEL. 03.21.49.44.66      FAX. 03.21.49.91.00]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="281"
-						y="95"
+						x="266"
+						y="108"
 						width="253"
 						height="19"
 						key="textField"
 						stretchType="RelativeToBandHeight"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" size="12"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Adresse2} != null ? (($F{Adresse3} != null) ? (($F{Adresse4} != null) ? (($F{Adresse5} != null) ? (($F{Adresse6} != null) ? (($F{Adresse7} != null) ? $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6} + '\n' + $F{Adresse7} : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3}) : $F{Adresse1} + '\n' + $F{Adresse2}) : $F{Adresse1} ;]]></textFieldExpression>
 				</textField>
@@ -146,7 +150,7 @@
 						key="staticText-6"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[S.A Capital de 150.000 €]]></text>
 				</staticText>
@@ -159,7 +163,7 @@
 						key="staticText-7"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[R.C.B BETHUNE 315 668 772]]></text>
 				</staticText>
@@ -172,7 +176,7 @@
 						key="staticText-8"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[TVA FR 81 315 668 772]]></text>
 				</staticText>
@@ -185,7 +189,7 @@
 						key="staticText-9"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Siret 315 668 772 00033 - APE 3320A]]></text>
 				</staticText>
@@ -198,7 +202,7 @@
 						key="staticText-10"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[RIV 30076 04209 00130700200 38]]></text>
 				</staticText>
@@ -211,9 +215,9 @@
 						key="textField-1"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" size="10"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[Objet : FACTURE N° $F{numfacture}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Objet : FACTURE N° " + $F{numfacture}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -224,9 +228,9 @@
 						key="textField-2"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" size="10"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[N/Ref : C $F{numcommande}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["N/Ref : C " + $F{numcommande}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -237,9 +241,9 @@
 						key="textField-3"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" size="10"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[V/Ref : Cde N° $F{cdeComClient}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["V/Ref : Cde N° " + $F{cdeComClient}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -250,35 +254,314 @@
 						key="textField-4"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" size="10"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[ECHEANCE : $F{dateechance}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["ECHEANCE : " + $F{dateechance}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="32"
+						y="264"
+						width="470"
+						height="79"
+						key="textField-5"/>
+					<box></box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{preclettre}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="32"
-						y="241"
+						y="237"
 						width="470"
-						height="15"
+						height="16"
 						key="textField-6"/>
 					<box></box>
 					<textElement>
-						<font/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{lblecheance}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="291"
-						y="214"
+						x="266"
+						y="199"
 						width="242"
 						height="17"
 						key="textField-7"/>
 					<box></box>
 					<textElement>
-						<font fontName="Times New Roman" size="12"/>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[COURRIERES, le : $F{dateemission}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["COURRIERES, le " + $F{dateemission}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="199"
+						width="242"
+						height="14"
+						key="textField-20"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["N° TVA : " + $F{numtva}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="318"
+						y="471"
+						width="144"
+						height="0"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="318"
+						y="422"
+						width="144"
+						height="0"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="430"
+						y="471"
+						width="32"
+						height="25"
+						key="staticText-11"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<text><![CDATA[Eur]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="471"
+						width="112"
+						height="25"
+						key="textField-21"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ttc}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="430"
+						y="446"
+						width="32"
+						height="25"
+						key="staticText-12"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<text><![CDATA[Eur]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="446"
+						width="112"
+						height="25"
+						key="textField-22"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{montanttaxe}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="430"
+						y="424"
+						width="32"
+						height="22"
+						key="staticText-13"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<text><![CDATA[Eur]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="424"
+						width="112"
+						height="22"
+						key="textField-23"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ht}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="430"
+						y="398"
+						width="32"
+						height="26"
+						key="staticText-14"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<text><![CDATA[Eur]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="398"
+						width="112"
+						height="26"
+						key="textField-24"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{coutmo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="430"
+						y="374"
+						width="32"
+						height="24"
+						key="staticText-15"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<text><![CDATA[Eur]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="###0.00;-###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="374"
+						width="112"
+						height="24"
+						key="textField-25"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mntfour}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="471"
+						width="248"
+						height="25"
+						key="textField-26"/>
+					<box></box>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["MONTANT T.T.C. .................."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="446"
+						width="53"
+						height="25"
+						key="textField-27"/>
+					<box></box>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["T.V.A. "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="422"
+						width="248"
+						height="25"
+						key="textField-28"/>
+					<box></box>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["MONTANT H.T. ...................."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="398"
+						width="248"
+						height="25"
+						key="textField-29"/>
+					<box></box>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["MAIN D'OEUVRE SUR SITE .........."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="374"
+						width="248"
+						height="25"
+						key="textField-30"/>
+					<box></box>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["FOURNITURE ......................"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="123"
+						y="446"
+						width="38"
+						height="25"
+						key="textField-31"/>
+					<box></box>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{tva}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="161"
+						y="446"
+						width="157"
+						height="25"
+						key="textField-32"/>
+					<box></box>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[" % .................."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="69"
+						y="509"
+						width="393"
+						height="23"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font fontName="Times New Roman" pdfFontName="Times-Italic" size="12" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{ValeurText}]]></textFieldExpression>
 				</textField>
 			</band>
 		</title>
@@ -287,238 +570,12 @@
 			</band>
 		</pageHeader>
 		<columnHeader>
-			<band height="48"  isSplitAllowed="false" >
-				<printWhenExpression><![CDATA[$F{preclettre} != null]]></printWhenExpression>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="32"
-						y="4"
-						width="470"
-						height="43"
-						key="textField-5"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{preclettre}]]></textFieldExpression>
-				</textField>
+			<band height="0"  isSplitAllowed="false" >
+				<printWhenExpression><![CDATA[$F{preclettre}!=null]]></printWhenExpression>
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="154"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="131"
-						y="11"
-						width="248"
-						height="25"
-						key="textField-8"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[FOURNITURE ......................]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="131"
-						y="35"
-						width="248"
-						height="25"
-						key="textField-9"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[MAIN D'OEUVRE SUR SITE ..........]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="131"
-						y="59"
-						width="248"
-						height="25"
-						key="textField-10"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[MONTANT H.T. ....................]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="131"
-						y="83"
-						width="248"
-						height="25"
-						key="textField-11"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[T.V.A. $F{TVA} % ..................]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="131"
-						y="108"
-						width="248"
-						height="25"
-						key="textField-12"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[MONTANT T.T.C. ..................]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="379"
-						y="11"
-						width="112"
-						height="25"
-						key="textField-13"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mntfour}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="491"
-						y="11"
-						width="32"
-						height="25"
-						key="staticText-11"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="379"
-						y="36"
-						width="112"
-						height="25"
-						key="textField-14"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mntfour}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="491"
-						y="36"
-						width="32"
-						height="25"
-						key="staticText-12"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="378"
-						y="59"
-						width="112"
-						height="25"
-						key="textField-15"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mntfour}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="490"
-						y="59"
-						width="32"
-						height="25"
-						key="staticText-13"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="378"
-						y="83"
-						width="112"
-						height="25"
-						key="textField-16"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mntfour}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="490"
-						y="83"
-						width="32"
-						height="25"
-						key="staticText-14"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="378"
-						y="107"
-						width="112"
-						height="25"
-						key="textField-17"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mntfour}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="490"
-						y="107"
-						width="32"
-						height="25"
-						key="staticText-15"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<line direction="TopDown">
-					<reportElement
-						x="378"
-						y="59"
-						width="144"
-						height="0"
-						key="line-1"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="379"
-						y="108"
-						width="144"
-						height="0"
-						key="line-2"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
+			<band height="0"  isSplitAllowed="false" >
 			</band>
 		</detail>
 		<columnFooter>
@@ -526,7 +583,7 @@
 			</band>
 		</columnFooter>
 		<pageFooter>
-			<band height="32"  isSplitAllowed="true" >
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</pageFooter>
 		<summary>

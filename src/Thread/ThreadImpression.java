@@ -14,11 +14,12 @@ public class ThreadImpression extends Thread{
 
 	protected JWindow frame;
 	protected JFrame fenetre;
-	protected String facture, valeur, mode;
+	protected String facture, mode;
+	protected Double valeur;
 	protected Base bdd;
 	protected boolean fini = false;
 	
-	public ThreadImpression(String numFacture, Base base, String valeurtext, String mode, JFrame fenetre){
+	public ThreadImpression(String numFacture, Base base, Double valeurtext, String mode, JFrame fenetre){
 		this.facture = numFacture;
 		this.valeur = valeurtext;
 		this.mode = mode;

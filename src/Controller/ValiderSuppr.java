@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import View.Clients.Client;
 import View.Commandes.Commandes;
 import View.Devis.Devis;
+import View.Factures.Factures;
 import View.Termes.Termes;
 
 public class ValiderSuppr implements ActionListener {
@@ -34,6 +35,8 @@ public class ValiderSuppr implements ActionListener {
 			supprCommandes();
 		} else if (type.equals("Termes")) {
 			supprTermes();
+		}else if (type.equals("Factures")) {
+			supprFacture();
 		}
 	}
 
@@ -133,4 +136,27 @@ public class ValiderSuppr implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Terme inexistant ", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}
 	}
+
+
+private void supprFacture() {
+	Factures facture = (Factures) classe;
+	if (facture.getDonnees().exist("factures", "NumFacture",
+			"NumFacture = " + facture.getjNumFacture().getText())) {
+		if (facture.getDonnees().exist("termes", "Numcommande, NumIndice",
+				"NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice())) {
+				facture.getBase().update("termes", "numfacture = null", "numcommande = " + facture.getNumeroCommande() + " AND numindice = " + facture.getNumeroIndice() + " AND numfacture = " + facture.getjNumFacture().getText());
+				facture.getBase().delete("factures", "numfacture = " + facture.getjNumFacture().getText());
+				JOptionPane.showMessageDialog(null, "Facture supprimé !");
+				facture.dispose();
+				facture.getFenetre().setEnabled(true);
+				facture.getFenetre().setVisible(true);
+			
+		} else {
+			JOptionPane.showMessageDialog(null, "Erreur : Numéro d'indice ou de commande incorrecte", "ATTENTION",
+					JOptionPane.WARNING_MESSAGE);
+		}
+	} else {
+		JOptionPane.showMessageDialog(null, "Terme inexistant ", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+	}
+}
 }

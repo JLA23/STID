@@ -98,7 +98,7 @@ public class SearchFacture extends JDialog{
 	    bouton2.setBounds(127 - bouton2.getPreferredSize().width, 70, bouton2.getPreferredSize().width, bouton2.getPreferredSize().height);
 	    JButton list2 = new JButton("Liste");
 	    list2.setBounds(133, 70, list.getPreferredSize().width, list.getPreferredSize().height);
-	    bouton.setMnemonic(KeyEvent.VK_ENTER);
+	    bouton2.setMnemonic(KeyEvent.VK_ENTER);
 	    this.getRootPane().setDefaultButton(bouton);
 	   	pane.add(bouton);
 	    pane.add(list);

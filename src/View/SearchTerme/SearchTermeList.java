@@ -21,29 +21,33 @@ public class SearchTermeList extends SearchList {
 
 	private static final long serialVersionUID = 1L;
 
-	public SearchTermeList(Base bdd, JFrame frame, String fonction, String numCom) {
+	public SearchTermeList(Base bdd, JFrame frame, String fonction, String numCom, String numindice) {
 		super(bdd, frame);
 		this.bdd = bdd;
 		this.frame = frame;
 		data = null;
-		if(fonction.equals("NewFacture") && numCom == null){
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null");
+		if(fonction.equals("NewFacture") && numCom == null && numindice == null){
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null");
 		}
-		else if(fonction.equals("NewFacture") && numCom != null){
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom);
+		else if(fonction.equals("NewFacture") && numCom != null && numindice == null){
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom);
 		}
-		else if(numCom != null && !fonction.equals("NewFacture")){
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom);
+		else if(numCom != null && !fonction.equals("NewFacture") && numindice == null){
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom);
+		}
+		else if(numCom != null && !fonction.equals("NewFacture") && numindice != null){
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom + " and t.numindice = " + numindice);
 		}
 		else{
-			data = donnees.liste("t.numCommande, t.numindice, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient");
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient");
 		}
-		this.setPreferredSize(new Dimension(800, 500));
+		this.setPreferredSize(new Dimension(1000, 500));
 		this.setTitle("STID Gestion 2.0 (Chercher Termes)");
 
         model = new DefaultTableModel();
         model.addColumn("N° Commande");
         model.addColumn("N° Indice");
+        model.addColumn("N° Facture");
         model.addColumn("N° Client");
         model.addColumn("Nom Client");
         model.addColumn("Libellé");
@@ -61,16 +65,17 @@ public class SearchTermeList extends SearchList {
         	}
         };
         layerTable.setRowSorter(sorter);
-		layerTable.getColumnModel().getColumn(0).setPreferredWidth(1);
-		layerTable.getColumnModel().getColumn(1).setPreferredWidth(1);
-		layerTable.getColumnModel().getColumn(2).setPreferredWidth(1);
-		layerTable.getColumnModel().getColumn(3).setPreferredWidth(220);
-		layerTable.getColumnModel().getColumn(4).setPreferredWidth(330);
+		layerTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+		layerTable.getColumnModel().getColumn(1).setPreferredWidth(10);
+		layerTable.getColumnModel().getColumn(2).setPreferredWidth(10);
+		layerTable.getColumnModel().getColumn(3).setPreferredWidth(10);
+		layerTable.getColumnModel().getColumn(4).setPreferredWidth(220);
+		layerTable.getColumnModel().getColumn(5).setPreferredWidth(330);
 		layerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		centrerTable(layerTable);
 		layerTable.getTableHeader().setReorderingAllowed(false);
 		JScrollPane scroll = new JScrollPane(layerTable);
-		scroll.setPreferredSize(new Dimension(750, 400));
+		scroll.setPreferredSize(new Dimension(950, 400));
 		layerPanel.add(scroll, c);
 		JButton valider = new JButton("Valider");
 		JButton annuler = new JButton("Annuler");

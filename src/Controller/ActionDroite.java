@@ -100,6 +100,14 @@ public class ActionDroite implements ActionListener {
 				e.printStackTrace();
 			}
 		}
+		else if (classe.equals("Factures")) {
+			try {
+				actionFactures();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void actionDevis() throws ParseException {
@@ -205,6 +213,51 @@ public class ActionDroite implements ActionListener {
 			}
 			if(res[0].equals(termes.getDonnees().max("Numcommande", "termes")) && termes.getDroite().isVisible()){
 				termes.getDroite().setVisible(false);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Numéro de termes inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+	private void actionFactures() throws ParseException {
+		if (factures.getDonnees().exist("factures", "NumFacture", "numfacture = " + factures.getjNumFacture().getText())) {
+			if (fonction.equals("Modif")) {
+					String[] re = factures.getValeurDevises().get(factures.getDevises().getSelectedItem());
+					String[] valeursInit = factures.getDonnees().fiche(
+							"f.montanttaxe, f.valeur, f.modepaiement, f.preclettre, f.dateEmission, f.dateEcheance, f.anneeValeur, f.CodeDevise",
+							"factures as f", "f.numfacture = " + factures.getjNumFacture().getText());
+					String[] valeursModifie = new String[8];
+					valeursModifie[0] = factures.getRecupTVA() + "";
+					valeursModifie[1] = factures.getjValeur().getText();
+					valeursModifie[2] = factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem())[0];
+					valeursModifie[3] = factures.getjPrecision().getText();
+					valeursModifie[4] = new SimpleDateFormat("yyyy-MM-dd").format(factures.getjDateEmission().getDate());
+					valeursModifie[5] = new SimpleDateFormat("yyyy-MM-dd").format(factures.getjDateEcheance().getDate());
+					valeursModifie[6] = factures.getjAnneeValeur().getText();
+					valeursModifie[7] = re[0];
+					if (!ModifieOuIdentique(valeursInit, valeursModifie)) {
+						factures.getBase().update("factures", "MontantTaxe = " + factures.getRecupTVA()
+						+  ", valeur = " + factures.getjValeur().getText()
+						+ ", ModePaiement = " + factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem())[0]
+						+ ", PrecLettre = '" + factures.getjPrecision().getText() + "', DateEmission = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEmission().getDate()) + "', DateEcheance = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEcheance().getDate()) + "', AnneeValeur = " + factures.getjAnneeValeur().getText() + ", CodeDevise = " + re[0]  
+						, "numFacture = " + factures.getjNumFacture().getText());
+						JOptionPane.showMessageDialog(null, "Facture modifié !");
+
+					}
+			}
+			int numero = Integer.parseInt(factures.getjNumFacture().getText()) + 1;
+			while(!factures.getDonnees().exist("factures", "numfacture", "numfacture = " + numero)){
+				numero += 1;
+			}
+			String [] res = factures.getDonnees().fiche("f.numfacture, t.numcommande, t.numindice, f.lblEcheance, cl.nomclient, Round(t.MntFour, 2), Round(t.CoutMo, 2), Round(t.Prefabrication, 2), c.CodeDevise, c.CdeComClient, Round(f.tva,2), cl.numClient, f.modepaiement, f.preclettre, f.dateEmission, f.dateecheance, f.anneeValeur, f.valeur",
+					"commandes as c, clients as cl, termes as t, factures as f", "t.numfacture = " + numero
+					+ " and t.numfacture = f.numfacture and t.numcommande = c.numCommande and c.numclient = cl.numclient ");
+			factures.initModif(res);
+			if(!res[0].equals(factures.getDonnees().min("Numfacture", "factures")) && !factures.getGauche().isVisible()){
+				factures.getGauche().setVisible(true);
+			}
+			if(res[0].equals(factures.getDonnees().max("Numfacture", "factures")) && factures.getDroite().isVisible()){
+				factures.getDroite().setVisible(false);
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Numéro de termes inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);

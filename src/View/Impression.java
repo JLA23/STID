@@ -17,11 +17,12 @@ public class Impression extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	protected JButton bouton, bouton2, bouton3, bouton4;
-	protected String facture, valeur;
+	protected String facture;
+	protected Double valeur;
 	protected Base bdd;
 	protected JFrame fenetre;
 
-	public Impression(String numfacture, Base base, String valeurtext, JFrame fenetre){
+	public Impression(String numfacture, Base base, Double valeurtext, JFrame fenetre){
 		this.facture = numfacture;
 		this.valeur = valeurtext;
 		this.bdd = base;

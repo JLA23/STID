@@ -46,15 +46,15 @@ public class ActionList implements ActionListener {
 				new SearchCommandeList(bdd, windo, fonction, null);	
 			}
 			else{
-				new SearchTermeList(bdd, windo, fonction, null);
+				new SearchTermeList(bdd, windo, fonction, null, null);
 			}
 		}
 		else if(type.equals("Factures")){
 			if(fonction.equals("NewFacture")){
-				new SearchTermeList(bdd, windo, fonction, null);	
+				new SearchTermeList(bdd, windo, fonction, null, null);	
 			}
 			else{
-				new SearchFactureList(bdd, windo, fonction, null, null);
+				new SearchFactureList(bdd, windo, fonction, null, null, null);
 			}
 		}
 		else if(type.equals("Salarie")){

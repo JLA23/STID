@@ -50,7 +50,7 @@ public class Termes extends JFrame{
     protected HashMap <String, String []> valeurjNumIndice;
     protected Object [][] listClient;
     protected JFrame fenetre;
-    protected String numeroIndice, numeroClient, numeroCommande;
+    protected String numeroIndice, numeroClient, numeroCommande, numFacture;
 
 	private static final long serialVersionUID = 1L;
 	protected Dimension screenSize = new Dimension();
@@ -350,6 +350,14 @@ public class Termes extends JFrame{
 
 	public void setValeurDevise(double valeurDevise) {
 		this.valeurDevise = valeurDevise;
+	}
+	
+	public String getNumFacture() {
+		return numFacture;
+	}
+
+	public void setNumFacture(String numFacture) {
+		this.numFacture = numFacture;
 	}
 
 	public JFormattedTextField getjNumIndice() {

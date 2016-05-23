@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="STID" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="96515d78-394d-4982-8208-cb3ef7b3ff17">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="49"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="NumClient" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="NumFacture" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="ValeurText" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="Logo" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, t.numcommande, Round(Sum(t.prefabrication + t.coutMo + t.mntfour + f.montanttaxe), 3) as ttc, f.tva, DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from clients as c, factures as f, termes as t, commandes as co where f.NumFacture = $P{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient;]]>
+	</queryString>
+	<field name="NumClient" class="java.lang.Integer"/>
+	<field name="Adresse1" class="java.lang.String"/>
+	<field name="Adresse2" class="java.lang.String"/>
+	<field name="Adresse3" class="java.lang.String"/>
+	<field name="Adresse4" class="java.lang.String"/>
+	<field name="Adresse5" class="java.lang.String"/>
+	<field name="Adresse6" class="java.lang.String"/>
+	<field name="Adresse7" class="java.lang.String"/>
+	<field name="prefabrication" class="java.lang.Float"/>
+	<field name="numtva" class="java.lang.String"/>
+	<field name="numcommande" class="java.lang.Integer"/>
+	<field name="ht" class="java.lang.Double"/>
+	<field name="numfacture" class="java.lang.Integer"/>
+	<field name="montanttaxe" class="java.lang.Float"/>
+	<field name="ttc" class="java.lang.Double"/>
+	<field name="tva" class="java.lang.Integer"/>
+	<field name="dateechance" class="java.lang.String"/>
+	<field name="dateemission" class="java.lang.String"/>
+	<field name="preclettre" class="java.lang.String"/>
+	<field name="lblecheance" class="java.lang.String"/>
+	<field name="cdeComClient" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="571" splitType="Stretch">
+			<image>
+				<reportElement key="image-1" x="256" y="1" width="279" height="87" uuid="5d43828a-ec81-4605-8d56-a0ed8c47614c"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+				</box>
+				<imageExpression><![CDATA[$P{Logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-1" x="0" y="0" width="242" height="14" uuid="66664200-1cec-443c-b003-0f81b78016b8"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Sté De Tuyauterie Industrielle Douaisienne]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="0" y="13" width="242" height="14" uuid="a07710ed-571e-416c-82c3-03c74c709724"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[80, rue des Colombes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="0" y="27" width="242" height="14" uuid="97a83eb0-e93d-483c-af45-5dec7a1582fe"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Z.I D'EMPLOI - 62710 COURRIERES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="1" y="40" width="242" height="14" uuid="4abb9464-e4d9-448c-9296-d75428089927"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[TEL. 03.21.49.44.66      FAX. 03.21.49.91.00]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToBandHeight" x="266" y="108" width="253" height="19" uuid="51c9cfc8-efa8-48f7-b0a7-727cd04d1c50"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Adresse2} != null ? (($F{Adresse3} != null) ? (($F{Adresse4} != null) ? (($F{Adresse5} != null) ? (($F{Adresse6} != null) ? (($F{Adresse7} != null) ? $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6} + '\n' + $F{Adresse7} : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3}) : $F{Adresse1} + '\n' + $F{Adresse2}) : $F{Adresse1} ;]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" x="1" y="54" width="242" height="14" uuid="baad7126-1a95-47dc-99dd-13c4f84be125"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[S.A Capital de 150.000 €]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" x="0" y="67" width="242" height="14" uuid="b89e15f5-c127-4b97-bb3c-e1c9859be825"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[R.C.B BETHUNE 315 668 772]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="0" y="95" width="242" height="14" uuid="60afb026-e596-4d30-a51b-f9a2e91ed847"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[TVA FR 81 315 668 772]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="0" y="80" width="242" height="14" uuid="c674d4e0-17d4-44d2-ad22-1a1e20df2d14"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Siret 315 668 772 00033 - APE 3320A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="0" y="108" width="242" height="14" uuid="34dabdf9-3ac4-40d2-8f85-7302ebe3b4ed"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[RIV 30076 04209 00130700200 38]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="0" y="144" width="242" height="14" uuid="807126f3-60bc-4cd9-90ca-04a836784a87"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Objet : FACTURE N° " + $F{numfacture}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="0" y="158" width="242" height="14" uuid="45606ac7-e9eb-4135-b427-35a57ba45d2e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N/Ref : C " + $F{numcommande}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-3" x="0" y="172" width="242" height="14" uuid="9543044d-a56d-4e77-8e32-80cc52286c42"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["V/Ref : Cde N° " + $F{cdeComClient}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-4" x="0" y="185" width="242" height="14" uuid="3909db16-4619-4602-af57-4a0620ec0dd4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ECHEANCE : " + $F{dateechance}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-5" mode="Transparent" x="32" y="264" width="470" height="79" uuid="6d29a53a-55e9-4fb4-8f04-d0d16294ee58"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{preclettre}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-6" x="32" y="237" width="470" height="16" uuid="4601199f-15f5-46c6-b647-b66ceb7b170c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lblecheance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-7" x="266" y="199" width="242" height="17" uuid="9cf972b7-44db-41b4-8290-e157e324e01e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["COURRIERES, le " + $F{dateemission}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-20" x="0" y="199" width="242" height="14" uuid="96946315-c4f8-4046-90fe-ded3a2b4b40a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° TVA : " + $F{numtva}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-1" x="318" y="421" width="144" height="1" uuid="8273a995-d518-4c25-98ec-5fe8e593c770"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-11" x="430" y="421" width="32" height="25" uuid="2148946d-b622-4656-8c60-eab35629a998"/>
+				<textElement textAlignment="Center">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<text><![CDATA[Eur]]></text>
+			</staticText>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-21" x="318" y="421" width="112" height="25" uuid="c6850229-9c5c-48be-b1f9-36c7aea130f3"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ttc} * -1]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-12" x="430" y="396" width="32" height="25" uuid="41879c36-e3c0-41c6-9ff1-89594f79085c"/>
+				<textElement textAlignment="Center">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<text><![CDATA[Eur]]></text>
+			</staticText>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-22" x="318" y="396" width="112" height="25" uuid="2016f06b-4ae7-49af-9d64-c167ef0c775e"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{montanttaxe} * -1]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-13" x="430" y="374" width="32" height="22" uuid="c7f40a44-4393-447c-a5b4-58b96669ec70"/>
+				<textElement textAlignment="Center">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<text><![CDATA[Eur]]></text>
+			</staticText>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-23" x="318" y="374" width="112" height="22" uuid="9c748af8-2b53-43d9-8a1b-6d3ca828f8b8"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht} * -1]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-26" x="70" y="421" width="248" height="25" uuid="d041641f-718b-4952-9ca2-b7f61e0c0156"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MONTANT T.T.C. .................."]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-27" x="70" y="396" width="53" height="25" uuid="240feebd-bdb7-41b6-8fab-7585ff55e9e0"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["T.V.A. "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-28" x="70" y="372" width="248" height="25" uuid="f51d0b34-a3b6-4eee-b2f6-18a2d5133efc"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MONTANT H.T. ...................."]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-31" x="123" y="396" width="38" height="25" uuid="057bde6b-05e9-4288-ae91-78ebb37ab898"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-32" x="161" y="396" width="157" height="25" uuid="bd1f63f2-bfae-48a7-bf19-c5433bfc745d"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" % .................."]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="70" y="490" width="393" height="23" uuid="ad63b572-0dc2-4892-8027-f7f64ffe2dbb"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isItalic="true" pdfFontName="Times-Italic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ValeurText}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="70" y="457" width="392" height="20" uuid="44c5a1c0-41ef-45c8-94d8-f8dcffb34a0c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Valeur en votre faveur.  déduire de votre prochain règlement.]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{preclettre}!=null]]></printWhenExpression>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Prevent"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

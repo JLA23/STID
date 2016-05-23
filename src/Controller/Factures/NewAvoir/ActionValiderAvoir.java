@@ -1,4 +1,4 @@
-package Controller.Factures.NewFacture;
+package Controller.Factures.NewAvoir;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,22 +7,39 @@ import javax.swing.JOptionPane;
 import View.Impression;
 import View.Factures.Factures;
 
-public class ActionValiderFacture implements ActionListener {
+public class ActionValiderAvoir implements ActionListener {
 
 	private Factures facture;
 
-	public ActionValiderFacture(Factures factures) {
+	public ActionValiderAvoir(Factures factures) {
 		this.facture = factures;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
 		valider();
+		JOptionPane.showMessageDialog(null, "Facture enregistré !");
+		facture.dispose();
+		facture.getFenetre().setEnabled(true);
+		facture.getFenetre().setVisible(true);
+		int option = JOptionPane.showConfirmDialog(null, "Voulez-vous imprimer la facture ?", "Impression",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (option == JOptionPane.YES_OPTION) {
+			double num = Double.parseDouble(facture.getjTotalTTC().getText().replaceAll(",", "\\."));
+		
+			new Impression(facture.getjNumFacture().getText(), facture.getBase(), num, facture.getFenetre());
+		}
 	}
 
 	public void valider() {
 		if (!facture.getDonnees().exist("factures", "NumFacture", "NumFacture = " + facture.getjNumFacture().getText())) {
 				if (facture.getDonnees().exist("termes", "NumCommande , Numindice", "NumCommande = " + facture.getNumeroCommande() + " and numIndice = " + facture.getNumeroIndice())) {
 				if (!facture.getjFournitures().getText().equals("0,00") || !facture.getjPrefabrication().getText().equals("0,00") || !facture.getjCout().getText().equals("0,00")) {
+					facture.getBase().insert("termes",
+							facture.getNumeroCommande() + ", " + facture.getNumeroIndice() + ", null, '"
+									+ facture.getLibelle2().getText() + "', "
+									+ facture.getjPrefabrication().getText().replaceAll(",", "\\.") + ", "
+									+ facture.getjCout().getText().replaceAll(",", "\\.") + ", "
+									+ facture.getjFournitures().getText().replaceAll(",", "\\."));
 						facture.getBase().insert("factures",
 							facture.getjNumFacture().getText() + ", " + facture.getRecupTVA() + ", " + facture.getjValeur().getText() + ", "
 									+ facture.getModespaiements().get(facture.getBoxModePaiement().getSelectedItem())[0] + ", '"
@@ -32,22 +49,7 @@ public class ActionValiderFacture implements ActionListener {
 									+ facture.getLibelle2().getText() + "', "
 									+ facture.getjAnneeValeur().getText() + ", "
 									+ facture.getValeurDevises().get(facture.getDevises().getSelectedItem())[0] + ", " + facture.getjTVA().getText().replaceAll(",", "\\."));
-					if(!facture.getjFournitures().getText().equals(facture.getValeursTerme()[2].replaceAll("\\.", ",")) || !facture.getjCout().getText().equals(facture.getValeursTerme()[3].replaceAll("\\.", ",")) || !facture.getjPrefabrication().getText().equals(facture.getValeursTerme()[4].replaceAll("\\.", ","))){
-						facture.getBase().update("termes", "Prefabrication = " + facture.getjPrefabrication().getText() + ", CoutMO = " + facture.getjCout().getText() + ", MntFour = " + facture.getjFournitures() + ", NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
-					}
-					else {
-						facture.getBase().update("termes", "NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
-					}
-					JOptionPane.showMessageDialog(null, "Facture enregistré !");
-					facture.dispose();
-					facture.getFenetre().setEnabled(true);
-					facture.getFenetre().setVisible(true);
-					int option = JOptionPane.showConfirmDialog(null, "Voulez-vous imprimer la facture ?", "Impression",
-							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-					if (option == JOptionPane.YES_OPTION) {
-						double num = Double.parseDouble(facture.getjTotalTTC().getText().replaceAll(",", "\\."));
-						new Impression(facture.getjNumFacture().getText(), facture.getBase(), num, facture.getFenetre());
-					}
+						facture.getBase().update("termes", "NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice() + " AND NumFacture is null");
 				} else {
 					JOptionPane.showMessageDialog(null, "Erreur : Les montants sont à zéro", "ATTENTION",
 							JOptionPane.WARNING_MESSAGE);

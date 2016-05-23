@@ -46,6 +46,17 @@ public class AddFacturation{
 		menuItem.getAccessibleContext().setAccessibleDescription("Modifier une facture ou créer un avoir");
 		menu.add(menuItem);
 		
+		//Supprimer Facture ou avoir 
+		menuItem = new JMenuItem("Supprimer une facture / avoir");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SearchFacture(bdd, fenetre, "Suppr");
+			}
+		});
+		menuItem.getAccessibleContext().setAccessibleDescription("Modifier une facture ou créer un avoir");
+		menu.add(menuItem);
+		
 		//Afficher facture ou avoir
 		menuItem = new JMenuItem("Afficher facture / avoir");
 		menuItem.addActionListener(new ActionListener() {

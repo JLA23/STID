@@ -77,7 +77,7 @@ public class SelectionAction implements ActionListener, MouseListener {
 					} else if (type.equals("Commandes")) {
 						new ModifCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						new ModifTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
+						new ModifTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), datas[tables.convertRowIndexToModel(ligne)][2].toString());
 					} else if (type.equals("Salarie")){
 						new Salarie(fenetre, bdd, numero, f);
 					} else if (type.equals("Factures")){
