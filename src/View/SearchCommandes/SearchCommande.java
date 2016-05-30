@@ -1,7 +1,6 @@
 package View.SearchCommandes;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,6 +13,8 @@ import javax.swing.JTextField;
 import BDD.Base;
 import Controller.ActionList;
 import Controller.ActionValiderVerif;
+import Controller.EcouteAction;
+import Controller.KeyEntrerSearch;
 import View.Options.ClickDroit;
 
 public class SearchCommande extends JDialog{
@@ -43,6 +44,8 @@ public class SearchCommande extends JDialog{
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
 	    numCom = new JFormattedTextField(num);
 	    numCom.setPreferredSize(new Dimension(100, 25));
+	    numCom.addKeyListener(new EcouteAction(numCom, false));
+	    numCom.addKeyListener(new KeyEntrerSearch(this, "Commandes"));
 	    new ClickDroit(numCom, true, true);
 	    pane.add(numCom);
 	    JLabel label2 = new JLabel("Numéro de Commande Client");
@@ -56,9 +59,7 @@ public class SearchCommande extends JDialog{
 	    JButton list = new JButton("Liste");
 	    pane.add(bouton);
 	    pane.add(list);
-	    bouton.addActionListener(new ActionValiderVerif(this, "Commandes"));
-	    bouton.setMnemonic(KeyEvent.VK_ENTER);
-	    this.getRootPane().setDefaultButton(bouton); 
+	    bouton.addActionListener(new ActionValiderVerif(this, "Commandes")); 
 	    list.addActionListener(new ActionList(this, base, frame, fonction, "Commandes"));
 	    this.add(pane); 
 	    this.pack();

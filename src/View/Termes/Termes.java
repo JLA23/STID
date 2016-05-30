@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -29,8 +31,8 @@ import Controller.FocusPosition;
 import Controller.ItemChange;
 import Controller.ExecuteClick;
 import Model.Donnees;
+import View.Factures.LookFacture;
 import View.Options.ClickDroit;
-
 
 public class Termes extends JFrame{
     protected JButton calcul1, valider, fermer, calcul2, calcul3, nouveau, jfacture, jcommande, gauche, droite, feuille;
@@ -552,6 +554,7 @@ public class Termes extends JFrame{
 	        facture.setBounds(30, 80, facture.getPreferredSize().width, facture.getPreferredSize().height);
 	        dateEmission.setBounds(30, 110, dateEmission.getPreferredSize().width, dateEmission.getPreferredSize().height);
 	        jfacture = new JButton("Voir facture");
+	        jfacture.addActionListener(new ViewFacture(this, res[9]));
 	        jfacture.setBounds(50, 150, jfacture.getPreferredSize().width, jfacture.getPreferredSize().height);
 	        jPanel7.add(facture);
 	        jPanel7.add(dateEmission);
@@ -562,6 +565,10 @@ public class Termes extends JFrame{
 				facture.setText("N° Facture : " + res[9]);
 				String [] date = donnees.fiche("DATE_FORMAT(DateEmission, '%d/%m/%Y')", "factures", "numfacture = " + res[9]);
 				dateEmission.setText("Emise le : " + date[0]);
+			    for( ActionListener al : jfacture.getActionListeners() ) {
+			    	jfacture.removeActionListener( al );
+			    }
+				jfacture.addActionListener(new ViewFacture(this, res[9]));
 			}
 		}
 		else if(res[9] == null && jPanel7.isShowing()){
@@ -569,5 +576,28 @@ public class Termes extends JFrame{
 			jPanel6.setBounds(100, 65, jPanel6.getPreferredSize().width, jPanel6.getPreferredSize().height);
 		}
 		
+	}
+
+	public class ViewFacture implements ActionListener {
+		
+		private Termes termes;
+		private String num;
+		
+		public ViewFacture(Termes termes, String num){
+			this.termes = termes;
+			this.num = num;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				new LookFacture(base, termes, numeroCommande, jNumIndice.getText(), num);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+	
 	}
 }

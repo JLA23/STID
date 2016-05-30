@@ -20,11 +20,9 @@ public class ModifDevis extends Devis{
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Modifier Devis)");
 		nouveau.setVisible(false);
-		//nouveau.setBounds(20, 510, 100, 25);
 		donnees = new Donnees(base);
 		String [] res = donnees.fiche("*, c.nomclient", "devis as d, clients as c", "d.numclient = c.numclient and d.numDevis = " + numd);
 		initModif(res);
-		//nouveau.addActionListener(new ActionRechercher(this, frame, "Modif", "Devis"));
 		valider.addActionListener(new ValiderModif(this, "Devis"));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));

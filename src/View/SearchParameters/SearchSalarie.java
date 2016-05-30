@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import BDD.Base;
 import Controller.ActionList;
 import Controller.ActionValiderVerif;
+import Controller.EcouteAction;
+import Controller.KeyEntrerSearch;
 import View.Options.ClickDroit;
 
 public class SearchSalarie extends JDialog{
@@ -44,6 +46,8 @@ public class SearchSalarie extends JDialog{
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
 	    numPersonnel = new JFormattedTextField(num);
 	    numPersonnel.setPreferredSize(new Dimension(100, 25));
+	    numPersonnel.addKeyListener(new EcouteAction(numPersonnel, false));
+	    numPersonnel.addKeyListener(new KeyEntrerSearch(this, "Salarie"));
 	    new ClickDroit(numPersonnel, true, true);
 	    pane.add(numPersonnel);
 	    

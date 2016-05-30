@@ -37,7 +37,7 @@ public class ModifTerme extends Termes {
 		res = donnees.fiche(
 				"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient, t.numfacture",
 				"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
-						+ nbindice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+						+ nbindice + " and t.numfacture is null and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		}
 		else{
 			res = donnees.fiche(
@@ -76,6 +76,7 @@ public class ModifTerme extends Termes {
 	        facture.setBounds(30, 80, facture.getPreferredSize().width, facture.getPreferredSize().height);
 	        dateEmission.setBounds(30, 110, dateEmission.getPreferredSize().width, dateEmission.getPreferredSize().height);
 	        jfacture = new JButton("Voir facture");
+	        jfacture.addActionListener(new ViewFacture(this, res[7]));
 	        jfacture.setBounds(50, 150, jfacture.getPreferredSize().width, jfacture.getPreferredSize().height);
 	        jPanel7.add(facture);
 	        jPanel7.add(dateEmission);

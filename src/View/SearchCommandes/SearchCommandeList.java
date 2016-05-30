@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.KeyEntrerSearchList;
 import Controller.Search;
 import Controller.RetourAction;
 import Controller.RowListener;
@@ -71,6 +72,7 @@ public class SearchCommandeList extends SearchList {
 		layerPanel.add(retour, BorderLayout.SOUTH);
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
+		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Commandes", fonction));
 		valider.addActionListener(new SelectionAction(this, "Commandes", fonction));
 		retour.addActionListener(new RetourAction(this, "Commandes", fonction));
 		annuler.addActionListener(new ActionFermer(this));

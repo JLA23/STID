@@ -270,7 +270,7 @@
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[Valeur en votre faveur.  déduire de votre prochain règlement.]]></text>
+				<text><![CDATA[Valeur en votre faveur. A déduire de votre prochain règlement.]]></text>
 			</staticText>
 		</band>
 	</title>

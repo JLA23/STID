@@ -14,6 +14,7 @@ import javax.swing.table.TableRowSorter;
 
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.KeyEntrerSearchList;
 import Controller.RetourAction;
 import Controller.RowListener;
 import Controller.Search;
@@ -29,16 +30,16 @@ public class SearchFactureList extends SearchList {
 		this.bdd = bdd;
 		this.frame = frame;
 		data = null;
-		if((fonction.equals("Modif") || fonction.equals("Look") || fonction.equals("Suppr")) && numCom == null  && numindice == null && numfacture == null){
+		if((fonction.equals("Modif") || fonction.equals("Recherche") || fonction.equals("Suppr")) && numCom == null  && numindice == null && numfacture == null){
 			data = donnees.liste("t.numCommande, t.numindice,  t.numfacture, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 2), co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is not null group by numfacture");
 		}
-		else if((fonction.equals("Modif") || fonction.equals("Look") || fonction.equals("Suppr")) && numCom != null && numindice == null && numfacture == null){
+		else if((fonction.equals("Modif") || fonction.equals("Recherche") || fonction.equals("Suppr")) && numCom != null && numindice == null && numfacture == null){
 			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 2), co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is not null and t.numCommande = " + numCom + " group by numfacture");
 		}
-		else if((fonction.equals("Modif") || fonction.equals("Look") || fonction.equals("Suppr")) && numCom != null && numindice != null && numfacture == null){
+		else if((fonction.equals("Modif") || fonction.equals("Recherche") || fonction.equals("Suppr")) && numCom != null && numindice != null && numfacture == null){
 			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 2), co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is not null and t.numCommande = " + numCom + " and t.numindice = " + numindice + " group by numfacture");
 		}
-		else if((fonction.equals("Modif") || fonction.equals("Look") || fonction.equals("Suppr")) && numCom == null && numindice == null && numfacture != null){
+		else if((fonction.equals("Modif") || fonction.equals("Recherche") || fonction.equals("Suppr")) && numCom == null && numindice == null && numfacture != null){
 			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 2), co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is not null and t.numfacture = " + numfacture + " group by numfacture");
 		}
 		this.setPreferredSize(new Dimension(1000, 500));
@@ -86,6 +87,7 @@ public class SearchFactureList extends SearchList {
 		layerPanel.add(retour, BorderLayout.SOUTH);
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
+		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Factures", fonction));
 		valider.addActionListener(new SelectionAction(this, "Factures", fonction));
 		retour.addActionListener(new RetourAction(this, "Factures", fonction));
 		annuler.addActionListener(new ActionFermer(this));

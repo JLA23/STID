@@ -2,7 +2,6 @@ package View.SearchDevis;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,6 +13,8 @@ import javax.swing.JPanel;
 import BDD.Base;
 import Controller.ActionList;
 import Controller.ActionValiderVerif;
+import Controller.EcouteAction;
+import Controller.KeyEntrerSearch;
 import View.Options.ClickDroit;
 
 public class SearchDevis extends JDialog{
@@ -43,6 +44,8 @@ public class SearchDevis extends JDialog{
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
 	    numDevis = new JFormattedTextField(num);
 	    numDevis.setPreferredSize(new Dimension(100, 25));
+	    numDevis.addKeyListener(new EcouteAction(numDevis, false));
+	    numDevis.addKeyListener(new KeyEntrerSearch(this, "Devis"));
 	    new ClickDroit(numDevis, true, true);
 	    pane.add(numDevis);
 	    
@@ -51,8 +54,6 @@ public class SearchDevis extends JDialog{
 	    this.setLocationRelativeTo(null);
 	    JButton bouton = new JButton("Valider");
 	    JButton list = new JButton("Liste");
-	    bouton.setMnemonic(KeyEvent.VK_ENTER);
-	    this.getRootPane().setDefaultButton(bouton); 
 	    pane3.add(bouton);
 	    pane3.add(list);
 	    
@@ -98,4 +99,5 @@ public class SearchDevis extends JDialog{
 	public void setBdd(Base bdd) {
 		this.bdd = bdd;
 	}
+
 }

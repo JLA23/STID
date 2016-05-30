@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.KeyEntrerSearchList;
 import Controller.RetourAction;
 import Controller.RowListener;
 import Controller.Search;
@@ -76,6 +77,7 @@ public class SearchDevisPointage extends SearchList {
 		    layerPanel.add(retour, BorderLayout.SOUTH);
 		    layerPanel.add(valider, BorderLayout.SOUTH);
 		    layerPanel.add(annuler, BorderLayout.SOUTH);
+		    layerTable.addKeyListener(new KeyEntrerSearchList(this, null, "Pointage"));
 			valider.addActionListener(new SelectionAction(this, null, "Pointage"));
 		 	annuler.addActionListener(new ActionFermer(this));
 	        retour.addActionListener(new RetourAction(this, null, "Pointage"));

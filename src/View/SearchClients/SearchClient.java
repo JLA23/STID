@@ -2,9 +2,7 @@ package View.SearchClients;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,10 +10,11 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import BDD.Base;
 import Controller.ActionList;
 import Controller.ActionValiderVerif;
+import Controller.EcouteAction;
+import Controller.KeyEntrerSearch;
 import View.Options.ClickDroit;
 
 public class SearchClient extends JDialog {
@@ -45,6 +44,8 @@ public class SearchClient extends JDialog {
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
 	    numClient = new JFormattedTextField(num);
 	    numClient.setPreferredSize(new Dimension(100, 25));
+	    numClient.addKeyListener(new EcouteAction(numClient, false));
+	    numClient.addKeyListener(new KeyEntrerSearch(this, "Client"));
 	    new ClickDroit(numClient, true, true);
 	    pane.add(numClient);
 	    
@@ -53,8 +54,6 @@ public class SearchClient extends JDialog {
 	    this.setLocationRelativeTo(null);
 	    JButton bouton = new JButton("Valider");
 	    JButton list = new JButton("Liste");
-	    bouton.setMnemonic(KeyEvent.VK_ENTER);
-	    this.getRootPane().setDefaultButton(bouton); 
 	    pane3.add(bouton);
 	    pane3.add(list);
 	    

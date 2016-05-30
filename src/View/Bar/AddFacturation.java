@@ -62,7 +62,7 @@ public class AddFacturation{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new SupprDevis();
+				new SearchFacture(bdd, fenetre, "Recherche");
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Modifier une facture ou créer un avoir");

@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.KeyEntrerSearchList;
 import Controller.Search;
 import Controller.SelectionAction;
 import Controller.RetourAction;
@@ -88,6 +89,7 @@ public class SearchDevisList extends SearchList {
 	        search.addKeyListener(new Search(this, 0));
 	        sorter.addRowSorterListener(new RowListener(this));
 	        layerTable.addMouseListener(new SelectionAction(this, "Devis", fonction));
+	        layerTable.addKeyListener(new KeyEntrerSearchList(this, "Devis", fonction));
 			this.add(layerPanel);
 			this.pack();
 			this.setResizable(false);

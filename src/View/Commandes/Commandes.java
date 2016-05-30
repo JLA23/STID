@@ -77,7 +77,7 @@ public class Commandes extends JFrame{
 		screenSize.height = 600;
 		donnees = new Donnees(base);
 		DevisdelaCommande = null;
-		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
+		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setSize(screenSize);
 		NumberFormat num =  NumberFormat.getIntegerInstance();
         DecimalFormat nf = new DecimalFormat("#0.00");

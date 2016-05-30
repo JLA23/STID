@@ -1,9 +1,7 @@
 package View.SearchFactures;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
+import java.text.NumberFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,11 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import BDD.Base;
 import Controller.ActionList;
 import Controller.ActionValiderVerif;
 import Controller.EcouteAction;
+import Controller.KeyEntrerSearch;
 import View.Options.ClickDroit;
 
 public class SearchFacture extends JDialog{
@@ -28,14 +26,12 @@ public class SearchFacture extends JDialog{
 	private Dimension screenSize = new Dimension();
 	private String f;
 	private JFrame fr;
-	private JDialog ici;
 	private Base bdd;
 	private JTabbedPane jtp;
 	private JButton bouton, bouton2;
 	
 	public SearchFacture(Base base, JFrame frame, String fonction){
 		super(frame, null, true);
-		this.ici = this;
 		this.f = fonction;
 		this.fr = frame;
 		this.bdd = base;
@@ -49,13 +45,9 @@ public class SearchFacture extends JDialog{
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				if(jtp.getSelectedIndex() == 0){
-					bouton.setMnemonic(KeyEvent.VK_ENTER);
-					ici.getRootPane().setDefaultButton(bouton);
 					numCom.requestFocus();
 				}
 				else if(jtp.getSelectedIndex() == 1){
-					bouton2.setMnemonic(KeyEvent.VK_ENTER);
-					ici.getRootPane().setDefaultButton(bouton2);
 					numFacture.requestFocus();
 				}
 			}
@@ -67,19 +59,19 @@ public class SearchFacture extends JDialog{
 	    pane.setPreferredSize(new Dimension(200, 130));
 	    JLabel label = new JLabel("Numéro de Commande");
 	    pane.add(label);
-	   // NumberFormat num =  NumberFormat.getIntegerInstance();
-	    numCom = new JFormattedTextField();
+	    NumberFormat num =  NumberFormat.getIntegerInstance();
+	    numCom = new JFormattedTextField(num);
 	    numCom.addKeyListener(new EcouteAction(numCom, false));
 	    numCom.setPreferredSize(new Dimension(100, 25));
-	    numCom.addKeyListener(new KeyList(this));
+	    numCom.addKeyListener(new KeyEntrerSearch(this, "Factures"));
 	    new ClickDroit(numCom, true, true);
 	    pane.add(numCom);
 	    JLabel labelIndice = new JLabel("Numéro Indice");
 	    pane.add(labelIndice);
-	    numIndice = new JFormattedTextField();
+	    numIndice = new JFormattedTextField(num);
 	    numIndice.addKeyListener(new EcouteAction(numIndice, false));
 	    numIndice.setPreferredSize(new Dimension(100, 25));
-	    numIndice.addKeyListener(new KeyList(this));
+	    numIndice.addKeyListener(new KeyEntrerSearch(this, "Factures"));
 	    new ClickDroit(numIndice, true, true);
 	    pane.add(numIndice);
 	    JLabel labelFacture = new JLabel("Numéro Facture");
@@ -87,7 +79,7 @@ public class SearchFacture extends JDialog{
 	    numFacture = new JFormattedTextField();
 	    numFacture.addKeyListener(new EcouteAction(numFacture, false));
 	    numFacture.setPreferredSize(new Dimension(100, 25));
-	    numFacture.addKeyListener(new KeyList(this));
+	    numFacture.addKeyListener(new KeyEntrerSearch(this, "Factures"));
 	    new ClickDroit(numFacture, true, true);
 	    pane2.add(numFacture);
 	    labelFacture.setBounds(20, 23, labelFacture.getPreferredSize().width, labelFacture.getPreferredSize().height);
@@ -98,8 +90,6 @@ public class SearchFacture extends JDialog{
 	    bouton2.setBounds(127 - bouton2.getPreferredSize().width, 70, bouton2.getPreferredSize().width, bouton2.getPreferredSize().height);
 	    JButton list2 = new JButton("Liste");
 	    list2.setBounds(133, 70, list.getPreferredSize().width, list.getPreferredSize().height);
-	    bouton2.setMnemonic(KeyEvent.VK_ENTER);
-	    this.getRootPane().setDefaultButton(bouton);
 	   	pane.add(bouton);
 	    pane.add(list);
 	    pane2.add(bouton2);
@@ -173,34 +163,5 @@ public class SearchFacture extends JDialog{
 		this.jtp = jtp;
 	}
 	
-	public class KeyList implements KeyListener{
-		
-		private SearchFacture search;
-		
-		public KeyList(SearchFacture search){
-			this.search = search;
-		}
-
-		@Override
-		public void keyPressed(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {
-			if((int)arg0.getKeyChar() == 10){
-				new ActionValiderVerif(search, "Factures").verif();
-			}
-			
-		}
-		
-	}
 	
 }

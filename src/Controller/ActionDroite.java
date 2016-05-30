@@ -372,8 +372,8 @@ public class ActionDroite implements ActionListener {
 	private boolean ModifieOuIdentique(String[] valeursInit, String[] valeursMaintenant) {
 		boolean verifie = true;
 		for (int i = 0; i < valeursInit.length; i++) {
-			 //System.out.println(i + " : " + valeursInit[i] + " - " +
-			 //valeursMaintenant[i]);
+			 System.out.println(i + " : " + valeursInit[i] + " - " +
+			 valeursMaintenant[i]);
 			if (!valeursInit[i].equals(valeursMaintenant[i])) {
 				verifie = false;
 				break;

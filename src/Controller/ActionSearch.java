@@ -27,10 +27,11 @@ public class ActionSearch implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(type.equals("Devis")){
-			new SearchClientList(((Devis)classe).getBase(), null, "SearchClient",((Devis)classe).getNumClient());
+			new SearchClientList(((Devis)classe).getBase(), classe, "SearchClient", "Devis", ((Devis)classe).getNumClient());
 		}
 		else if(type.equals("Commandes")){
-			new SearchClientList(((Commandes)classe).getBase(), null, "SearchClient", ((Commandes)classe).getNumClient());
+			new SearchClientList(((Commandes)classe).getBase(), classe, "SearchClient", "Commandes", ((Commandes)classe).getNumClient());
+			
 		}
 		else if(type.equals("Pointage")){
 			if(fonction.equals("NumDevis")){

@@ -504,16 +504,18 @@ public class Factures extends JFrame{
 		jAnneeValeur.setText(res[16]);
 		jValeur.setText(res[17]);
 		double montant = Double.parseDouble(jTotalTTC.getText().replaceAll(",", "\\."));
-        if(montant < 0){
-        	jbfacture.setBounds(340, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
-        	javoir.setVisible(false);
-        }
-        else{
-        	jbfacture.setBounds(280, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
-        	javoir.setBounds(380, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
-        	this.getContentPane().add(javoir);
-        	javoir.setVisible(true);
-        }
+		if(jbfacture != null){
+			if(montant < 0){
+				jbfacture.setBounds(340, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+				javoir.setVisible(false);
+			}
+			else{
+				jbfacture.setBounds(280, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+				javoir.setBounds(380, 440, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
+				this.getContentPane().add(javoir);
+				javoir.setVisible(true);
+			}
+		}
 	}
 	
 	private void SelectModePaiement(String modes) {

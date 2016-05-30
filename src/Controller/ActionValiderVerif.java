@@ -17,6 +17,7 @@ import View.Commandes.SupprCommande;
 import View.Devis.LookDevis;
 import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
+import View.Factures.LookFacture;
 import View.Factures.ModifFacture;
 import View.Factures.NewFacture;
 import View.Factures.SupprFacture;
@@ -86,23 +87,29 @@ public class ActionValiderVerif implements ActionListener {
 	private void verifClient() throws ParseException {
 		Base bdd = ((SearchClient) fr).getBdd();
 		Donnees donnees = new Donnees(bdd);
-		if (donnees.exist("clients", "NumClient", "NumClient = " + ((SearchClient) fr).getNumClient().getText())) {
-			((SearchClient) fr).dispose();
-			if (((SearchClient) fr).getF().equals("Modif")) {
-				new ModifClient(bdd, ((SearchClient) fr).getNumClient().getText());
-			} else if (((SearchClient) fr).getF().equals("Suppr")) {
-				if (!donnees.lier("numClient", "devis",
-						"numClient = " + ((SearchClient) fr).getNumClient().getText())) {
-					new SupprClient(bdd, ((SearchClient) fr).getNumClient().getText());
-				} else {
-					JOptionPane.showMessageDialog(null, "Le client ne peut être supprimé", "ATTENTION",
+		if(!((SearchClient)fr).getNumClient().getText().isEmpty()){
+			if (donnees.exist("clients", "NumClient", "NumClient = " + ((SearchClient) fr).getNumClient().getText())) {
+				((SearchClient) fr).dispose();
+				if (((SearchClient) fr).getF().equals("Modif")) {
+					new ModifClient(bdd, ((SearchClient) fr).getNumClient().getText());
+				} else if (((SearchClient) fr).getF().equals("Suppr")) {
+					if (!donnees.lier("numClient", "devis",
+							"numClient = " + ((SearchClient) fr).getNumClient().getText())) {
+						new SupprClient(bdd, ((SearchClient) fr).getNumClient().getText());
+					} else {
+						JOptionPane.showMessageDialog(null, "Le client ne peut être supprimé", "ATTENTION",
 							JOptionPane.WARNING_MESSAGE);
+					}
+				} else if (((SearchClient) fr).getF().equals("Recherche")) {
+					new LookClient(bdd, ((SearchClient) fr).getNumClient().getText());
 				}
-			} else if (((SearchClient) fr).getF().equals("Recherche")) {
-				new LookClient(bdd, ((SearchClient) fr).getNumClient().getText());
+			} else {
+				JOptionPane.showMessageDialog(null, "Aucun Client avec ce numèro !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
 			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Aucun Client avec ce numèro !", "ATTENTION",
+		}
+		else{
+			JOptionPane.showMessageDialog(null, "Le champs est vide !", "ATTENTION",
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -300,7 +307,7 @@ public class ActionValiderVerif implements ActionListener {
 					"NumCommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND numIndice = "
 							+ ((SearchTerme) fr).getNumIndice().getText())) {
 				((SearchTerme) fr).dispose();
-				boolean exist = donnees.existPlusieur("NumFacture", "termes",
+				boolean exist = donnees.existPlusieur("NumCommande, NumIndice, NumFacture", "termes",
 						"NumCommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND NumIndice = " + ((SearchTerme) fr).getNumIndice().getText());
 				if(!exist){
 					if (((SearchTerme) fr).getF().equals("Modif")) {
@@ -359,6 +366,9 @@ public class ActionValiderVerif implements ActionListener {
 						else if (((SearchFacture) fr).getF().equals("Suppr")) {
 							new SupprFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
 						}
+						else if (((SearchFacture) fr).getF().equals("Recherche")) {
+							new LookFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+						}
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
@@ -388,13 +398,15 @@ public class ActionValiderVerif implements ActionListener {
 					}
 					else{
 					String[] res = donnees.fiche("NumCommande, NumIndice, NumFacture", "termes",
-							"NumIndice = " + ((SearchFacture) fr).getNumIndice().getText() + " AND NumCommande = "
-									+ ((SearchFacture) fr).getNumCom().getText());
+							 "NumCommande = " + ((SearchFacture) fr).getNumCom().getText() + " AND NumIndice = " + ((SearchFacture) fr).getNumIndice().getText() + " AND Numfacture is not null");
 					if (((SearchFacture) fr).getF().equals("Modif")) {
 						new ModifFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
 					}
 					else if (((SearchFacture) fr).getF().equals("Suppr")) {
 						new SupprFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+					}
+					else if (((SearchFacture) fr).getF().equals("Recherche")) {
+						new LookFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
 					}
 					}
 
@@ -420,6 +432,9 @@ public class ActionValiderVerif implements ActionListener {
 					}
 					else if (((SearchFacture) fr).getF().equals("Suppr")) {
 						new SupprFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
+					}
+					else if (((SearchFacture) fr).getF().equals("Recherche")) {
+						new LookFacture(bdd, ((SearchFacture) fr).getFr(), res[0], res[1], res[2]);
 					}
 
 				} else {

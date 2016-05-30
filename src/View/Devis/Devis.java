@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -38,13 +39,14 @@ import Controller.FocusPosition;
 import Controller.ItemChange;
 import Controller.TestContenu;
 import Model.Donnees;
+import View.Commandes.LookCommande;
 import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
 import fr.julien.autocomplete.view.AutoComplete;
 
 public class Devis extends JFrame {
 	protected JButton calcul1, valider, fermer, newClient, calcul2, calcul3, calcul4, calcul5, calcul6, calcul7,
-			nouveau, search, gauche, droite, feuille;
+			nouveau, search, gauche, droite, feuille, viewCommande;
 	protected JComboBox<String> devises;
 	protected JLabel numero, prefabrication, euro1, euro2, euro3, euro4, totalDevis, hrsAtelier, prevu, hrsSite, hrs1,
 			dateLabel, euro5;
@@ -628,6 +630,34 @@ public class Devis extends JFrame {
 		new TestContenu(this, jPrevu, 3, "Devis");
 		new TestContenu(this, jCommande, 3, "Devis");
 		new FocusJText(this, "Devis").name();
+		if(viewCommande == null && !res[2].equals("null")){
+			viewCommande = new JButton("Voir la commande n°" + res[2]);
+			viewCommande.setBounds(320, 510, viewCommande.getPreferredSize().width, viewCommande.getPreferredSize().height);
+			viewCommande.addActionListener(new ViewCommande(this, res[2]));
+			this.add(viewCommande);
+		}
+		else{
+		if(res[2].equals("null") && viewCommande.isVisible()){
+			viewCommande.setVisible(false);
+		}
+		else if(!res[2].equals("null") && viewCommande.isVisible()){
+			  for( ActionListener al : viewCommande.getActionListeners() ) {
+			        viewCommande.removeActionListener( al );
+			    }
+			  viewCommande.setText("Voir la commande n°" + res[2]);
+			  viewCommande.setBounds(320, 510, viewCommande.getPreferredSize().width, viewCommande.getPreferredSize().height);
+			  viewCommande.addActionListener(new ViewCommande(this, res[2]));
+		}
+		else if(!res[2].equals("null") && !viewCommande.isVisible()){
+			for( ActionListener al : viewCommande.getActionListeners() ) {
+		        viewCommande.removeActionListener( al );
+		    }
+		  viewCommande.setText("Voir la commande n°" + res[2]);
+		  viewCommande.setBounds(320, 510, viewCommande.getPreferredSize().width, viewCommande.getPreferredSize().height);
+		  viewCommande.addActionListener(new ViewCommande(this, res[2]));
+		  viewCommande.setVisible(true);
+		}}
+		
 	}
 
 	protected void InsertDevises() {
@@ -957,6 +987,28 @@ public class Devis extends JFrame {
 		this.feuille = feuille;
 	}
 
+	public class ViewCommande implements ActionListener {
+		
+		private Devis devis;
+		private String num;
+		
+		public ViewCommande(Devis devis, String num){
+			this.devis = devis;
+			this.num = num;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				new LookCommande(base, num, devis);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+	
+	}
 
 
 }

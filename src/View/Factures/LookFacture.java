@@ -1,23 +1,28 @@
 package View.Factures;
 
 import java.awt.Color;
-import java.awt.event.ActionListener;
+import java.awt.Image;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map.Entry;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import BDD.Base;
+import Controller.ActionDroite;
 import Controller.ActionFermer;
+import Controller.ActionGauche;
+import Controller.ActionRechercher;
 import Controller.ValiderModif;
-import Controller.ValiderSuppr;
 import Model.Calcul;
 import View.Options.ClickDroit;
 
-public class SupprFacture extends Factures {
+public class LookFacture extends Factures {
 
 	private static final long serialVersionUID = 1L;
 
-	public SupprFacture(Base bdd, JFrame frame, String num, String indice, String nbFacture) throws ParseException {
+	public LookFacture(Base bdd, JFrame frame, String num, String indice, String nbFacture) throws ParseException {
 		super(bdd, frame);
 		numero.setText(numero.getText() + num + " / " + indice);
 		numeroCommande = num;
@@ -87,10 +92,28 @@ public class SupprFacture extends Factures {
         new ClickDroit(jPrecision, true, true);
         new ClickDroit(jAnneeValeur, true, true);
         new ClickDroit(jTVA, true, false);
-        for( ActionListener al : valider.getActionListeners() ) {
-	    	valider.removeActionListener( al );
-	    }
-        valider.addActionListener(new ValiderSuppr(this, "Factures"));
+        valider.setVisible(false);
+		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		gauche = new JButton(icon);
+		gauche.setBounds(20, 440, 25, 25);
+		gauche.addActionListener(new ActionGauche(this, "Factures", "Modif"));
+		this.add(gauche);
+		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		droite = new JButton(icon2);
+		droite.setBounds(80, 440, 25, 25);
+		droite.addActionListener(new ActionDroite(this, "Factures", "Modif"));
+		this.add(droite);
+		if(jNumFacture.getText().equals(donnees.min("NumFacture", "factures"))){
+			gauche.setVisible(false);
+		}
+		if(jNumFacture.getText().equals(donnees.max("NumFacture", "factures"))){
+			droite.setVisible(false);
+		}
+		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
+		feuille = new JButton(icon3);	
+		feuille.setBounds(50, 440, 25, 25);
+		feuille.addActionListener(new ActionRechercher(this, "Factures", "Modif"));
+		this.add(feuille);
 		this.setVisible(true);
 	}
 

@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.KeyEntrerSearchList;
 import Controller.Search;
 import Controller.SelectionAction;
 import Controller.RetourAction;
@@ -86,6 +87,7 @@ public class SearchSalarieList extends SearchList {
 		    layerPanel.add(retour, BorderLayout.SOUTH);
 		    layerPanel.add(valider, BorderLayout.SOUTH);
 		    layerPanel.add(annuler, BorderLayout.SOUTH);
+		    layerTable.addKeyListener(new KeyEntrerSearchList(this, "Salarie", f));
 			valider.addActionListener(new SelectionAction(this, "Salarie", f));
 		 	annuler.addActionListener(new ActionFermer(this));
 	        retour.addActionListener(new RetourAction(this, "Salarie", f));

@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.KeyEntrerSearchList;
 import Controller.Search;
 import Controller.RetourAction;
 import Controller.RowListener;
@@ -27,19 +28,19 @@ public class SearchTermeList extends SearchList {
 		this.frame = frame;
 		data = null;
 		if(fonction.equals("NewFacture") && numCom == null && numindice == null){
-			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null");
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null ORDER BY NumCommande ASC, NumIndice ASC");
 		}
 		else if(fonction.equals("NewFacture") && numCom != null && numindice == null){
-			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom);
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numfacture is null and t.numCommande = " + numCom + " ORDER BY NumCommande ASC, NumIndice ASC");
 		}
 		else if(numCom != null && !fonction.equals("NewFacture") && numindice == null){
-			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom);
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom + " ORDER BY NumCommande ASC, NumIndice ASC");
 		}
 		else if(numCom != null && !fonction.equals("NewFacture") && numindice != null){
-			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom + " and t.numindice = " + numindice);
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient and t.numCommande = " + numCom + " and t.numindice = " + numindice + " ORDER BY NumCommande ASC, NumIndice ASC");
 		}
 		else{
-			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient");
+			data = donnees.liste("t.numCommande, t.numindice, t.numfacture, co.numClient, c.nomclient, t.lblTerme", "termes as t, commandes as co, clients as c", "co.numCommande = t.numCommande and co.numClient = c.numClient ORDER BY NumCommande ASC, NumIndice ASC");
 		}
 		this.setPreferredSize(new Dimension(1000, 500));
 		this.setTitle("STID Gestion 2.0 (Chercher Termes)");
@@ -84,6 +85,7 @@ public class SearchTermeList extends SearchList {
 		layerPanel.add(retour, BorderLayout.SOUTH);
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
+		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Termes", fonction));
 		valider.addActionListener(new SelectionAction(this, "Termes", fonction));
 		retour.addActionListener(new RetourAction(this, "Termes", fonction));
 		annuler.addActionListener(new ActionFermer(this));

@@ -20,8 +20,10 @@ import View.Commandes.SupprCommande;
 import View.Devis.LookDevis;
 import View.Devis.ModifDevis;
 import View.Devis.SupprDevis;
+import View.Factures.LookFacture;
 import View.Factures.ModifFacture;
 import View.Factures.NewFacture;
+import View.Factures.SupprFacture;
 import View.Parameters.Salarie;
 import View.Pointage.SaisiePointage;
 import View.SearchClients.SearchClientList;
@@ -62,11 +64,15 @@ public class SelectionAction implements ActionListener, MouseListener {
 		action();
 	}
 	
-	private void action(){
+	public void action(){
 		initVerif();
 		int ligne = tables.getSelectedRow();
 		if (ligne != -1) {
 			String numero = datas[tables.convertRowIndexToModel(ligne)][0].toString();
+			String numero2 = null;
+			if(datas[tables.convertRowIndexToModel(ligne)][2] != null){
+				numero2 = datas[tables.convertRowIndexToModel(ligne)][2].toString();
+			}
 			dialog.dispose();
 			try {
 				if (f.equals("Modif")) {
@@ -77,11 +83,11 @@ public class SelectionAction implements ActionListener, MouseListener {
 					} else if (type.equals("Commandes")) {
 						new ModifCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						new ModifTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), datas[tables.convertRowIndexToModel(ligne)][2].toString());
+						new ModifTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					} else if (type.equals("Salarie")){
 						new Salarie(fenetre, bdd, numero, f);
 					} else if (type.equals("Factures")){
-						new ModifFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), datas[tables.convertRowIndexToModel(ligne)][2].toString());
+						new ModifFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					}
 				} else if (f.equals("Suppr")) {
 					if (type.equals("Client")) {
@@ -92,6 +98,8 @@ public class SelectionAction implements ActionListener, MouseListener {
 						new SupprCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
 						new SupprTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
+					} else if (type.equals("Factures")) {
+						new SupprFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					} else if (type.equals("Salarie")){
 						new Salarie(fenetre, bdd, numero, f);
 					}
@@ -104,10 +112,13 @@ public class SelectionAction implements ActionListener, MouseListener {
 						new LookCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
 						 new LookTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
+					} else if (type.equals("Factures")) {
+						 new LookFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					}
 				} else if (f.equals("SearchClient")) {
 					autos.getZoneTexte().setText(numero);
 					dialog.dispose();
+					new FocusJText(((SearchClientList)clas).getFenetre(), ((SearchClientList)clas).getClasse()).name();
 				} else if (f.equals("NewTerme")){ 
 					new NewTerme(bdd, fenetre, numero);
 				}  else if (f.equals("NewFacture")){ 

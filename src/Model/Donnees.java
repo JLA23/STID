@@ -204,7 +204,8 @@ public class Donnees {
 		int i = 0;
 		try {
 			while (rs.next()) {
-				if(!rs.getString(1).equals("null")){
+				System.out.println(rs.getString(1));
+				if(rs.getString(1) != null){
 					i++;
 				}
 			}
