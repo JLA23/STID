@@ -97,7 +97,7 @@ public class SelectionAction implements ActionListener, MouseListener {
 					} else if (type.equals("Commandes")) {
 						new SupprCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						new SupprTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
+						new SupprTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					} else if (type.equals("Factures")) {
 						new SupprFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					} else if (type.equals("Salarie")){
@@ -111,7 +111,7 @@ public class SelectionAction implements ActionListener, MouseListener {
 					} else if (type.equals("Commandes")) {
 						new LookCommande(bdd, numero, fenetre);
 					} else if (type.equals("Termes")) {
-						 new LookTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString());
+						 new LookTerme(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					} else if (type.equals("Factures")) {
 						 new LookFacture(bdd, fenetre, numero, datas[tables.convertRowIndexToModel(ligne)][1].toString(), numero2);
 					}

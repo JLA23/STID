@@ -269,19 +269,20 @@ public class ActionValiderVerif implements ActionListener {
 					exist = donnees.existPlusieur("NumIndice", "termes",
 							"Numfacture is null and NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
 				} else {
-					exist = donnees.existPlusieur("NumIndice", "termes",
+					exist = donnees.existPlusieur("NumCommande, NumIndice, NumFacture", "termes",
 							"NumCommande = " + ((SearchTerme) fr).getNumCom().getText());
 				}
 				if (exist) {
 					new SearchTermeList(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getF(),
 							((SearchTerme) fr).getNumCom().getText(), null);
 				} else {
+					String numf = donnees.fiche("NumFacture", "termes", "numcommande = " + ((SearchTerme) fr).getNumCom().getText())[0];
 					if (((SearchTerme) fr).getF().equals("Modif")) {
-						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1", null);
+						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1", numf);
 					} else if (((SearchTerme) fr).getF().equals("Suppr")) {
-						new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
+						new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1", numf);
 					} else if (((SearchTerme) fr).getF().equals("Recherche")) {
-						new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1");
+						new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(), "1", numf);
 					} else if (((SearchTerme) fr).getF().equals("NewFacture")) {
 						String num = donnees.searchTerme(((SearchTerme) fr).getNumCom().getText());
 						if (!num.isEmpty()) {
@@ -297,11 +298,16 @@ public class ActionValiderVerif implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
 						JOptionPane.WARNING_MESSAGE);
 			}
+			
+			
 		} else if (((SearchTerme) fr).getNumCom().getText().isEmpty()
 				&& !((SearchTerme) fr).getNumIndice().getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Il faut un numéro de Commande !", "ATTENTION",
 					JOptionPane.WARNING_MESSAGE);
-		} else if (!((SearchTerme) fr).getNumCom().getText().isEmpty()
+		} 
+		
+		
+		else if (!((SearchTerme) fr).getNumCom().getText().isEmpty()
 				&& !((SearchTerme) fr).getNumIndice().getText().isEmpty()) {
 			if (donnees.exist("termes", "NumCommande, NumIndice",
 					"NumCommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND numIndice = "
@@ -310,15 +316,16 @@ public class ActionValiderVerif implements ActionListener {
 				boolean exist = donnees.existPlusieur("NumCommande, NumIndice, NumFacture", "termes",
 						"NumCommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND NumIndice = " + ((SearchTerme) fr).getNumIndice().getText());
 				if(!exist){
+					String numf = donnees.fiche("NumFacture", "termes", "numcommande = " + ((SearchTerme) fr).getNumCom().getText() + " AND numIndice = " + ((SearchTerme) fr).getNumIndice().getText())[0];
 					if (((SearchTerme) fr).getF().equals("Modif")) {
 						new ModifTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
-								((SearchTerme) fr).getNumIndice().getText(), null);
+								((SearchTerme) fr).getNumIndice().getText(), numf);
 					} else if (((SearchTerme) fr).getF().equals("Suppr")) {
 						new SupprTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
-								((SearchTerme) fr).getNumIndice().getText());
+								((SearchTerme) fr).getNumIndice().getText(), numf);
 					} else if (((SearchTerme) fr).getF().equals("Recherche")) {
 						new LookTerme(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
-								((SearchTerme) fr).getNumIndice().getText());
+								((SearchTerme) fr).getNumIndice().getText(), numf);
 					} else if (((SearchTerme) fr).getF().equals("NewFacture")) {
 						new NewFacture(bdd, ((SearchTerme) fr).getFr(), ((SearchTerme) fr).getNumCom().getText(),
 								((SearchTerme) fr).getNumIndice().getText());

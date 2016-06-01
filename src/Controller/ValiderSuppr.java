@@ -114,26 +114,28 @@ public class ValiderSuppr implements ActionListener {
 	
 	private void supprTermes() {
 		Termes termes = (Termes) classe;
-		if (termes.getDonnees().exist("termes", "NumCommande, NumIndice",
-				"NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice())) {
+		boolean exist = termes.getDonnees().exist("termes", "NumCommande, NumIndice, NumFacture", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice() + " AND NumFacture is null");
+		if(termes.getNumFacture() == null){
+			if(exist){
 			if (!termes.getNumIndice().getText().equals("") && termes.getDonnees().exist("commandes", "Numcommande",
 					"NumCommande = " + termes.getNumeroCommande())) {
-				if (!termes.getDonnees().lier("numfacture", "termes", "numCommande = " + termes.getNumeroCommande() + " AND numindice = " + termes.getNumeroIndice())) {
-					termes.getBase().delete("termes", "numCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice());
+					termes.getBase().delete("termes", "numCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice() + " AND NumFacture is null");
 					JOptionPane.showMessageDialog(null, "Terme supprimé !");
 					termes.dispose();
 					termes.getFenetre().setEnabled(true);
 					termes.getFenetre().setVisible(true);
-				} else {
-					JOptionPane.showMessageDialog(null, "Erreur : Une facture est liée au devis", "ATTENTION",
-							JOptionPane.WARNING_MESSAGE);
-				}
+				
 			} else {
 				JOptionPane.showMessageDialog(null, "Erreur : Numéro d'indice ou de commande incorrecte", "ATTENTION",
 						JOptionPane.WARNING_MESSAGE);
-			}
-		} else {
+				}
+			} else {
 			JOptionPane.showMessageDialog(null, "Terme inexistant ", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Erreur : Une facture est liée au Terme", "ATTENTION",
+					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 

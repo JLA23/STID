@@ -18,7 +18,7 @@ public class SupprTerme extends Termes {
 
 	private static final long serialVersionUID = 1L;
 
-	public SupprTerme(Base bdd, JFrame frame, String num, String indice) throws ParseException {
+	public SupprTerme(Base bdd, JFrame frame, String num, String indice, String fact) throws ParseException {
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Supprimer Terme)");
 		this.base= bdd;
@@ -31,10 +31,19 @@ public class SupprTerme extends Termes {
 		numeroCommande = num;
 		String nbindice = indice;
 		numeroIndice = indice;
-		String[] res = donnees.fiche(
+		String[] res = null;
+		if(fact == null){
+		res = donnees.fiche(
 				"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient, t.numfacture",
 				"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
-						+ nbindice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+						+ nbindice + " and t.numfacture is null and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+		}
+		else{
+			res = donnees.fiche(
+					"t.lblTerme, cl.nomclient, t.MntFour, t.CoutMo, t.Prefabrication, c.CodeDevise, c.numClient, t.numfacture",
+					"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
+							+ nbindice + " and t.numfacture = " + fact + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+		}
 		jNumIndice.setText(nbindice);
 		jLibelle.setText(res[0]);
 		nameClient.setText(nameClient.getText() + res[1]);
@@ -68,6 +77,7 @@ public class SupprTerme extends Termes {
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionRechercher(this, "Termes", "Suppr"));
 		if(res[7] != null){
+			numFacture = res[7];
 			jPanel6.setBounds(10, 65, jPanel6.getPreferredSize().width, jPanel6.getPreferredSize().height);
 			jPanel7 = new JPanel();
 			jPanel7.setLayout(null);

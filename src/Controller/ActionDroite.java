@@ -267,6 +267,7 @@ public class ActionDroite implements ActionListener {
 	private void actionCommandes() throws ParseException {
 		if (commandes.getDonnees().exist("commandes", "Numcommande",
 				"numcommande = " + commandes.getjNumCommande().getText())) {
+			if(fonction.equals("Modif")){
 			if (!commandes.getNumClient().getText().equals("") && commandes.getDonnees().exist("clients", "NumClient",
 					"NumClient = " + commandes.getNumClient().getText())) {
 				String[] re = commandes.getValeurDevises().get(commandes.getDevises().getSelectedItem());
@@ -301,6 +302,7 @@ public class ActionDroite implements ActionListener {
 					comparaisonDevis();
 					JOptionPane.showMessageDialog(null, "commandes validé !");
 				}
+			}
 				int numero = Integer.parseInt(commandes.getjNumCommande().getText()) + 1;
 				while (!commandes.getDonnees().exist("commandes", "numcommande", "numcommande = " + numero)) {
 					numero += 1;
@@ -328,6 +330,7 @@ public class ActionDroite implements ActionListener {
 
 	private void actionSalarie() throws ParseException {
 		if (salarie.getDonnees().exist("personne", "NumPersonnel", "numpersonnel = " + salarie.getCode().getText())) {
+			if(fonction.equals("Modif")){
 			if (!salarie.getNom().getText().equals("") && !salarie.getPrenom().getText().equals("")) {
 				String[] re = salarie.getValeur().get(salarie.getjType().getSelectedItem());
 				String[] valeursInit = salarie.getDonnees().fiche("*", "personne",
@@ -344,6 +347,7 @@ public class ActionDroite implements ActionListener {
 							"NumPersonnel = " + salarie.getCode().getText());
 					JOptionPane.showMessageDialog(null, "salarie validé !");
 				}
+			}
 				int numero = Integer.parseInt(salarie.getCode().getText()) + 1;
 				while (!salarie.getDonnees().exist("personne", "numpersonnel", "numpersonnel = " + numero)) {
 					numero += 1;

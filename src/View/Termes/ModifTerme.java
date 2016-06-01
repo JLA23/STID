@@ -32,6 +32,7 @@ public class ModifTerme extends Termes {
 		numeroCommande = num;
 		String nbindice = indice;
 		numeroIndice = indice;
+		System.out.println(num +", " + indice + ", " + fact);
 		String[] res = null;
 		if(fact == null){
 		res = donnees.fiche(
@@ -45,6 +46,7 @@ public class ModifTerme extends Termes {
 					"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
 							+ nbindice + " and t.numfacture = " + fact + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		}
+		System.out.println(res[0] + ", " + res[1] + ", " + res[2]);
 		jNumIndice.setText(nbindice);
 		jLibelle.setText(res[0]);
 		nameClient.setText(nameClient.getText() + res[1]);
@@ -58,7 +60,6 @@ public class ModifTerme extends Termes {
 		new Calcul().calculerMontant(jFournitures, jCout, jPrefabrication, jTotalDevis, jTotalDevisDevise,
 				valeurDevise);
 		jNumIndice.requestFocus();
-
 		valider.addActionListener(new ValiderModif(this, "Termes"));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.setVisible(false);

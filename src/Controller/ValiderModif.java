@@ -211,14 +211,21 @@ public class ValiderModif implements ActionListener {
 	
 	private void validerTermes(){
 		Termes termes = (Termes)classe;
-		if(termes.getDonnees().exist("termes", "NumCommande, NumIndice", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice())){
+		boolean exist = false;
+		if(termes.getNumFacture() == null){
+			exist = termes.getDonnees().exist("termes", "NumCommande, NumIndice, NumFacture", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice() + " AND NumFacture is null");
+		}
+		else{
+			exist = termes.getDonnees().exist("termes", "NumCommande, NumIndice, NumFacture", "NumCommande = " + termes.getNumeroCommande() + " AND NumIndice = " + termes.getNumeroIndice() + " AND NumFacture = " + termes.getNumFacture());
+		}
+		if(exist){
 			if(termes.getDonnees().exist("commandes", "NumCommande", "NumCommande = " + termes.getNumeroCommande())){
-				if(termes.getNumFacture().equals(null)){
+				if(termes.getNumFacture() == null){
 					termes.getBase().update("termes", "Lblterme = '" + termes.getjLibelle().getText()
 					+  "', MntFour = " + termes.getjFournitures().getText().replaceAll(",", "\\.")
 					+ ", CoutMO = " + termes.getjCout().getText().replaceAll(",", "\\.")
 					+ ", Prefabrication = " + termes.getjPrefabrication().getText().replaceAll(",", "\\.")
-					, "numCommande = " + termes.getNumeroCommande() + " AND numIndice = " + termes.getNumeroIndice());
+					, "numCommande = " + termes.getNumeroCommande() + " AND numIndice = " + termes.getNumeroIndice() + " AND numFacture is null");
 				}
 				else{
 					termes.getBase().update("termes", "Lblterme = '" + termes.getjLibelle().getText()

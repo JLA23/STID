@@ -196,9 +196,11 @@ public class ActionRechercher implements ActionListener {
 
 					}
 			}
+			
 			termes.dispose();
 			termes.getFenetre().setEnabled(true);
 			new SearchTerme(termes.getBase(), termes.getFenetre(), fonction);
+			
 		} else {
 			JOptionPane.showMessageDialog(null, "Numéro de termes inexistant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}

@@ -96,12 +96,12 @@ public class LookFacture extends Factures {
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		gauche = new JButton(icon);
 		gauche.setBounds(20, 440, 25, 25);
-		gauche.addActionListener(new ActionGauche(this, "Factures", "Modif"));
+		gauche.addActionListener(new ActionGauche(this, "Factures", "Recherche"));
 		this.add(gauche);
 		ImageIcon icon2 = new ImageIcon(new ImageIcon("lib/images/Fleche droite bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		droite = new JButton(icon2);
 		droite.setBounds(80, 440, 25, 25);
-		droite.addActionListener(new ActionDroite(this, "Factures", "Modif"));
+		droite.addActionListener(new ActionDroite(this, "Factures", "Recherche"));
 		this.add(droite);
 		if(jNumFacture.getText().equals(donnees.min("NumFacture", "factures"))){
 			gauche.setVisible(false);
@@ -112,7 +112,7 @@ public class LookFacture extends Factures {
 		ImageIcon icon3 = new ImageIcon(new ImageIcon("lib/images/feuille.png").getImage().getScaledInstance(16, 20, Image.SCALE_DEFAULT));
 		feuille = new JButton(icon3);	
 		feuille.setBounds(50, 440, 25, 25);
-		feuille.addActionListener(new ActionRechercher(this, "Factures", "Modif"));
+		feuille.addActionListener(new ActionRechercher(this, "Factures", "Recherche"));
 		this.add(feuille);
 		this.setVisible(true);
 	}
