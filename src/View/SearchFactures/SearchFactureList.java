@@ -88,6 +88,7 @@ public class SearchFactureList extends SearchList {
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
 		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Factures", fonction));
+		layerTable.addMouseListener(new SelectionAction(this, "Factures", fonction));
 		valider.addActionListener(new SelectionAction(this, "Factures", fonction));
 		retour.addActionListener(new RetourAction(this, "Factures", fonction));
 		annuler.addActionListener(new ActionFermer(this));

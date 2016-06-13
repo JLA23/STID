@@ -59,6 +59,7 @@ public class Factures extends JFrame{
     protected JFrame fenetre;
     protected String numeroCommande, numeroIndice;
     protected String [] valeursTerme;
+    protected ExecuteClick click;
 
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
@@ -70,7 +71,7 @@ public class Factures extends JFrame{
 		this.setTitle("STID Gestion 2.0 (Nouvelle Facture)");
 		screenSize.width = 800;
 		screenSize.height = 530;
-		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
+		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setSize(screenSize);
 	    this.base = bdd;
 	    donnees = new Donnees(base);
@@ -195,7 +196,7 @@ public class Factures extends JFrame{
 		jPanel2.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.<AWTKeyStroke> emptySet());
 		jPanel3.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.<AWTKeyStroke> emptySet());
 		this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.<AWTKeyStroke> emptySet());
-        ExecuteClick click = new ExecuteClick(this, "Factures");
+        click = new ExecuteClick(this, "Factures", "New");
 		jNumFacture.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jNumFacture.getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;

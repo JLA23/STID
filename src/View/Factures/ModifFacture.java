@@ -24,10 +24,11 @@ import View.Options.ClickDroit;
 public class ModifFacture extends Factures {
 
 	private static final long serialVersionUID = 1L;
+	private ClickDroit clickd;
 
 	public ModifFacture(Base bdd, JFrame frame, String num, String indice, String nbFacture) throws ParseException {
 		super(bdd, frame);
-		System.out.println(nbFacture);
+		this.setTitle("STID Gestion 2.0 (Modifier Facture / Avoir)");
 		numero.setText(numero.getText() + num + " / " + indice);
 		numeroCommande = num;
 		numeroIndice = indice;
@@ -63,7 +64,7 @@ public class ModifFacture extends Factures {
 		fermer.addActionListener(new ActionFermer(this, frame));
 
 		nouveau.setVisible(false);
-		//nouveau.setBounds(20, 440, 100, 25);
+
 		jNumFacture.setEditable(false);
 		jFournitures.setEditable(false);
 		jCout.setEditable(false);
@@ -77,7 +78,7 @@ public class ModifFacture extends Factures {
 		jCout.setBackground(new Color(204, 204, 204));
 		jPrefabrication.setBackground(new Color(204, 204, 204));
 		jTVA.setBackground(new Color(204, 204, 204));
-        new ClickDroit(jNumFacture, true, false);
+        clickd = new ClickDroit(jNumFacture, true, false);
         new ClickDroit(jFournitures, true, false);
         new ClickDroit(jCout, true, false);
         new ClickDroit(jPrefabrication, true, false);
@@ -87,6 +88,7 @@ public class ModifFacture extends Factures {
         new ClickDroit(jPrecision, true, true);
         new ClickDroit(jAnneeValeur, true, true);
         new ClickDroit(jTVA, true, false);
+        new ClickDroit(jValeur, true, false);
         jbfacture = new JButton("Factures");
         javoir = new JButton("Avoir");
         double montant = Double.parseDouble(jTotalTTC.getText().replaceAll(",", "\\."));
@@ -155,6 +157,7 @@ public class ModifFacture extends Factures {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				new ValiderModif(modif, "Factures").validerFactures();
 				double num = Double.parseDouble(jTotalTTC.getText().replaceAll(",", "\\."));
 				new Impression(jNumFacture.getText(), base, num, modif);
 			}
@@ -174,6 +177,7 @@ public class ModifFacture extends Factures {
 			int option = JOptionPane.showConfirmDialog(null, "Voulez-vous créer un avoir ?", "Avoir",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if(option == JOptionPane.YES_OPTION){
+				clickd.setPasteCutAnnuler(true);
 				new NewAvoir(modif);
 			}
 		}

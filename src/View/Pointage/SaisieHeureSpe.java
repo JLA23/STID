@@ -2,24 +2,31 @@ package View.Pointage;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Collections;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import Controller.ActionCalculatrice;
+import Controller.EcouteAction;
 import Controller.TestContenu;
 import Controller.Pointage.AjoutSaisie;
 import Controller.Pointage.FermerSaisie;
 import Controller.Pointage.ModifierSaisie;
 import Controller.Pointage.NouveauSaisie;
+import View.Options.ClickDroit;
 
 public class SaisieHeureSpe extends JFrame{
 	
@@ -67,6 +74,7 @@ public class SaisieHeureSpe extends JFrame{
 		this.setVisible(true);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void init(){
 		String annee = spe.getjAnnee().getText();
 		int num = spe.getDonnees().newNum("heurespe", "NumHeureSpe", "Annee = " + annee);
@@ -149,6 +157,63 @@ public class SaisieHeureSpe extends JFrame{
 		fermer = new JButton("Fermer");
 		fermer.setBounds(390, 170, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
 		this.add(fermer);
+		
+		new ClickDroit(jAnnee, true, true);
+		new ClickDroit(jNumero, true, true);
+		new ClickDroit(jLibelle, true, true);
+		new ClickDroit(jhRecup, true, true);
+		new ClickDroit(jhPerdue, true, true);
+		
+		jAnnee.addKeyListener(new EcouteAction(jAnnee));
+		jNumero.addKeyListener(new EcouteAction(jNumero));
+		jhRecup.addKeyListener(new EcouteAction(jhRecup));
+		jhPerdue.addKeyListener(new EcouteAction(jhPerdue));
+		
+
+	    this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		jAnnee.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jAnnee.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jNumero.requestFocus();
+			}
+		});
+		jNumero.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jNumero.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jLibelle.requestFocus();
+			}
+		});
+		
+		jLibelle.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jLibelle.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jhRecup.requestFocus();
+			}
+		});
+		
+		jhRecup.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jhRecup.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jhPerdue.requestFocus();
+			}
+		});
+		
+		jhPerdue.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jhPerdue.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jAnnee.requestFocus();
+			}
+		});
 		
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);

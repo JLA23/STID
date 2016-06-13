@@ -12,6 +12,7 @@ import Controller.ActionGauche;
 import Controller.ActionRechercher;
 import Controller.ValiderModif;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class ModifDevis extends Devis{
 	private static final long serialVersionUID = 1L;
@@ -19,6 +20,10 @@ public class ModifDevis extends Devis{
 	public ModifDevis(Base bdd, String numd, JFrame frame) throws ParseException{
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Modifier Devis)");
+		new ClickDroit(jNumDevis, true, false);
+		new ClickDroit(jLibelle, true, true);
+		new ClickDroit(numClient.getZoneTexte(), true, true);
+		click.setFonction("Modif");
 		nouveau.setVisible(false);
 		donnees = new Donnees(base);
 		String [] res = donnees.fiche("*, c.nomclient", "devis as d, clients as c", "d.numclient = c.numclient and d.numDevis = " + numd);

@@ -60,6 +60,7 @@ public class Commandes extends JFrame{
     protected ArrayList<Object[]> listDevis;
     protected String [] valeursCommande;
     protected Object [][] DevisdelaCommande;
+    protected ExecuteClick click;
 
 	protected static final long serialVersionUID = 1L;
 	private Dimension screenSize = new Dimension();
@@ -73,7 +74,7 @@ public class Commandes extends JFrame{
 		this.base = bdd;
 		this.setLayout(null);
 		this.setTitle("STID Gestion 2.0 (Nouvelle Commande)");
-		screenSize.width = 800;
+		screenSize.width = 790;
 		screenSize.height = 600;
 		donnees = new Donnees(base);
 		DevisdelaCommande = null;
@@ -214,13 +215,13 @@ public class Commandes extends JFrame{
 		new ClickDroit(jTotalDevisDevise, true, false);
 		new ClickDroit(jTotalHeure, true, false);
 		new ClickDroit(jResteCommande, true, false);
-		new ClickDroit(jNumCommande, true, true);
+
 		jPanel1.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		jPanel2.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		JPanelTemps.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		jPanel6.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		jPanel3.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
-		ExecuteClick click = new ExecuteClick(this, "Commandes");
+		click = new ExecuteClick(this, "Commandes", "New");
 		
 		jFournitures.addMouseListener(new FocusPosition(jFournitures, 1, click));
 		jCout.addMouseListener(new FocusPosition(jCout, 1, click));
@@ -229,6 +230,8 @@ public class Commandes extends JFrame{
 		jHeureAtelier.addMouseListener(new FocusPosition(jHeureAtelier, 2, click));
 		jPrevu.addMouseListener(new FocusPosition(jPrevu, 3, click));
 		jCommande.addMouseListener(new FocusPosition(jCommande, 3, click));
+		
+		jNumCommande.addKeyListener(new EcouteAction(jNumCommande));
 		
 		jNumCommande.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jNumCommande.getActionMap().put("tab", new AbstractAction() {
@@ -239,7 +242,7 @@ public class Commandes extends JFrame{
 			}
 		});
 		
-		new ClickDroit(jLibelle, true, true);
+		
 		jLibelle.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jLibelle.getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;
@@ -249,7 +252,7 @@ public class Commandes extends JFrame{
 			}
 		});
 		
-		new ClickDroit(numClient.getZoneTexte(), true, true);
+		
 		numClient.getZoneTexte().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		numClient.getZoneTexte().getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;

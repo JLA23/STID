@@ -61,6 +61,7 @@ public class NewFacture extends Factures{
         new ClickDroit(jPrecision, true, true);
         new ClickDroit(jAnneeValeur, true, true);
         new ClickDroit(jTVA, true, true);
+        new ClickDroit(jValeur, true, true);
         valider.addActionListener(new ActionValiderFacture(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionNouveau(this, "Factures"));

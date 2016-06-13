@@ -146,9 +146,16 @@ private void supprFacture() {
 			"NumFacture = " + facture.getjNumFacture().getText())) {
 		if (facture.getDonnees().exist("termes", "Numcommande, NumIndice",
 				"NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice())) {
-				facture.getBase().update("termes", "numfacture = null", "numcommande = " + facture.getNumeroCommande() + " AND numindice = " + facture.getNumeroIndice() + " AND numfacture = " + facture.getjNumFacture().getText());
-				facture.getBase().delete("factures", "numfacture = " + facture.getjNumFacture().getText());
-				JOptionPane.showMessageDialog(null, "Facture supprimé !");
+				if(Double.parseDouble(facture.getjTotalHT().getText().replaceAll(",", "\\.")) < 0){
+					facture.getBase().delete("termes", "numcommande = " + facture.getNumeroCommande() + " AND numindice = " + facture.getNumeroIndice() + " AND numfacture = " + facture.getjNumFacture().getText());
+					facture.getBase().delete("factures", "numfacture = " + facture.getjNumFacture().getText());
+					JOptionPane.showMessageDialog(null, "Facture et Terme supprimés !");
+				}
+				else{
+					facture.getBase().update("termes", "numfacture = null", "numcommande = " + facture.getNumeroCommande() + " AND numindice = " + facture.getNumeroIndice() + " AND numfacture = " + facture.getjNumFacture().getText());
+					facture.getBase().delete("factures", "numfacture = " + facture.getjNumFacture().getText());
+					JOptionPane.showMessageDialog(null, "Facture supprimée !");
+				}
 				facture.dispose();
 				facture.getFenetre().setEnabled(true);
 				facture.getFenetre().setVisible(true);

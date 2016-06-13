@@ -13,6 +13,7 @@ import Controller.TestContenu;
 import Controller.ActionRechercher;
 import Controller.ValiderSuppr;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class SupprDevis extends Devis{
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,10 @@ public class SupprDevis extends Devis{
 	public SupprDevis(Base bdd, String numd, JFrame frame) throws ParseException{
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Supprimer Devis)");
+		new ClickDroit(jNumDevis, true, false);
+		new ClickDroit(jLibelle, true, false);
+		new ClickDroit(numClient.getZoneTexte(), true, false);
+		click.setFonction("Suppr");
 		this.base= bdd;
 		valider.setText("Supprimer");
 		valider.setBounds(660, 495, 100, 25);
@@ -49,6 +54,9 @@ public class SupprDevis extends Devis{
 		new TestContenu(this, jHeureAtelier, 2, "Devis");
 		new TestContenu(this, jPrevu, 3, "Devis");
 		new TestContenu(this, jCommande, 3, "Devis");
+		new TestContenu(this, jTotalDevis, 0, "Devis");
+		new TestContenu(this, jTotalHeure, 0, "Devis");
+		new TestContenu(this, jResteCommande, 0, "Devis");
 		new FocusJText(this, "Devis").name();
 		jFournitures.setEditable(false);
 		jFournitures.setBackground(new Color(204, 204, 204));

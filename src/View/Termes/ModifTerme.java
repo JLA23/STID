@@ -17,8 +17,10 @@ import Controller.ActionFermer;
 import Controller.ActionGauche;
 
 import Controller.ActionRechercher;
+import Controller.TestContenu;
 import Controller.ValiderModif;
 import Model.Calcul;
+import View.Options.ClickDroit;
 
 public class ModifTerme extends Termes {
 
@@ -27,12 +29,13 @@ public class ModifTerme extends Termes {
 	public ModifTerme(Base bdd, JFrame frame, String num, String indice, String fact) throws ParseException {
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Modifier Terme)");
-		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
 		numero.setText(numero.getText() + num);
 		numeroCommande = num;
 		String nbindice = indice;
 		numeroIndice = indice;
-		System.out.println(num +", " + indice + ", " + fact);
+		new ClickDroit(jNumIndice, true, false);
+		new ClickDroit(jLibelle, true, true);
+		click.setFonction("Modif");
 		String[] res = null;
 		if(fact == null){
 		res = donnees.fiche(
@@ -46,7 +49,6 @@ public class ModifTerme extends Termes {
 					"commandes as c, clients as cl, termes as t", "t.numCommande = " + num + " and t.numIndice = "
 							+ nbindice + " and t.numfacture = " + fact + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		}
-		System.out.println(res[0] + ", " + res[1] + ", " + res[2]);
 		jNumIndice.setText(nbindice);
 		jLibelle.setText(res[0]);
 		nameClient.setText(nameClient.getText() + res[1]);
@@ -59,6 +61,11 @@ public class ModifTerme extends Termes {
 		valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
 		new Calcul().calculerMontant(jFournitures, jCout, jPrefabrication, jTotalDevis, jTotalDevisDevise,
 				valeurDevise);
+		new TestContenu(this, jFournitures, 1, "Termes");
+		new TestContenu(this, jCout, 1, "Termes");
+		new TestContenu(this, jPrefabrication, 1, "Termes");
+		new TestContenu(this, jTotalDevis, 0, "Termes");
+		new TestContenu(this, jTotalDevisDevise, 0, "Termes");
 		jNumIndice.requestFocus();
 		valider.addActionListener(new ValiderModif(this, "Termes"));
 		fermer.addActionListener(new ActionFermer(this, frame));

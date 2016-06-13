@@ -15,6 +15,7 @@ import Controller.ActionFermer;
 import Controller.ActionGauche;
 import Controller.ActionRechercher;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class LookClient extends Client {
 
@@ -25,6 +26,7 @@ public class LookClient extends Client {
 		this.setTitle("STID Gestion 2.0 (Supprimer Client)");
 		nouveau.setText("Recherche");
 		donnees = new Donnees(base);
+		new ClickDroit(jNumClient, true, false);
 		String[] res = donnees.fiche("*", "clients", "numClient = " + numero);
 		jNumClient.setText(numero);
 		jNumClient.setEditable(false);

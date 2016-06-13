@@ -147,11 +147,11 @@ public class Base  {
 			String query = null;
 			String query2 = null;
 			if(typeCompte.equals("Admin")){
-				query = "GRANT ALL PRIVILEGES ON *.* TO '" + newPseudo + "'@'%' IDENTIFIED BY '" + newMdp + "' WITH GRANT OPTION";
+				query = "GRANT ALL PRIVILEGES ON *.* TO '" + newPseudo + "'@'192.168.%' IDENTIFIED BY '" + newMdp + "' WITH GRANT OPTION";
 				query2 = "Insert into users values('" + newPseudo + "', 1)";
 			}
 			else{
-				query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + newPseudo + "'@'%' IDENTIFIED BY '" + newMdp + "'";
+				query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + newPseudo + "'@'192.168.%' IDENTIFIED BY '" + newMdp + "'";
 				query2 = "Insert into users values('" + newPseudo + "', 2)";;
 			}
 				stmt.executeUpdate(query); 
@@ -186,7 +186,7 @@ public class Base  {
 	public String modifPseudo(String newPseudo){
 		String message = null;
 		try{
-			String query = "RENAME USER '"+ pseudo + "'@'192.168.%' TO '" + newPseudo + "'@'%'";
+			String query = "RENAME USER '"+ pseudo + "'@'192.168.%' TO '" + newPseudo + "'@'192.168.%'";
 			stmt.executeUpdate(query); 
 			String res = update("users", "pseudo = '" + newPseudo + "'", "pseudo = '" + pseudo + "'");
 			if(res.equals("Modification effectué avec succée !")){
@@ -206,12 +206,18 @@ public class Base  {
 		String res = null;
 		try{
 			if(compte.equals("Admin")){
-				String query = "GRANT ALL PRIVILEGES ON *.* TO '" + pseudo + "'@'%' WITH GRANT OPTION";
+				String query = "REVOKE ALL PRIVILEGES ON *.* FROM '" + pseudo +"'@'192.168.%'";
+				stmt.executeUpdate(query);
+				query = "GRANT ALL PRIVILEGES ON *.* TO '" + pseudo + "'@'192.168.%'";
 				stmt.executeUpdate(query);
 				res = update("users", "typecompte = 1", "pseudo = '" + pseudo + "'");
 			}
 			else{
-				String query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + pseudo + "'@'%'";
+				String query = "REVOKE ALL PRIVILEGES ON *.* FROM '"+ pseudo +"'@'192.168.%'";
+				stmt.executeUpdate(query);
+				query = "REVOKE GRANT OPTION ON *.* FROM '"+ pseudo +"'@'192.168.%'";
+				stmt.executeUpdate(query);
+				query = "GRANT SELECT, UPDATE, RELOAD ON *.* TO '" + pseudo + "'@'192.168.%'";
 				stmt.executeUpdate(query);
 				res = update("users", "typecompte = 2", "pseudo = '" + pseudo + "'");
 			}
@@ -224,7 +230,6 @@ public class Base  {
 			
 		}
 		catch(Exception e){message = "Error : " + e.getMessage();}
-		
 		return message;
 	}
 	

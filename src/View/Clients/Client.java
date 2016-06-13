@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import BDD.Base;
 import Controller.LimiteCaratere;
+import Controller.EcouteAction;
 import Controller.FocusJText;
 import Controller.ItemChange;
 import Model.Donnees;
@@ -259,7 +260,6 @@ public class Client extends JDialog {
 		panelPaiement.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		
-		new ClickDroit(jNumClient, true, true);
 		jNumClient.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jNumClient.getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;
@@ -407,6 +407,9 @@ public class Client extends JDialog {
 				jNumClient.requestFocus();
 			}
 		});
+		jJourSuivant.addKeyListener(new EcouteAction(jJourSuivant));
+		jDelais.addKeyListener(new EcouteAction(jDelais));
+		jNbExemplaire.addKeyListener(new EcouteAction(jNbExemplaire));
 	}
 	
 	public JRadioButton getBr2() {

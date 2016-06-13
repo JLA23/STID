@@ -21,7 +21,11 @@ public class TestContenu {
 		}
 		else if (!jtext.getText().contains(",") && !jtext.getText().contains(".")) {
 			jtext.setText(jtext.getText() + ",00");
-		} else if (jtext.getText().contains(",") && jtext.getText().split(",")[1].length() == 1){
+		}
+		else if (jtext.getText().contains(",") && jtext.getText().split(",").length == 1){
+				jtext.setText(jtext.getText() + "00");
+		}
+		 else if (jtext.getText().contains(",") && jtext.getText().split(",")[1].length() == 1){
 			jtext.setText(jtext.getText() + "0");
 		}
 		else {

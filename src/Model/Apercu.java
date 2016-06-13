@@ -31,6 +31,8 @@ public class Apercu {
     		if(val < 0){
     			val = val * -1;
     		}
+    	Donnees donnees = new Donnees(bdd);
+    	String [] res = donnees.fiche("c.NomClient, c.NbEx", "clients as c, factures as f, termes as t, commandes as co", "f.NumFacture = " + numFacture + " and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient");			
     	int i = new Double(val).intValue(); //recuperer la partie entiere
     	double decimale = ((val*100)-(new Double(i).doubleValue() * 100))/100;;
 		decimale = decimale * 100;
@@ -60,7 +62,7 @@ public class Apercu {
 
             // - Execution du rapport
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, bdd.getCon());
-            JasperViewer jReportsViewer = new JasperViewer(jasperPrint, "Eric", 3);
+            JasperViewer jReportsViewer = new JasperViewer(jasperPrint, "Facture n°" + numFacture + " - " + res[0], Integer.parseInt(res[1]));
             thread.getFrame().setVisible(false);
             jReportsViewer.setVisible(true);
         } catch (JRException e) {

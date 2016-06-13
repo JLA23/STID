@@ -86,6 +86,7 @@ public class SearchTermeList extends SearchList {
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
 		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Termes", fonction));
+		layerTable.addMouseListener(new SelectionAction(this, "Termes", fonction));
 		valider.addActionListener(new SelectionAction(this, "Termes", fonction));
 		retour.addActionListener(new RetourAction(this, "Termes", fonction));
 		annuler.addActionListener(new ActionFermer(this));

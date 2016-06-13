@@ -38,6 +38,12 @@ public class ActionValiderFacture implements ActionListener {
 					else {
 						facture.getBase().update("termes", "NumFacture = " + facture.getjNumFacture().getText(), "NumCommande = " + facture.getNumeroCommande() + " AND NumIndice = " + facture.getNumeroIndice());
 					}
+					String res [] = facture.getDonnees().fiche("Round(c.prefabrication + c.coutmo + c.mntfour, 2) as com, Round(Sum(t.prefabrication + t.coutmo + t.mntfour), 2) as ter", "commandes as c, termes as t", "t.numcommande = c.numcommande and c.numcommande = " + facture.getNumeroCommande() + " and t.prefabrication >= 0 and t.coutmo >= 0 and t.mntfour >= 0");
+					Double valcom = Double.parseDouble(res[0]);
+					Double valter = Double.parseDouble(res[1]);
+					if(valter >= valcom){
+						facture.getBase().update("commandes", "travauxfini = 1", "numcommande = " + facture.getNumeroCommande());
+					}
 					JOptionPane.showMessageDialog(null, "Facture enregistré !");
 					facture.dispose();
 					facture.getFenetre().setEnabled(true);

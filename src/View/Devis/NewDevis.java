@@ -5,6 +5,7 @@ import Controller.ActionFermer;
 import Controller.Devis.NewDevis.ActionCreateClient;
 import Controller.ActionNouveau;
 import Controller.Devis.NewDevis.ActionValiderDevis;
+import View.Options.ClickDroit;
 
 public class NewDevis extends Devis{
 	
@@ -16,6 +17,9 @@ public class NewDevis extends Devis{
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionNouveau(this, "Devis"));
 		newClient.addActionListener(new ActionCreateClient(this));
+		new ClickDroit(jNumDevis, true, true);
+		new ClickDroit(jLibelle, true, true);
+		new ClickDroit(numClient.getZoneTexte(), true, true);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

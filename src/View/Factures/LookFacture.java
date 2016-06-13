@@ -24,6 +24,7 @@ public class LookFacture extends Factures {
 
 	public LookFacture(Base bdd, JFrame frame, String num, String indice, String nbFacture) throws ParseException {
 		super(bdd, frame);
+		this.setTitle("STID Gestion 2.0 (Recherche Facture)");
 		numero.setText(numero.getText() + num + " / " + indice);
 		numeroCommande = num;
 		numeroIndice = indice;
@@ -89,9 +90,10 @@ public class LookFacture extends Factures {
         new ClickDroit(jTotalHT, true, false);
         new ClickDroit(jTotalTTC, true, false);
         new ClickDroit(jTotalDevise, true, false);
-        new ClickDroit(jPrecision, true, true);
-        new ClickDroit(jAnneeValeur, true, true);
+        new ClickDroit(jPrecision, true, false);
+        new ClickDroit(jAnneeValeur, true, false);
         new ClickDroit(jTVA, true, false);
+        new ClickDroit(jValeur, true, false);
         valider.setVisible(false);
 		ImageIcon icon = new ImageIcon(new ImageIcon("lib/images/Fleche gauche bleue.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		gauche = new JButton(icon);

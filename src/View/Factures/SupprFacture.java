@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import javax.swing.JFrame;
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.TestContenu;
 import Controller.ValiderModif;
 import Controller.ValiderSuppr;
 import Model.Calcul;
@@ -19,6 +20,7 @@ public class SupprFacture extends Factures {
 
 	public SupprFacture(Base bdd, JFrame frame, String num, String indice, String nbFacture) throws ParseException {
 		super(bdd, frame);
+		this.setTitle("STID Gestion 2.0 (Supprimer Facture / Avoir)");
 		numero.setText(numero.getText() + num + " / " + indice);
 		numeroCommande = num;
 		numeroIndice = indice;
@@ -42,6 +44,13 @@ public class SupprFacture extends Factures {
 		jTVA.setText((valeurTVA + "").replaceAll("\\.", ","));
 		new Calcul().calculerMontantTTC(jFournitures, jCout, jPrefabrication, jTotalHT, jTotalTTC, jTotalDevise,
 				valeurDevise, valeurTVA, this);
+		new TestContenu(this, jFournitures, 1, "Factures");
+		new TestContenu(this, jCout, 1, "Factures");
+		new TestContenu(this, jPrefabrication, 1, "Factures");
+		new TestContenu(this, jTVA, 0, "Factures");
+		new TestContenu(this, jTotalHT, 0, "Factures");
+		new TestContenu(this, jTotalTTC, 0, "Factures");
+		new TestContenu(this, jTotalDevise, 0, "Factures");
 		InsertModesPaiements(res[8]);
 		SelectModePaiement(res[9]);
 		jPrecision.setText(res[10]);
@@ -84,9 +93,10 @@ public class SupprFacture extends Factures {
         new ClickDroit(jTotalHT, true, false);
         new ClickDroit(jTotalTTC, true, false);
         new ClickDroit(jTotalDevise, true, false);
-        new ClickDroit(jPrecision, true, true);
-        new ClickDroit(jAnneeValeur, true, true);
+        new ClickDroit(jPrecision, true, false);
+        new ClickDroit(jAnneeValeur, true, false);
         new ClickDroit(jTVA, true, false);
+        new ClickDroit(jValeur, true, false);
         for( ActionListener al : valider.getActionListeners() ) {
 	    	valider.removeActionListener( al );
 	    }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/AutoCompletion.jar"/>
 	<classpathentry kind="lib" path="lib/ConfigurationFichier.jar"/>
 	<classpathentry kind="lib" path="lib/Crypte.jar"/>
@@ -76,5 +75,6 @@
 	<classpathentry kind="lib" path="lib/ireport/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/ireport/xmlbeans-2.5.0.jar"/>
 	<classpathentry kind="lib" path="lib/ireport/xmpcore-5.1.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

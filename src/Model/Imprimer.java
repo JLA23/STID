@@ -20,26 +20,29 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.swing.JRViewer;
 
 public class Imprimer {
-	
+
 	protected Base bdd;
 	protected String numfacture;
 	protected Double valeur;
 	protected ThreadImpression thread;
-		
-    public Imprimer(String numFacture, Base base, Double valeur, ThreadImpression thread) {
-    	this.bdd = base;
-    	this.numfacture = numFacture;
-    	this.valeur = valeur;
-    	this.thread = thread;
-    	init();
-    }
-    
-    @SuppressWarnings("unchecked")
+
+	public Imprimer(String numFacture, Base base, Double valeur, ThreadImpression thread) {
+		this.bdd = base;
+		this.numfacture = numFacture;
+		this.valeur = valeur;
+		this.thread = thread;
+		init();
+	}
+
+	@SuppressWarnings("unchecked")
 	private void init() {
     	Double val = valeur;
 		if(val < 0){
 			val = val * -1;
 		}
+		
+		Donnees donnees = new Donnees(bdd);
+		String [] res = donnees.fiche("c.NomClient, c.NbEx", "clients as c, factures as f, termes as t, commandes as co", "f.NumFacture = " + numfacture + " and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient");		
 		int i = new Double(val).intValue(); //recuperer la partie entiere
 		double decimale = ((val*100)-(new Double(i).doubleValue() * 100))/100;
 		decimale = decimale * 100;
@@ -74,11 +77,13 @@ public class Imprimer {
             
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, bdd.getCon());
             thread.getFrame().setVisible(false);
-            new JRViewer(jasperPrint).printManager("Test", 3);
+            JRViewer view = new JRViewer(jasperPrint);
+            view.printManager("Facture n°" + numfacture + " - " + res[0], Integer.parseInt(res[1]));
+            
         } catch (JRException e) {
 
             e.printStackTrace();
         } 
 
-    }    
+    }
 }

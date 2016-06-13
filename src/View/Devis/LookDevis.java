@@ -17,6 +17,7 @@ import Controller.ActionRechercher;
 import Controller.FocusJText;
 import Controller.TestContenu;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class LookDevis extends Devis {
 	private static final long serialVersionUID = 1L;
@@ -25,6 +26,10 @@ public class LookDevis extends Devis {
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Fiche Devis)");
 		this.base = bdd;
+		new ClickDroit(jNumDevis, true, false);
+		new ClickDroit(jLibelle, true, false);
+		new ClickDroit(numClient.getZoneTexte(), true, false);
+		click.setFonction("Look");
 		valider.setVisible(false);
 		nouveau.setVisible(false);
 		//nouveau.setBounds(20, 510, 100, 25);
@@ -51,6 +56,9 @@ public class LookDevis extends Devis {
 		new TestContenu(this, jHeureAtelier, 2, "Devis");
 		new TestContenu(this, jPrevu, 3, "Devis");
 		new TestContenu(this, jCommande, 3, "Devis");
+		new TestContenu(this, jTotalDevis, 0, "Devis");
+		new TestContenu(this, jTotalHeure, 0, "Devis");
+		new TestContenu(this, jResteCommande, 0, "Devis");
 		new FocusJText(this, "Devis").name();
 		jFournitures.setEditable(false);
 		jFournitures.setBackground(new Color(204, 204, 204));

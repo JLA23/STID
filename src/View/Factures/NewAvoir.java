@@ -12,6 +12,7 @@ public class NewAvoir {
 
 	public NewAvoir(Factures facture){
 		this.factures = facture;
+		facture.setTitle("STID Gestion 2.0 (New Avoir)");
 		int nbFacture = factures.getDonnees().newNum("factures","NumFacture", null);
 		factures.getjNumFacture().setText(nbFacture + "");
 		factures.getjNumFacture().setEditable(true);

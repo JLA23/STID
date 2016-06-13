@@ -10,24 +10,33 @@ public class ClickDroit extends JPopupMenu {
 
 	private static final long serialVersionUID = 1L;
 	private JTextComponent text;
+	private boolean pasteCutAnnuler, copy;
+	private JMenuItem cutMenuItem, copyMenuItem, pasteMenuItem, supprMenuItem;
 
-	public ClickDroit(JTextComponent comp, boolean copy, boolean pasteCutAnnuler) {
+	public ClickDroit(JTextComponent comp, boolean copy, boolean pasteCut) {
 		this.text = comp;
+		this.copy = copy;
+		this.pasteCutAnnuler = pasteCut;
+		init();
+		text.setComponentPopupMenu(this);
+	}
+	
+	private void init(){
 		// Copy
 		if (copy) {
-			JMenuItem copyMenuItem = new JMenuItem("Copier");
+			copyMenuItem = new JMenuItem("Copier");
 			this.add(copyMenuItem);
 			copyMenuItem.addActionListener(new Action(text));
 		}
 
 		// Cut
 		if (pasteCutAnnuler) {
-			JMenuItem cutMenuItem = new JMenuItem("Couper");
+			cutMenuItem = new JMenuItem("Couper");
 			this.add(cutMenuItem);
 			cutMenuItem.addActionListener(new Action(text));
 
 			// Paste
-			JMenuItem pasteMenuItem = new JMenuItem("Coller");
+			pasteMenuItem = new JMenuItem("Coller");
 			// pasteMenuItem.setEnabled(false);
 			this.add(pasteMenuItem);
 			pasteMenuItem.addActionListener(new Action(text));
@@ -36,14 +45,13 @@ public class ClickDroit extends JPopupMenu {
 			this.addSeparator();
 
 			// Supprimer
-			JMenuItem supprMenuItem = new JMenuItem("Supprimer");
+			supprMenuItem = new JMenuItem("Supprimer");
 			// supprMenuItem.setEnabled(false);
 			this.add(supprMenuItem);
 			supprMenuItem.addActionListener(new Action(text));
 		}
-		text.setComponentPopupMenu(this);
 	}
-
+	
 	private class Action implements ActionListener {
 
 		private JTextComponent compo;
@@ -62,7 +70,18 @@ public class ClickDroit extends JPopupMenu {
 			} else if (actionEvent.getActionCommand().equals("Supprimer")) {
 				compo.replaceSelection("");
 			}
-
 		}
 	}
+
+	public boolean isPasteCutAnnuler() {
+		return pasteCutAnnuler;
+	}
+
+	public void setPasteCutAnnuler(boolean pasteCutAnnuler) {
+		this.pasteCutAnnuler = pasteCutAnnuler;
+		copyMenuItem.setVisible(false);
+		init();
+		text.setComponentPopupMenu(this);
+	}
+		
 }

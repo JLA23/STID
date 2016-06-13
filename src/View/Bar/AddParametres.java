@@ -1,8 +1,10 @@
 package View.Bar;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -20,11 +22,14 @@ public class AddParametres{
 	private Base base;
 	private JFrame fenetre;
 	
-	public AddParametres(Base bdd, String typeCompte, JFrame frame){
+	public AddParametres(Base bdd, JFrame frame){
 		base = bdd;
 		fenetre = frame;
 		menu = new JMenu("Paramètres");
-		menu.getAccessibleContext().setAccessibleDescription("Clients");		
+		menu.getAccessibleContext().setAccessibleDescription("Paramètres");
+		ImageIcon icon = new ImageIcon(
+				new ImageIcon("lib/images/parametrage.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		menu.setIcon(icon);
 		
 		
 		//Categorie de personne
@@ -91,7 +96,7 @@ public class AddParametres{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ParametreTaux(base);
+				new ParametreTaux(base, fenetre);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Paramètres de l'application");

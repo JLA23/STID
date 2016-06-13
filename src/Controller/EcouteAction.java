@@ -3,18 +3,18 @@ package Controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
 
 public class EcouteAction implements KeyListener {
 
-	JFormattedTextField text1;
+	JTextField text1;
 	String l = "1234567890";
 	boolean point = true;
 
-	public EcouteAction(JFormattedTextField jtext1) {
+	public EcouteAction(JTextField jtext1) {
 		this.text1 = jtext1;
 	}
-	public EcouteAction(JFormattedTextField jtext1, boolean point) {
+	public EcouteAction(JTextField jtext1, boolean point) {
 		this.text1 = jtext1;
 		this.point = point;
 	}

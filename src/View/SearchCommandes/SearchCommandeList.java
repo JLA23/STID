@@ -73,6 +73,7 @@ public class SearchCommandeList extends SearchList {
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
 		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Commandes", fonction));
+		layerTable.addMouseListener(new SelectionAction(this, "Commandes", fonction));
 		valider.addActionListener(new SelectionAction(this, "Commandes", fonction));
 		retour.addActionListener(new RetourAction(this, "Commandes", fonction));
 		annuler.addActionListener(new ActionFermer(this));

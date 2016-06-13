@@ -24,8 +24,10 @@ import View.Bar.AddTermes;
 			this.add(new AddClients(bdd, typeCompte).getMenu());
 			this.add(new AddTermes(bdd, typeCompte, frame).getMenu());
 			this.add(new AddFacturation(bdd, typeCompte, frame).getMenu());
-			this.add(new AddPointages(bdd, frame, typeCompte).getMenu());
-			this.add(new AddParametres(bdd, typeCompte, frame).getMenu());
+			if(typeCompte.equals("Admin")){
+			this.add(new AddPointages(bdd, frame).getMenu());
+			this.add(new AddParametres(bdd, frame).getMenu());
+			}
 			this.add(new AddPropos(bdd).getMenu());
 
 		}

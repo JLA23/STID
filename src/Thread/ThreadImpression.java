@@ -29,7 +29,7 @@ public class ThreadImpression extends Thread{
 	
 	public void run(){
 		frame = new JWindow();
-		ImageIcon loading = new ImageIcon("ajax-loader.gif");
+		ImageIcon loading = new ImageIcon("lib/images/ajax-loader.gif");
 		frame.add(new JLabel("", loading, JLabel.CENTER));
 		frame.setSize(100, 100);
         frame.setLocationRelativeTo(null);

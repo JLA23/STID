@@ -88,6 +88,7 @@ public class SearchClientList extends SearchList {
         layerPanel.add(valider, BorderLayout.SOUTH);
         layerPanel.add(annuler, BorderLayout.SOUTH);
         layerTable.addKeyListener(new KeyEntrerSearchList(this, "Client", fonction));
+        layerTable.addMouseListener(new SelectionAction(this, "Client", fonction));
         valider.addActionListener(new SelectionAction(this, "Client", fonction));
         annuler.addActionListener(new ActionFermer(this));
         retour.addActionListener(new RetourAction(this, "Client", fonction));

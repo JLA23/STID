@@ -11,18 +11,24 @@ public class ExecuteClick {
 	
 	private boolean click;
 	private Object classe;
-	private String type;
+	private String type, fonction;
 	
-	public ExecuteClick(Object d, String typeClasse){
+	public ExecuteClick(Object d, String typeClasse, String fonction){
 		this.click = false;
 		this.classe = d;
 		this.type = typeClasse;
+		this.fonction = fonction;
 	}
 	
 	public void execute(MouseEvent m, FocusEvent f, JFormattedTextField jtext, int met){
 		if(m != null && f == null){
 			click = true;
-			new ClickDroit(jtext, true, true);
+			if(fonction.equals("Suppr") || fonction.equals("Look")){
+				new ClickDroit(jtext, true, false);
+			}
+			else{
+				new ClickDroit(jtext, true, true);
+			}
 		}
 		else if(m == null && f != null){
 			if(click == false){
@@ -33,6 +39,14 @@ public class ExecuteClick {
 			}
 		}
 		
+	}
+
+	public String getFonction() {
+		return fonction;
+	}
+
+	public void setFonction(String fonction) {
+		this.fonction = fonction;
 	}
 
 }

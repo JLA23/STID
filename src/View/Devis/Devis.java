@@ -68,6 +68,7 @@ public class Devis extends JFrame {
 	protected static final long serialVersionUID = 1L;
 	protected Dimension screenSize = new Dimension();
 	protected JFrame fenetre;
+	protected ExecuteClick click;
 
 	@SuppressWarnings("unchecked")
 	public Devis(Base bdd, JFrame frame) {
@@ -208,7 +209,7 @@ public class Devis extends JFrame {
 
 		search.addActionListener(new ActionSearch(this, "Devis"));
 		
-		ExecuteClick click = new ExecuteClick(this, "Devis");
+		click = new ExecuteClick(this, "Devis", "New");
 		
 		jFournitures.addMouseListener(new FocusPosition(jFournitures, 1, click));
 		jCout.addMouseListener(new FocusPosition(jCout, 1, click));
@@ -217,6 +218,8 @@ public class Devis extends JFrame {
 		jHeureAtelier.addMouseListener(new FocusPosition(jHeureAtelier, 2, click));
 		jPrevu.addMouseListener(new FocusPosition(jPrevu, 3, click));
 		jCommande.addMouseListener(new FocusPosition(jCommande, 3, click));
+		
+		jNumDevis.addKeyListener(new EcouteAction(jNumDevis));
 		
 		new ClickDroit(jTotalDevis, true, false);
 		new ClickDroit(jTotalDevisDevise, true, false);
@@ -257,7 +260,7 @@ public class Devis extends JFrame {
 		nouveau.setBounds(20, 510, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
 		this.getContentPane().add(nouveau);
 		
-		new ClickDroit(jNumDevis, true, true);
+		
 		jNumDevis.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jNumDevis.getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;
@@ -276,7 +279,7 @@ public class Devis extends JFrame {
 			}
 		});
 		
-		new ClickDroit(jLibelle, true, true);
+		
 		jLibelle.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jLibelle.getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;
@@ -286,7 +289,7 @@ public class Devis extends JFrame {
 			}
 		});
 		
-		new ClickDroit(numClient.getZoneTexte(), true, true);
+		
 		numClient.getZoneTexte().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		numClient.getZoneTexte().getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;
@@ -629,6 +632,9 @@ public class Devis extends JFrame {
 		new TestContenu(this, jHeureAtelier, 2, "Devis");
 		new TestContenu(this, jPrevu, 3, "Devis");
 		new TestContenu(this, jCommande, 3, "Devis");
+		new TestContenu(this, jTotalDevis, 0, "Devis");
+		new TestContenu(this, jTotalHeure, 0, "Devis");
+		new TestContenu(this, jResteCommande, 0, "Devis");
 		new FocusJText(this, "Devis").name();
 		if(viewCommande == null && !res[2].equals("null")){
 			viewCommande = new JButton("Voir la commande n°" + res[2]);
@@ -1010,5 +1016,12 @@ public class Devis extends JFrame {
 	
 	}
 
+	public ExecuteClick getClick() {
+		return click;
+	}
+
+	public void setClick(ExecuteClick click) {
+		this.click = click;
+	}
 
 }

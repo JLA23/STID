@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import BDD.Base;
@@ -33,7 +34,8 @@ public class ParametreTaux extends JDialog{
 	private Donnees donnees;
 	private LinkedHashMap<String, String[]> valeur;
 	
-	public ParametreTaux(Base bdd){
+	public ParametreTaux(Base bdd, JFrame frame){
+		super(frame, null, true);
 		this.base = bdd;
 		donnees = new Donnees(base);
 		this.setLayout(null);
@@ -81,8 +83,9 @@ public class ParametreTaux extends JDialog{
 		this.getContentPane().add(valider);
 		this.getContentPane().add(annuler);
 		this.setResizable(false);
-		this.setVisible(true);
 		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+
 	}
 	
 	public Base getBase() {

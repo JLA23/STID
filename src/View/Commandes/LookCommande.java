@@ -15,6 +15,7 @@ import Controller.FocusJText;
 import Controller.TestContenu;
 import Controller.ActionRechercher;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
+import View.Options.ClickDroit;
 
 public class LookCommande extends Commandes {
 	private static final long serialVersionUID = 1L;
@@ -22,6 +23,10 @@ public class LookCommande extends Commandes {
 	public LookCommande(Base bdd, String numd, JFrame frame) throws ParseException{
 			super(bdd, frame);
 			this.setTitle("STID Gestion 2.0 (Fiche Commande)");
+			new ClickDroit(jNumCommande, true, false);
+			new ClickDroit(jLibelle, true, false);
+			new ClickDroit(numClient.getZoneTexte(), true, false);
+			click.setFonction("Look");
 			nouveau.setText("Recherche");
 			nouveau.setBounds(20, 510, 100, 25);
 			DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);
@@ -55,6 +60,9 @@ public class LookCommande extends Commandes {
 			new TestContenu(this, jHeureAtelier, 2, "Commandes");
 			new TestContenu(this, jPrevu, 3, "Commandes");
 			new TestContenu(this, jCommande, 3, "Commandes");
+			new TestContenu(this, jTotalDevis, 0, "Commandes");
+			new TestContenu(this, jTotalHeure, 0, "Commandes");
+			new TestContenu(this, jResteCommande, 0, "Commandes");
 			new FocusJText(this, "Commandes").name();
 			jFournitures.setEditable(false);
 			jFournitures.setBackground(new Color(204, 204, 204));

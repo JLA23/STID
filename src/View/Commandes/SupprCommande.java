@@ -10,6 +10,7 @@ import Controller.TestContenu;
 import Controller.ActionRechercher;
 import Controller.ValiderSuppr;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
+import View.Options.ClickDroit;
 
 public class SupprCommande extends Commandes{
 private static final long serialVersionUID = 1L;
@@ -19,6 +20,10 @@ private static final long serialVersionUID = 1L;
 		this.setTitle("STID Gestion 2.0 (Supprimer Commande)");
 		nouveau.setText("Recherche");
 		nouveau.setBounds(20, 510, 100, 25);
+		new ClickDroit(jNumCommande, true, false);
+		new ClickDroit(jLibelle, true, false);
+		new ClickDroit(numClient.getZoneTexte(), true, false);
+		click.setFonction("Suppr");
 		DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);
 		String [] res = donnees.fiche("*", "commandes", "numCommande = " + numd);
 		jNumCommande.setText(res[0]);
@@ -50,6 +55,9 @@ private static final long serialVersionUID = 1L;
 		new TestContenu(this, jHeureAtelier, 2, "Commandes");
 		new TestContenu(this, jPrevu, 3, "Commandes");
 		new TestContenu(this, jCommande, 3, "Commandes");
+		new TestContenu(this, jTotalDevis, 0, "Commandes");
+		new TestContenu(this, jTotalHeure, 0, "Commandes");
+		new TestContenu(this, jResteCommande, 0, "Commandes");
 		new FocusJText(this, "Commandes").name();
 		jFournitures.setEditable(false);
 		jFournitures.setBackground(new Color(204, 204, 204));

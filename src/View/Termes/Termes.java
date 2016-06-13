@@ -53,7 +53,7 @@ public class Termes extends JFrame{
     protected Object [][] listClient;
     protected JFrame fenetre;
     protected String numeroIndice, numeroClient, numeroCommande, numFacture;
-
+    protected ExecuteClick click;
 	private static final long serialVersionUID = 1L;
 	protected Dimension screenSize = new Dimension();
 	
@@ -65,7 +65,7 @@ public class Termes extends JFrame{
 		this.setTitle("STID Gestion 2.0 (Nouveau Terme)");
 		screenSize.width = 590;
 		screenSize.height = 500;
-		this.setIconImage(new ImageIcon("lib/images/e.png").getImage());
+		this.setIconImage(new ImageIcon("lib/images/icone.png").getImage());
 	    this.setSize(screenSize);
 	    this.base = bdd;
 	    donnees = new Donnees(base);
@@ -137,7 +137,7 @@ public class Termes extends JFrame{
 		jPanel2.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		jPanel6.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
-		ExecuteClick click = new ExecuteClick(this, "Termes");
+		click = new ExecuteClick(this, "Termes", "New");
 		
 		jFournitures.addMouseListener(new FocusPosition(jFournitures, 1, click));
 		jCout.addMouseListener(new FocusPosition(jCout, 1, click));
@@ -149,7 +149,7 @@ public class Termes extends JFrame{
         devise.setText(devises.getSelectedItem().toString());
         devises.addItemListener(new ItemChange(this, "Termes"));
         
-    	new ClickDroit(jLibelle, true, true);
+    	
 		jNumIndice.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
 		jNumIndice.getActionMap().put("tab", new AbstractAction() {
 			protected static final long serialVersionUID = 1L;
@@ -221,6 +221,9 @@ public class Termes extends JFrame{
         nouveau.setPreferredSize(new Dimension(90, 25));
         nouveau.setBounds(20, 410, nouveau.getPreferredSize().width, nouveau.getPreferredSize().height);
         this.getContentPane().add(nouveau);
+        new ClickDroit(jTotalDevis, true, false);
+        new ClickDroit(jTotalDevisDevise, true, false);
+        
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.addWindowListener(new ActionFermer(this, fenetre));

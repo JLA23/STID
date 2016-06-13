@@ -16,6 +16,7 @@ import Controller.TestContenu;
 import Controller.ActionRechercher;
 import Controller.ValiderModif;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
+import View.Options.ClickDroit;
 
 public class ModifCommande extends Commandes{
 	
@@ -24,8 +25,10 @@ public class ModifCommande extends Commandes{
 	public ModifCommande(Base bdd, String numd, JFrame frame) throws ParseException{
 		super(bdd, frame);
 		this.setTitle("STID Gestion 2.0 (Modifier Commande)");
-		//nouveau.setText("Recherche");
-		//nouveau.setBounds(20, 510, 100, 25);
+		new ClickDroit(jNumCommande, true, false);
+		new ClickDroit(jLibelle, true, true);
+		new ClickDroit(numClient.getZoneTexte(), true, true);
+		click.setFonction("Modif");
 		DevisdelaCommande = donnees.liste("d.numDevis, d.numClient, c.nomclient, d.lblDevis", "devis as d, clients as c", "d.numclient = c.numclient and d.numcommande = " + numd);
 		String [] res = donnees.fiche("*", "commandes", "numCommande = " + numd);
 		jNumCommande.setText(res[0]);
@@ -58,6 +61,9 @@ public class ModifCommande extends Commandes{
 		new TestContenu(this, jHeureAtelier, 2, "Commandes");
 		new TestContenu(this, jPrevu, 3, "Commandes");
 		new TestContenu(this, jCommande, 3, "Commandes");
+		new TestContenu(this, jTotalDevis, 0, "Commandes");
+		new TestContenu(this, jTotalHeure, 0, "Commandes");
+		new TestContenu(this, jResteCommande, 0, "Commandes");
 		new FocusJText(this, "Commandes").name();
 		valider.addActionListener(new ValiderModif(this, "Commandes"));
 		fermer.addActionListener(new ActionFermer(this, frame));

@@ -10,6 +10,7 @@ import Controller.ActionFermer;
 import Controller.ActionRechercher;
 import Controller.ValiderSuppr;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class SupprClient extends Client {
 
@@ -19,6 +20,7 @@ public class SupprClient extends Client {
 		super(bdd, null);
 		this.setTitle("STID Gestion 2.0 (Supprimer Client)");
 		nouveau.setText("Recherche");
+		new ClickDroit(jNumClient, true, false);
 		donnees = new Donnees(base);
 		String[] res = donnees.fiche("*", "clients", "numClient = " + numero);
 		jNumClient.setText(numero);

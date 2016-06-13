@@ -39,17 +39,13 @@ public class STID {
 						bdd.close();
 						new Identification(line[0],line[1]);
 					}
-	        		else if (message.contains("Communications link failure")){
-	        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Communications link failure");
+	        		else{
+	        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données");
 	        			new ConfigurationConnexion();
 	        		}
-	        		else if(message.contains("Unknown database")){
-	        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Unknown database");
-	        			new ConfigurationConnexion();
-	        		}
+	
 	        	}
 	        }
-	        	
 	    });
 	}
 }

@@ -10,9 +10,11 @@ import javax.swing.JPanel;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.ActionRechercher;
+import Controller.TestContenu;
 import Controller.ValiderSuppr;
 import Model.Calcul;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class SupprTerme extends Termes {
 
@@ -31,6 +33,9 @@ public class SupprTerme extends Termes {
 		numeroCommande = num;
 		String nbindice = indice;
 		numeroIndice = indice;
+		new ClickDroit(jNumIndice, true, false);
+		new ClickDroit(jLibelle, true, false);
+		click.setFonction("Suppr");
 		String[] res = null;
 		if(fact == null){
 		res = donnees.fiche(
@@ -56,6 +61,11 @@ public class SupprTerme extends Termes {
 		valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
 		new Calcul().calculerMontant(jFournitures, jCout, jPrefabrication, jTotalDevis, jTotalDevisDevise,
 				valeurDevise);
+		new TestContenu(this, jFournitures, 1, "Termes");
+		new TestContenu(this, jCout, 1, "Termes");
+		new TestContenu(this, jPrefabrication, 1, "Termes");
+		new TestContenu(this, jTotalDevis, 0, "Termes");
+		new TestContenu(this, jTotalDevisDevise, 0, "Termes");
 		jNumIndice.requestFocus();
 		jFournitures.setEditable(false);
 		jFournitures.setBackground(new Color(204, 204, 204));

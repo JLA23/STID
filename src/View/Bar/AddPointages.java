@@ -1,8 +1,10 @@
 package View.Bar;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -18,11 +20,14 @@ public class AddPointages{
 	private Base base;
 	private JFrame fenetre;
 	
-	public AddPointages(Base bdd, JFrame frame, String typeCompte){
+	public AddPointages(Base bdd, JFrame frame){
 		menu = new JMenu("Pointages");
 		menu.getAccessibleContext().setAccessibleDescription("Pointages");		
 		this.base = bdd;
 		this.fenetre = frame;
+		ImageIcon icon = new ImageIcon(
+				new ImageIcon("lib/images/pointage.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		menu.setIcon(icon);
 		
 		//Saisir des heures spéciales
 		menuItem = new JMenuItem("Saisir des heures spéciales");

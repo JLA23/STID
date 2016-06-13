@@ -16,8 +16,10 @@ import Controller.ActionDroite;
 import Controller.ActionFermer;
 import Controller.ActionGauche;
 import Controller.ActionRechercher;
+import Controller.TestContenu;
 import Model.Calcul;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class LookTerme extends Termes {
 
@@ -25,7 +27,7 @@ public class LookTerme extends Termes {
 
 	public LookTerme(Base bdd, JFrame frame, String num, String indice, String fact) throws ParseException {
 		super(bdd, frame);
-		this.setTitle("STID Gestion 2.0 (Supprimer Terme)");
+		this.setTitle("STID Gestion 2.0 (Recherche Terme)");
 		this.base = bdd;
 		valider.setVisible(false);
 		nouveau.setVisible(false);
@@ -35,6 +37,9 @@ public class LookTerme extends Termes {
 		numeroCommande = num;
 		String nbindice = indice;
 		numeroIndice = indice;
+		new ClickDroit(jNumIndice, true, false);
+		new ClickDroit(jLibelle, true, false);
+		click.setFonction("Look");
 		String[] res = null;
 		if(fact == null){
 		res = donnees.fiche(
@@ -60,6 +65,11 @@ public class LookTerme extends Termes {
 		valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
 		new Calcul().calculerMontant(jFournitures, jCout, jPrefabrication, jTotalDevis, jTotalDevisDevise,
 				valeurDevise);
+		new TestContenu(this, jFournitures, 1, "Termes");
+		new TestContenu(this, jCout, 1, "Termes");
+		new TestContenu(this, jPrefabrication, 1, "Termes");
+		new TestContenu(this, jTotalDevis, 0, "Termes");
+		new TestContenu(this, jTotalDevisDevise, 0, "Termes");
 		jNumIndice.requestFocus();
 		jFournitures.setEditable(false);
 		jFournitures.setBackground(new Color(204, 204, 204));

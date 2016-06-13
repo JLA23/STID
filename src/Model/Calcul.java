@@ -2,6 +2,7 @@ package Model;
 
 import javax.swing.JFormattedTextField;
 
+import Controller.TestContenu;
 import View.Factures.Factures;
 
 public class Calcul {
@@ -45,6 +46,7 @@ public class Calcul {
 		calcule = Math.round(((calcule * valeurDevise)) * Math.pow(10, 2)) / Math.pow(10, 2);
 		jTotalDevisDevise.setText((calcule + "").replaceAll("\\.", ","));
 		facture.setRecupTVA(tvaRecup);
+		new TestContenu(facture, jTotalDevisTTC, 0, null);
 	}
 	
 }

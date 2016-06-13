@@ -1,17 +1,23 @@
 package View.Pointage;
 
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.KeyStroke;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -25,6 +31,7 @@ import Controller.ExecuteClick;
 import Controller.FocusJText;
 import Controller.FocusPosition;
 import Model.Donnees;
+import View.Options.ClickDroit;
 import fr.julien.autocomplete.model.AutoCompleteModel;
 import fr.julien.autocomplete.view.AutoComplete;
 
@@ -41,7 +48,9 @@ public class SaisiePointage extends JFrame{
 	private Donnees donnees;
 	private Base base;
 	private JFrame fenetre;
+	private ExecuteClick click;
 	
+	@SuppressWarnings("unchecked")
 	public SaisiePointage(Base bdd, JFrame frame){
 		this.setLayout(null);
 		this.setTitle("STID Gestion 2.0 (Saisie Pointage)");
@@ -57,7 +66,7 @@ public class SaisiePointage extends JFrame{
 		this.base = bdd;
 		this.donnees = new Donnees(base);
 	    
-		ExecuteClick click = new ExecuteClick(this, null);
+		click = new ExecuteClick(this, null, "Saisie");
 		
 	    numDevis = new JLabel("N° Devis");
 		DecimalFormat num = new DecimalFormat("#0.00");
@@ -110,7 +119,6 @@ public class SaisiePointage extends JFrame{
 		calcul2.setBounds(460 + jHSC125.getPreferredSize().width, 60, calcul2.getPreferredSize().width, calcul2.getPreferredSize().height);
 	    this.add(calcul2);
 	    calcul2.addActionListener(new ActionCalculatrice(this, jHSC125, 0, null));
-	    
 	    HeuresSuppCoef15 = new JLabel("Coef : 1.50");
 	    jHSC15 = new JFormattedTextField(num);	    
 	    HeuresSuppCoef15.setBounds(450 - HeuresSuppCoef15.getPreferredSize().width ,100, HeuresSuppCoef15.getPreferredSize().width, HeuresSuppCoef15.getPreferredSize().height);
@@ -184,6 +192,65 @@ public class SaisiePointage extends JFrame{
 	    fermer.addActionListener(new ActionFermer(this, fenetre));
 	    
 	    this.addWindowListener(new ActionFermer(this, fenetre));
+	    
+	    new ClickDroit(jNumDevis.getZoneTexte(), true, true);
+	    new ClickDroit(jCode.getZoneTexte(), true, true);
+	    jNumDevis.getZoneTexte().addKeyListener(new EcouteAction(jNumDevis.getZoneTexte()));
+	    jCode.getZoneTexte().addKeyListener(new EcouteAction(jCode.getZoneTexte()));
+	    
+	    this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		jNumDevis.getZoneTexte().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jNumDevis.getZoneTexte().getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jHN.requestFocus();
+			}
+		});
+		jHN.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jHN.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jHSC125.requestFocus();
+			}
+		});
+		
+		jHSC125.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jHSC125.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jHSC15.requestFocus();
+			}
+		});
+		
+		jHSC15.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jHSC15.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jHSC2.requestFocus();
+			}
+		});
+		
+		jHSC2.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jHSC2.getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jCode.getZoneTexte().requestFocus();
+			}
+		});
+		
+		jCode.getZoneTexte().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "tab");
+		jCode.getZoneTexte().getActionMap().put("tab", new AbstractAction() {
+			protected static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent ae) {
+				jNumDevis.getZoneTexte().requestFocus();
+			}
+		});
 	    
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);

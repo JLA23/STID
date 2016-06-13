@@ -88,6 +88,7 @@ public class SearchSalarieList extends SearchList {
 		    layerPanel.add(valider, BorderLayout.SOUTH);
 		    layerPanel.add(annuler, BorderLayout.SOUTH);
 		    layerTable.addKeyListener(new KeyEntrerSearchList(this, "Salarie", f));
+		    layerTable.addMouseListener(new SelectionAction(this, "Salarie", f));
 			valider.addActionListener(new SelectionAction(this, "Salarie", f));
 		 	annuler.addActionListener(new ActionFermer(this));
 	        retour.addActionListener(new RetourAction(this, "Salarie", f));

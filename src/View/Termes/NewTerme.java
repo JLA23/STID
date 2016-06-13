@@ -6,6 +6,7 @@ import Controller.ActionFermer;
 import Controller.ActionNouveau;
 import Controller.Termes.NewTerme.ActionValiderTerme;
 import Model.Calcul;
+import View.Options.ClickDroit;
 
 public class NewTerme extends Termes{
 
@@ -13,6 +14,8 @@ public class NewTerme extends Termes{
 
 	public NewTerme(Base bdd, JFrame frame, String num) {
 		super(bdd, frame);
+		new ClickDroit(jNumIndice, true, true);
+		new ClickDroit(jLibelle, true, true);
 		numero.setText(numero.getText() + num);
 		numeroCommande = num;
 		int nbCommande = donnees.newNum("termes","NumIndice", "NumCommande = " + num);

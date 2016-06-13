@@ -7,6 +7,7 @@ import Controller.ActionFermer;
 import Controller.ActionNouveau;
 import Controller.Commandes.NewCommande.ActionValiderCommande;
 import Controller.Commandes.SelectDevis.ActionSelectDevis;
+import View.Options.ClickDroit;
 
 public class NewCommande extends Commandes{
 
@@ -14,6 +15,9 @@ public class NewCommande extends Commandes{
 
 	public NewCommande(Base bdd, JFrame frame) {
 		super(bdd, frame);
+		new ClickDroit(jNumCommande, true, true);
+		new ClickDroit(jLibelle, true, true);
+		new ClickDroit(numClient.getZoneTexte(), true, true);
 		sd = new SelectDevis(bdd, this, null);
 		jDevis.addActionListener(new ActionSelectDevis(sd));
 		fermer.addActionListener(new ActionFermer(this, frame));

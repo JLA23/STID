@@ -16,6 +16,7 @@ import Controller.ActionGauche;
 import Controller.ActionRechercher;
 import Controller.ValiderModif;
 import Model.Donnees;
+import View.Options.ClickDroit;
 
 public class ModifClient extends Client{
 
@@ -24,6 +25,7 @@ public class ModifClient extends Client{
 	public ModifClient(Base bdd, String numero) throws ParseException {
 		super(bdd, null);
 		this.setTitle("STID Gestion 2.0 (Modifier Client)");
+		new ClickDroit(jNumClient, true, false);
 		nouveau.setText("Recherche");
 		donnees = new Donnees(base);
 		String [] res = donnees.fiche("*", "clients", "numClient = " + numero);
