@@ -3,15 +3,19 @@ package View.Bar;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import BDD.Base;
 import View.Parameters.Categorie;
+import View.Parameters.ConfigMail;
 import View.Parameters.ParametreTaux;
+import View.Parameters.Paritee;
 import View.Parameters.Salarie;
 import View.SearchParameters.SearchSalarie;
 
@@ -83,10 +87,30 @@ public class AddParametres{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new DevisEnCours();
+				new Paritee(base, fenetre);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Définition des devises");
+		menu.add(menuItem);
+		
+		menu.addSeparator();
+		
+		//Mail
+		menuItem = new JMenuItem("Configuration Mail");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					new ConfigMail(fenetre, base);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e1.getMessage() + "\n Le programe va quitter", "ATTENTION",JOptionPane.ERROR_MESSAGE);
+					base.close();
+					System.exit(1);
+				}
+			}
+		});
+		menuItem.getAccessibleContext().setAccessibleDescription("Configurer adresse mail");
 		menu.add(menuItem);
 		
 		menu.addSeparator();

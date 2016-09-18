@@ -4,13 +4,16 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import BDD.Base;
 import Model.Donnees;
+import View.Clients.CA;
 import View.Clients.NewClient;
+import View.Impression.Clients.EtatsClients;
 import View.SearchClients.SearchClient;
 
 public class AddClients {
@@ -19,10 +22,12 @@ public class AddClients {
 	private JMenuItem menuItem;
 	private Base base;
 	private Donnees donnees;
+	private JFrame frame;
 
-	public AddClients(Base bdd, String typeCompte) {
+	public AddClients(Base bdd, JFrame fenetre,String typeCompte) {
 		menu = new JMenu("Clients");
 		this.base = bdd;
+		this.frame = fenetre;
 		donnees = new Donnees(base);
 		menu.getAccessibleContext().setAccessibleDescription("Clients");
 		ImageIcon icon = new ImageIcon(
@@ -86,7 +91,7 @@ public class AddClients {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// new SupprDevis();
+				new EtatsClients(base, frame, 0);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Liste des clients");
@@ -97,10 +102,21 @@ public class AddClients {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// new DevisEnCours();
+				new EtatsClients(base, frame, 1);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Retard");
+		menu.add(menuItem);
+		
+		// Impayé
+		menuItem = new JMenuItem("Impayé");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new EtatsClients(base, frame, 2);
+			}
+		});
+		menuItem.getAccessibleContext().setAccessibleDescription("Impayé");
 		menu.add(menuItem);
 
 		// Factures à venir
@@ -108,7 +124,7 @@ public class AddClients {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// new ListDevis();
+				new EtatsClients(base, frame, 3);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Factures à venir");
@@ -121,7 +137,7 @@ public class AddClients {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// new ListDevis();
+				new CA(base, frame);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Resultat");

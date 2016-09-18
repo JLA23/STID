@@ -22,7 +22,8 @@ public class ActionCalculatrice implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		Calculatrice c = new Calculatrice(null, "Calculatrice", true);
+		Double val = (Double.parseDouble(casse.getText().replaceAll(",", "\\.")));
+		Calculatrice c = new Calculatrice(null, "Calculatrice", true, val);
 		casse.setText(c.getValeur());
 		new TestContenu(frame, casse, met, classe);
 	}

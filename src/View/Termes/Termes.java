@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -82,10 +83,11 @@ public class Termes extends JFrame{
         fournitures = new JLabel("Fournitures");
         coutMO = new JLabel("Coût MO");
         prefabrication = new JLabel("Préfabrication");
-        euro1 = new JLabel("EUR");
-        euro2 = new JLabel("EUR");
-        euro3 = new JLabel("EUR");
-        euro4 = new JLabel("EUR");
+        String [] symbole =  donnees.fiche("Symbole", "devises", "Pardefaut = 1");
+        euro1 = new JLabel(symbole[0]);
+        euro2 = new JLabel(symbole[0]);
+        euro3 = new JLabel(symbole[0]);
+        euro4 = new JLabel(symbole[0]);
         totalDevis = new JLabel("Total Devis");
         totalDevisdevise = new JLabel("Total (Devise)");
 		devise = new JLabel();
@@ -109,8 +111,9 @@ public class Termes extends JFrame{
         
         jTotalDevis.setEditable(false);
         jTotalDevisDevise.setEditable(false);
-        
-        jNumIndice = new JFormattedTextField();
+        NumberFormat num =  NumberFormat.getIntegerInstance();
+        num.setGroupingUsed(false);
+        jNumIndice = new JFormattedTextField(num);
         ImageIcon icon = new ImageIcon("lib/images/1447428838_calculate_16x16.gif");
         calcul1 = new JButton(icon);
 		calcul2 = new JButton(icon);

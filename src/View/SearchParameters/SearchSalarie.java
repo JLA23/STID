@@ -44,6 +44,7 @@ public class SearchSalarie extends JDialog{
 	    JLabel label = new JLabel("Numéro Personnel");
 	    pane.add(label);
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
+	    num.setGroupingUsed(false);
 	    numPersonnel = new JFormattedTextField(num);
 	    numPersonnel.setPreferredSize(new Dimension(100, 25));
 	    numPersonnel.addKeyListener(new EcouteAction(numPersonnel, false));

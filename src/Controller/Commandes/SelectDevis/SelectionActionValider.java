@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import Controller.FocusJText;
 import Controller.TestContenu;
 import View.Commandes.Commandes;
 import View.Commandes.SelectDevis;
@@ -22,8 +23,12 @@ public class SelectionActionValider implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		action();
+	}
+	public void action(){
 		if (select.getModel().getRowCount() > 0) {
 			String[] listnum = new String[select.getModel().getRowCount()];
+			commandes.getjLibelle().setText((String)select.getModel().getValueAt(0, 3));
 			for (int i = 0; i < listnum.length; i++) {
 				listnum[i] = (String) (select.getModel().getValueAt(i, 0));
 			}
@@ -71,6 +76,7 @@ public class SelectionActionValider implements ActionListener {
 	
 	private void numClientIdentique(){
 		int ligne = select.getModel().getRowCount();
+		System.out.println(ligne);
 		String numclient = (String)select.getModel().getValueAt(0, 1);
 		boolean valide = true;
 		if(ligne > 1){
@@ -83,6 +89,7 @@ public class SelectionActionValider implements ActionListener {
 		}
 		if (valide){
 			commandes.getNumClient().getZoneTexte().setText(numclient);
+			new FocusJText(commandes, "Commandes").name();
 		}
 	}
 

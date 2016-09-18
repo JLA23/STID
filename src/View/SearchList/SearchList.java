@@ -12,8 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import BDD.Base;
+import Controller.Search;
 import Model.Donnees;
 import fr.julien.autocomplete.view.AutoComplete;
 
@@ -31,7 +33,9 @@ public class SearchList extends JDialog{
 	protected GridBagConstraints c;
 	protected JFormattedTextField search;
 	protected DefaultTableModel model;
-	
+	protected Search actionSearch;
+	protected TableRowSorter<DefaultTableModel> sorter;
+
 	public SearchList(Base bdd, JFrame frame){
 		super(frame, null, true);
 		this.bdd = bdd;
@@ -110,5 +114,21 @@ public class SearchList extends JDialog{
 		custom.setHorizontalAlignment(JLabel.CENTER); 
 		for (int i=0 ; i<table.getColumnCount() ; i++) 
 			table.getColumnModel().getColumn(i).setCellRenderer(custom); 
-	   }	
+	   }
+	
+	public Search getActionSearch() {
+		return actionSearch;
+	}
+
+	public TableRowSorter<DefaultTableModel> getSorter() {
+		return sorter;
+	}
+
+	public void setSorter(TableRowSorter<DefaultTableModel> sorter) {
+		this.sorter = sorter;
+	}
+
+	public void setActionSearch(Search actionSearch) {
+		this.actionSearch = actionSearch;
+	}
 }

@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import Controller.Client.NewClient.ActionValiderClient;
 import Controller.Devis.NewDevis.ActionValiderDevis;
+import Controller.Factures.NewFacture.ActionValiderFacture;
 import Controller.Termes.NewTerme.ActionValiderTerme;
 import Controller.Commandes.NewCommande.ActionValiderCommande;
 import View.Clients.Client;
@@ -17,8 +18,10 @@ import View.Commandes.Commandes;
 import View.Commandes.NewCommande;
 import View.Devis.Devis;
 import View.Devis.NewDevis;
+import View.Factures.Factures;
 import View.Pointage.SaisiePointage;
 import View.SearchCommandes.SearchCommande;
+import View.SearchTerme.SearchTerme;
 import View.Termes.Termes;
 
 public class ActionNouveau implements ActionListener {
@@ -102,20 +105,37 @@ public class ActionNouveau implements ActionListener {
 				}
 			}
 		}
+		
+		else if (typeClasse.equals("Factures")) {
+			int option = JOptionPane.showConfirmDialog(null, "Voulez-vous enregistrer la facture ?", "Quitter " + typeClasse,
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (option == JOptionPane.YES_OPTION) {
+				new ActionValiderFacture(((Factures)frame)).valider();
+				if (!((Factures)frame).isShowing()) {
+					new SearchTerme(((Factures)frame).getBase(),((Factures)frame).getFenetre(), "NewFacture");
+				}
+			}
+			else if (option == JOptionPane.NO_OPTION) {
+				((Factures)frame).dispose();
+				((Factures)frame).getFenetre().setEnabled(true);
+				((Factures)frame).getFenetre().setVisible(true);
+				if (!((Factures)frame).isShowing()) {
+					new SearchTerme(((Factures)frame).getBase(), ((Factures)frame).getFenetre(), "NewFacture");
+				}
+			}
+		}
 		else if (typeClasse.equals("Pointage")){
 			SaisiePointage pointage = ((SaisiePointage)frame);
 			if(!pointage.getjNumDevis().getZoneTexte().getText().equals("") && !pointage.getjNumDevis().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("devis", "NumDevis", "NumDevis = " + pointage.getjNumDevis().getZoneTexte().getText())){
 				if (!pointage.getjCode().getZoneTexte().getText().equals("") && !pointage.getjCode().getZoneTexte().equals("(vide)") && pointage.getDonnees().exist("personne", "NumPersonnel", "NumPersonnel = " + pointage.getjCode().getZoneTexte().getText())){
-					if(!pointage.getjHN().getText().equals("0,00")){
 						if(!pointage.getjHN().getText().contains("-") && !pointage.getjHSC125().getText().contains("-") && !pointage.getjHSC15().getText().contains("-")&& !pointage.getjHSC2().getText().contains("-")){
 							if(pointage.getDonnees().exist("pointage", "NumPersonnel, NumDevis, NumSem, Annee", "NumPersonnel = " + pointage.getjCode().getText() + " AND NumDevis = " + pointage.getjNumDevis().getText() + " AND NumSem = " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + " AND Annee = " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()))){
-								pointage.getBase().update("pointage", "HrPassNormal = " + pointage.getjHN().getText().replaceAll(",", "\\.") + ", HrPassSup = " + pointage.getjHSC125().getText().replaceAll(",", "\\.") + ", HrPassSup50 = " + pointage.getjHSC15().getText().replaceAll(",", "\\.") + ", HrPassSup25 = " + pointage.getjHSC2().getText().replaceAll(",", "\\."), "NumPersonnel = " + pointage.getjCode().getText() + " AND NumDevis = " + pointage.getjNumDevis().getText() + " AND NumSem = " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + " AND Annee = " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()));
+								pointage.getBase().update("pointage", "HrPassNormal = " + pointage.getjHN().getText().replaceAll(",", "\\.") + ", HrPassSup125 = " + pointage.getjHSC125().getText().replaceAll(",", "\\.") + ", HrPassSup150 = " + pointage.getjHSC15().getText().replaceAll(",", "\\.") + ", HrPassSup200 = " + pointage.getjHSC2().getText().replaceAll(",", "\\."), "NumPersonnel = " + pointage.getjCode().getText() + " AND NumDevis = " + pointage.getjNumDevis().getText() + " AND NumSem = " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + " AND Annee = " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()));
 							}
 							else{
-								pointage.getBase().insert("pointage", pointage.getjCode().getZoneTexte().getText() + ", " + pointage.getjNumDevis().getZoneTexte().getText() + ", " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + ", " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()) +  ", " + pointage.getjHN().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC125().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC15().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC2().getText().replaceAll(",", "\\."));
+								pointage.getBase().insert("pointage", pointage.getjCode().getZoneTexte().getText() + ", " + pointage.getjNumDevis().getZoneTexte().getText() + ", " + new SimpleDateFormat("ww").format(pointage.getjDate().getDate()) + ", " + new SimpleDateFormat("yyyy").format(pointage.getjDate().getDate()) +  ", " + pointage.getjHN().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC125().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC2().getText().replaceAll(",", "\\.") + ", " + pointage.getjHSC15().getText().replaceAll(",", "\\."));
 							}
 							pointage.getjNumDevis().getZoneTexte().setText("");
-							pointage.getjCode().getZoneTexte().setText("");
 							pointage.getjHN().setText("0,00");
 							pointage.getjHSC125().setText("0,00");
 							pointage.getjHSC15().setText("0,00");
@@ -127,11 +147,6 @@ public class ActionNouveau implements ActionListener {
 							JOptionPane.showMessageDialog(null, "Erreur : Pas de valeurs négatif possible", "ATTENTION",
 									JOptionPane.WARNING_MESSAGE);
 						}
-					}
-					else {
-						JOptionPane.showMessageDialog(null, "Erreur : Heures normales sont à 0", "ATTENTION",
-								JOptionPane.WARNING_MESSAGE);
-					}
 				}
 				else{
 					JOptionPane.showMessageDialog(null, "Erreur : Aucun Salarié Selectionné ou existant", "ATTENTION",

@@ -42,6 +42,7 @@ public class SearchClient extends JDialog {
 	    JLabel label = new JLabel("Numéro du Client");
 	    pane.add(label);
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
+	    num.setGroupingUsed(false);
 	    numClient = new JFormattedTextField(num);
 	    numClient.setPreferredSize(new Dimension(100, 25));
 	    numClient.addKeyListener(new EcouteAction(numClient, false));

@@ -39,11 +39,13 @@ public class ActionList implements ActionListener {
 			new SearchClientList(bdd, null, fonction, null);
 		}
 		else if(type.equals("Commandes")){
-			new SearchCommandeList(bdd, windo, fonction, null);	
+			String n = null;
+			new SearchCommandeList(bdd, windo, fonction, n);	
 		}
 		else if(type.equals("Termes")){
 			if(fonction.equals("NewTerme")){
-				new SearchCommandeList(bdd, windo, fonction, null);	
+				String n = null;
+				new SearchCommandeList(bdd, windo, fonction, n);	
 			}
 			else{
 				new SearchTermeList(bdd, windo, fonction, null, null);

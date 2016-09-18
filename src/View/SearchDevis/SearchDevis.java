@@ -42,6 +42,7 @@ public class SearchDevis extends JDialog{
 	    JLabel label = new JLabel("Numéro de Devis");
 	    pane.add(label);
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
+	    num.setGroupingUsed(false);
 	    numDevis = new JFormattedTextField(num);
 	    numDevis.setPreferredSize(new Dimension(100, 25));
 	    numDevis.addKeyListener(new EcouteAction(numDevis, false));

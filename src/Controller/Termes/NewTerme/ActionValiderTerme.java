@@ -23,7 +23,7 @@ public class ActionValiderTerme implements ActionListener {
 				if (!terme.getjFournitures().getText().equals("0,00") || !terme.getjPrefabrication().getText().equals("0,00") || !terme.getjCout().getText().equals("0,00")) {
 					terme.getBase().insert("termes",
 							terme.getNumeroCommande() + ", " + terme.getjNumIndice().getText() + ", null, '"
-									+ terme.getjLibelle().getText() + "', "
+									+ apostrophe(terme.getjLibelle().getText()) + "', "
 									+ terme.getjPrefabrication().getText().replaceAll(",", "\\.") + ", "
 									+ terme.getjCout().getText().replaceAll(",", "\\.") + ", "
 									+ terme.getjFournitures().getText().replaceAll(",", "\\."));
@@ -44,4 +44,17 @@ public class ActionValiderTerme implements ActionListener {
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
+	
+	 public String apostrophe(String message){
+		 String mes = message;
+		 if(message != null && message.contains("'")){
+				String[] separer = message.split("'");
+				mes = separer[0];
+				for(int j = 1; j < separer.length; j++){
+					mes += "\\'" + separer[j];
+				}
+				
+		 }
+		 return mes;
+	 }
 }

@@ -39,10 +39,10 @@ public class ActionValiderClient implements ActionListener {
 										&& !client.getjAdresses()[1].getText().isEmpty()
 										&& !client.getjAdresses()[2].getText().isEmpty()) {
 									String[] re = client.getValeurTaux().get(client.getBoxTva().getSelectedItem());
-									String query = client.getjNumClient().getText() + ", '" + client.getjName().getText()
+									String query = client.getjNumClient().getText() + ", '" + apostrophe(client.getjName().getText())
 											+ "', '";
 									for (int i = 0; i < client.getjAdresses().length; i++) {
-										query += client.getjAdresses()[i].getText() + "', '";
+										query += apostrophe(client.getjAdresses()[i].getText()) + "', '";
 									}
 									query += client.getjMail().getText() + "', " + client.getjDelais().getText() + ", ";
 									if (client.getBr1().isSelected()) {
@@ -53,7 +53,6 @@ public class ActionValiderClient implements ActionListener {
 									query += client.getjNbExemplaire().getText() + ", "
 											+ client.getjJourSuivant().getText() + ", " + re[0] + ", '"
 											+ client.getJnumTVA().getText() + "', 1";
-									System.out.println(query);
 									client.getBase().insert("clients", query);
 									client.getVal();
 									
@@ -99,16 +98,24 @@ public class ActionValiderClient implements ActionListener {
 	private boolean mail(String mail) {
 		boolean resultat = false;
 		if (mail.contains("@")) {
-			System.out.println("Entree 1");
 			String[] tmp = mail.split("@");
-			System.out.println(tmp[0]);
-			System.out.println(tmp[1]);
 			if (tmp[1].contains(".")) {
-				System.out.println("Entree 2");
 				resultat = true;
 			}
 		}
-		System.out.println("fin");
 		return resultat;
 	}
+	
+	 public String apostrophe(String message){
+		 String mes = message;
+		 if(message != null && message.contains("'")){
+				String[] separer = message.split("'");
+				mes = separer[0];
+				for(int j = 1; j < separer.length; j++){
+					mes += "\\'" + separer[j];
+				}
+				
+		 }
+		 return mes;
+	 }
 }

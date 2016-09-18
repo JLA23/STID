@@ -4,6 +4,7 @@ import BDD.Base;
 import Controller.ActionFermer;
 import Controller.Devis.NewDevis.ActionCreateClient;
 import Controller.ActionNouveau;
+import Controller.VerifNum;
 import Controller.Devis.NewDevis.ActionValiderDevis;
 import View.Options.ClickDroit;
 
@@ -13,6 +14,7 @@ public class NewDevis extends Devis{
 
 	public NewDevis(Base bdd, JFrame frame){
 		super(bdd, frame);
+		jNumDevis.addFocusListener(new VerifNum(jNumDevis, donnees, "devis"));
 		valider.addActionListener(new ActionValiderDevis(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionNouveau(this, "Devis"));

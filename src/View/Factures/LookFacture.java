@@ -31,7 +31,7 @@ public class LookFacture extends Factures {
 		jNumFacture.setText(nbFacture);
 		String[] res = null;
 		res = donnees.fiche(
-				"f.lblEcheance, cl.nomclient, Round(t.MntFour, 2), Round(t.CoutMo, 2), Round(t.Prefabrication, 2), c.CodeDevise, c.CdeComClient, Round(f.tva,2), cl.numClient, f.modepaiement, f.preclettre, f.dateEmission, f.dateecheance, f.anneeValeur, f.valeur",
+				"l.lblterme, cl.nomclient, Round(t.MntFour, 2), Round(t.CoutMo, 2), Round(t.Prefabrication, 2), c.CodeDevise, c.CdeComClient, Round(f.tva,2), cl.numClient, f.modepaiement, f.preclettre, f.dateEmission, f.dateecheance, f.anneeValeur, f.valeur",
 				"commandes as c, clients as cl, termes as t, factures as f", "t.numfacture = " + nbFacture
 						+ " and t.numfacture = f.numfacture and t.numcommande = c.numCommande and c.numclient = cl.numclient ");
 		libelle2.setText(res[0]);

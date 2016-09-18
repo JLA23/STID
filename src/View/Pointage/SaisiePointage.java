@@ -53,6 +53,7 @@ public class SaisiePointage extends JFrame{
 	@SuppressWarnings("unchecked")
 	public SaisiePointage(Base bdd, JFrame frame){
 		this.setLayout(null);
+		this.addWindowListener(new ActionFermer(this, frame));
 		this.setTitle("STID Gestion 2.0 (Saisie Pointage)");
 		this.fenetre = frame;
 		fenetre.setEnabled(false);
@@ -190,8 +191,6 @@ public class SaisiePointage extends JFrame{
 	    fermer.setBounds(530, 285, fermer.getPreferredSize().width, fermer.getPreferredSize().height);
 	    this.add(fermer); 
 	    fermer.addActionListener(new ActionFermer(this, fenetre));
-	    
-	    this.addWindowListener(new ActionFermer(this, fenetre));
 	    
 	    new ClickDroit(jNumDevis.getZoneTexte(), true, true);
 	    new ClickDroit(jCode.getZoneTexte(), true, true);

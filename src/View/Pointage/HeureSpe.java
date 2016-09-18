@@ -19,13 +19,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import BDD.Base;
 import Controller.ActionFermer;
+import Controller.PositionComparator;
 import Controller.RowListener;
 import Controller.Search;
 import Controller.TestContenu;
@@ -48,9 +48,10 @@ public class HeureSpe extends JFrame{
 	protected JFrame frame;
 	protected Base base;
 	protected Donnees donnees;
-	protected RowSorter<TableauSaisie> sorter;
+	protected TableRowSorter<TableauSaisie> sorter;
 	protected JScrollPane scroll;
 	protected TableauSaisie saisie;
+	protected Search actionSearch;
 	
 	public HeureSpe(Base bdd, JFrame frame) {
 	    this.setSize(600, 380);
@@ -91,6 +92,9 @@ public class HeureSpe extends JFrame{
         search.setPreferredSize(new Dimension(110, 27));
         saisie = new TableauSaisie(data);
         sorter = new TableRowSorter<>(saisie);
+        sorter.setComparator(1, new PositionComparator("double"));
+        sorter.setComparator(2, new PositionComparator("double"));
+        sorter.setComparator(3, new PositionComparator("double"));
         layerTable = new JTable(saisie){
 			private static final long serialVersionUID = 1L;
 
@@ -110,8 +114,9 @@ public class HeureSpe extends JFrame{
 		scroll.setPreferredSize(new Dimension(550, 200));
 
 		layerPanel.add(scroll, c);
-
-        search.addKeyListener(new Search(this, 0));
+		
+		actionSearch = new Search(this, 0);
+        search.addKeyListener(actionSearch);
         sorter.addRowSorterListener(new RowListener(this));
 		layerPanel.setPreferredSize(new Dimension(550, 220));
 		layerPanel.setBounds(15, 30, layerPanel.getPreferredSize().width, layerPanel.getPreferredSize().height);
@@ -280,6 +285,22 @@ public class HeureSpe extends JFrame{
 
 	public void setSaisie(TableauSaisie saisie) {
 		this.saisie = saisie;
+	}
+
+	public TableRowSorter<TableauSaisie> getSorter() {
+		return sorter;
+	}
+
+	public void setSorter(TableRowSorter<TableauSaisie> sorter) {
+		this.sorter = sorter;
+	}
+
+	public Search getActionSearch() {
+		return actionSearch;
+	}
+
+	public void setActionSearch(Search actionSearch) {
+		this.actionSearch = actionSearch;
 	}
 
 	public class EcouteAnnee implements KeyListener{

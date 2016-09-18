@@ -25,8 +25,8 @@ public class ActionValiderCommande implements ActionListener {
 					String[] re = commande.getValeurDevises().get(commande.getDevises().getSelectedItem());
 					commande.getBase().insert("commandes",
 							commande.getjNumCommande().getText() + ", " + commande.getNumClient().getText() + ", '"
-									+ commande.getjNumCommandeClient().getText() + "', '"
-									+ commande.getjLibelle().getText() + "', "
+									+ apostrophe(commande.getjNumCommandeClient().getText()) + "', '"
+									+ apostrophe(commande.getjLibelle().getText()) + "', "
 									+ commande.getjFournitures().getText().replaceAll(",", "\\.") + ", "
 									+ commande.getjCout().getText().replaceAll(",", "\\.") + ", "
 									+ commande.getjHeureSite().getText().replaceAll(",", "\\.") + ", "
@@ -38,6 +38,8 @@ public class ActionValiderCommande implements ActionListener {
 					for (int i = 0; i < commande.getListDevis().size(); i++) {
 						commande.getBase().update("devis", "numcommande = " + commande.getjNumCommande().getText(), "numdevis = " + (String)commande.getListDevis().get(i)[0]);
 					}
+					commande.getBase().insert("termes",commande.getjNumCommande().getText() + ", 1, null, '" + apostrophe(commande.getjLibelle().getText()) + "', " + commande.getjPrefabrication().getText().replaceAll(",", "\\.") + ", " +
+							 commande.getjCout().getText().replaceAll(",", "\\.") + ", " + commande.getjFournitures().getText().replaceAll(",", "\\."));
 					JOptionPane.showMessageDialog(null, "Commande enregistré !");
 					commande.dispose();
 					commande.getFenetre().setEnabled(true);
@@ -55,4 +57,17 @@ public class ActionValiderCommande implements ActionListener {
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
+	
+	 public String apostrophe(String message){
+		 String mes = message;
+		 if(message != null && message.contains("'")){
+				String[] separer = message.split("'");
+				mes = separer[0];
+				for(int j = 1; j < separer.length; j++){
+					mes += "\\'" + separer[j];
+				}
+				
+		 }
+		 return mes;
+	 }
 }

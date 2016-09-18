@@ -10,6 +10,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Impression.Factures.EtatsFactures;
 import View.SearchFactures.SearchFacture;
 import View.SearchTerme.SearchTerme;
 
@@ -80,7 +81,7 @@ public class AddFacturation {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// new DevisEnCours();
+				new EtatsFactures(bdd, fenetre, 0);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Listing TVA");
@@ -91,7 +92,7 @@ public class AddFacturation {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// new ListDevis();
+				new EtatsFactures(bdd, fenetre, 1);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Calcul du CA HT sur un ou plusieur mois");

@@ -8,17 +8,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.KeyEntrerSearchList;
+import Controller.PositionComparator;
 import Controller.Search;
 import Controller.SelectionAction;
 import Controller.RetourAction;
 import Controller.RowListener;
-import View.Pointage.SaisiePointage;
 import View.SearchList.SearchList;
 import fr.julien.autocomplete.view.AutoComplete;
 
@@ -27,22 +26,18 @@ public class SearchSalarieList extends SearchList {
 	private static final long serialVersionUID = 1L;
 	protected String f;
 	protected AutoComplete auto;
-	protected SaisiePointage saisie;
+	protected Object saisie;
 	
 	public SearchSalarieList(Base bdd, JFrame frame, String fonction) {
 		super(bdd, frame);
 		this.setPreferredSize(new Dimension(800, 480));
-		this.bdd = bdd;
-		this.frame = frame;
 		this.f = fonction;
 		init();
 	}
 	
-	public SearchSalarieList(Base bdd, SaisiePointage frame, String fonction, AutoComplete auto) {
-		super(bdd, frame);
+	public SearchSalarieList(Base bdd, Object frame, String fonction, AutoComplete auto) {
+		super(bdd, (JFrame)frame);
 		this.setPreferredSize(new Dimension(800, 480));
-		this.bdd = bdd;
-		this.frame = frame;
 		this.saisie = frame;
 		this.f = fonction;
 		this.auto = auto;
@@ -60,8 +55,8 @@ public class SearchSalarieList extends SearchList {
 	    	for(int m = 0; m< data.length ; m++){
 				model.addRow(data[m]);
 			}
-	    	RowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-	       
+	    	sorter = new TableRowSorter<>(model);
+	    	sorter.setComparator(0, new PositionComparator("int"));
 	        // Construct our table to hold our list of layers
 	        layerTable = new JTable(model){
 				private static final long serialVersionUID = 1L;
@@ -92,7 +87,8 @@ public class SearchSalarieList extends SearchList {
 			valider.addActionListener(new SelectionAction(this, "Salarie", f));
 		 	annuler.addActionListener(new ActionFermer(this));
 	        retour.addActionListener(new RetourAction(this, "Salarie", f));
-	        search.addKeyListener(new Search(this, 0));
+			actionSearch = new Search(this, 0);
+	        search.addKeyListener(actionSearch);
 	        sorter.addRowSorterListener(new RowListener(this));
 			this.add(layerPanel);
 			this.pack();
@@ -159,11 +155,11 @@ public class SearchSalarieList extends SearchList {
 		this.auto = auto;
 	}
 
-	public SaisiePointage getSaisie() {
+	public Object getSaisie() {
 		return saisie;
 	}
 
-	public void setSaisie(SaisiePointage saisie) {
+	public void setSaisie(Object saisie) {
 		this.saisie = saisie;
 	}
 	

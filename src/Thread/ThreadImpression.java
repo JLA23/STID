@@ -4,16 +4,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JWindow;
-
 import BDD.Base;
-import Model.Apercu;
-import Model.GeneratePDF;
 import Model.Imprimer;
 
 public class ThreadImpression extends Thread{
 
 	protected JWindow frame;
-	protected JFrame fenetre;
+	protected JFrame fenetre, interfaceMail;
 	protected String facture, mode;
 	protected Double valeur;
 	protected Base bdd;
@@ -33,21 +30,20 @@ public class ThreadImpression extends Thread{
 		frame.add(new JLabel("", loading, JLabel.CENTER));
 		frame.setSize(100, 100);
         frame.setLocationRelativeTo(null);
-        if(mode.equals("Imprimer")){
+       if(mode.equals("Imprimer") || mode.equals("Apercu") || mode.equals("Mail")){
     		frame.setVisible(true);
     		frame.setAlwaysOnTop(true);
-        	new Imprimer(facture, bdd, valeur, this);
+        	new Imprimer(facture, bdd, valeur, this, mode);
         }
         else if(mode.equals("PDF")){
-        	new GeneratePDF(facture, bdd, valeur, this);
-        }
-        else if(mode.equals("Apercu")){
-    		frame.setVisible(true);
-    		frame.setAlwaysOnTop(true);
-        	new Apercu(facture, bdd, valeur, this);
+        	new Imprimer(facture, bdd, valeur, this, mode);
         }
         while(frame.isVisible()){}
-        fenetre.setEnabled(true);
+        if(interfaceMail != null){
+        	while(interfaceMail.isVisible()){}
+        }
+        	fenetre.setEnabled(true);
+        	fenetre.setVisible(true);
 	}
 
 	public JWindow getFrame() {
@@ -57,7 +53,22 @@ public class ThreadImpression extends Thread{
 	public void setFrame(JWindow frame) {
 		this.frame = frame;
 	}
-	
+
+	public JFrame getInterfaceMail() {
+		return interfaceMail;
+	}
+
+	public void setInterfaceMail(JFrame interfaceMail) {
+		this.interfaceMail = interfaceMail;
+	}
+
+	public JFrame getFenetre() {
+		return fenetre;
+	}
+
+	public void setFenetre(JFrame fenetre) {
+		this.fenetre = fenetre;
+	}
 	
 	
 	

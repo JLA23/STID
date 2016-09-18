@@ -6,27 +6,80 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.KeyEntrerSearchList;
+import Controller.PositionComparator;
 import Controller.Search;
 import Controller.RetourAction;
 import Controller.RowListener;
 import Controller.SelectionAction;
 import View.SearchList.SearchList;
+import fr.julien.autocomplete.view.AutoComplete;
 
 public class SearchCommandeList extends SearchList {
 
 	private static final long serialVersionUID = 1L;
+	protected String fonction, numComClient;
+	protected JButton valider, retour, annuler;
+	protected Object saisie;
 
 	public SearchCommandeList(Base bdd, JFrame frame, String fonction, String numComClient) {
 		super(bdd, frame);
-		this.bdd = bdd;
-		this.frame = frame;
 		data = null;
+		this.numComClient = numComClient;
+		this.fonction = fonction;
+		init();
+		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Commandes", fonction));
+		layerTable.addMouseListener(new SelectionAction(this, "Commandes", fonction));
+		valider.addActionListener(new SelectionAction(this, "Commandes", fonction));
+		retour.addActionListener(new RetourAction(this, "Commandes", fonction));
+		annuler.addActionListener(new ActionFermer(this));
+		actionSearch = new Search(this, 0);
+        search.addKeyListener(actionSearch);
+		this.add(layerPanel);
+		this.pack();
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+	}
+	public SearchCommandeList(Base bdd, Object frame, String fonction, AutoComplete complete) {
+		super(bdd, (JFrame)frame);
+		this.saisie = frame;
+		data = null;
+		this.fonction = fonction;
+		this.auto = complete;
+		init();
+		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Commandes", fonction));
+		layerTable.addMouseListener(new SelectionAction(this, "Commandes", fonction));
+		valider.addActionListener(new SelectionAction(this, "Commandes", fonction));
+		retour.addActionListener(new RetourAction(this, "Commandes", fonction));
+		annuler.addActionListener(new ActionFermer(this));
+		actionSearch = new Search(this, 0);
+        search.addKeyListener(actionSearch);
+		this.add(layerPanel);
+		this.pack();
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+	}
+	
+	
+	public String getFonction() {
+		return fonction;
+	}
+	public void setFonction(String fonction) {
+		this.fonction = fonction;
+	}
+	public String getNumComClient() {
+		return numComClient;
+	}
+	public void setNumComClient(String numComClient) {
+		this.numComClient = numComClient;
+	}
+	private void init(){
 		if(numComClient != null){
 			data = donnees.liste("d.numCommande, d.numClient, c.nomclient, d.lblCommande", "commandes as d, clients as c", "d.numClient = c.numClient and d.CdeComClient = '" + numComClient + "'");
 		}
@@ -44,8 +97,9 @@ public class SearchCommandeList extends SearchList {
     	for(int m = 0; m< data.length ; m++){
 			model.addRow(data[m]);
 		}
-    	RowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-       
+    	sorter = new TableRowSorter<>(model);
+    	sorter.setComparator(0, new PositionComparator("int"));
+    	sorter.setComparator(1, new PositionComparator("int"));
         // Construct our table to hold our list of layers
         layerTable = new JTable(model){
 			private static final long serialVersionUID = 1L;
@@ -65,25 +119,20 @@ public class SearchCommandeList extends SearchList {
 		JScrollPane scroll = new JScrollPane(layerTable);
 		scroll.setPreferredSize(new Dimension(750, 400));
 		layerPanel.add(scroll, c);
-		JButton valider = new JButton("Valider");
-		JButton annuler = new JButton("Annuler");
-		JButton retour = new JButton("Retour");
+		valider = new JButton("Valider");
+		annuler = new JButton("Annuler");
+		retour = new JButton("Retour");
 		layerPanel.add(search, BorderLayout.EAST);
 		layerPanel.add(retour, BorderLayout.SOUTH);
 		layerPanel.add(valider, BorderLayout.SOUTH);
 		layerPanel.add(annuler, BorderLayout.SOUTH);
-		layerTable.addKeyListener(new KeyEntrerSearchList(this, "Commandes", fonction));
-		layerTable.addMouseListener(new SelectionAction(this, "Commandes", fonction));
-		valider.addActionListener(new SelectionAction(this, "Commandes", fonction));
-		retour.addActionListener(new RetourAction(this, "Commandes", fonction));
-		annuler.addActionListener(new ActionFermer(this));
-        search.addKeyListener(new Search(this, 0));
         sorter.addRowSorterListener(new RowListener(this));
-		this.add(layerPanel);
-		this.pack();
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
 
+	}
+	public Object getSaisie() {
+		return saisie;
+	}
+	public void setSaisie(Object saisie) {
+		this.saisie = saisie;
 	}
 }

@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="STID" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="96515d78-394d-4982-8208-cb3ef7b3ff17">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="49"/>
+	<property name="ireport.y" value="288"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -13,29 +13,65 @@
 	<parameter name="ValeurText" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="Logo" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
-		<![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, t.numcommande, Round(Sum(t.prefabrication + t.coutMo + t.mntfour + f.montanttaxe), 3) as ttc, f.tva, DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from clients as c, factures as f, termes as t, commandes as co where f.NumFacture = $P{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient;]]>
+		<![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, t.numcommande, Round(Sum(t.prefabrication + t.coutMo + t.mntfour + f.montanttaxe), 3) as ttc, f.tva, DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from clients as c, factures as f, termes as t, commandes as co where f.NumFacture = $P!{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient;]]>
 	</queryString>
-	<field name="NumClient" class="java.lang.Integer"/>
-	<field name="Adresse1" class="java.lang.String"/>
-	<field name="Adresse2" class="java.lang.String"/>
-	<field name="Adresse3" class="java.lang.String"/>
-	<field name="Adresse4" class="java.lang.String"/>
-	<field name="Adresse5" class="java.lang.String"/>
-	<field name="Adresse6" class="java.lang.String"/>
-	<field name="Adresse7" class="java.lang.String"/>
-	<field name="prefabrication" class="java.lang.Float"/>
-	<field name="numtva" class="java.lang.String"/>
-	<field name="numcommande" class="java.lang.Integer"/>
+	<field name="NumClient" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse3" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse4" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse5" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse6" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse7" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prefabrication" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numtva" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="ht" class="java.lang.Double"/>
-	<field name="numfacture" class="java.lang.Integer"/>
-	<field name="montanttaxe" class="java.lang.Float"/>
+	<field name="numfacture" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="montanttaxe" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numcommande" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="ttc" class="java.lang.Double"/>
-	<field name="tva" class="java.lang.Integer"/>
+	<field name="tva" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="dateechance" class="java.lang.String"/>
-	<field name="dateemission" class="java.lang.String"/>
-	<field name="preclettre" class="java.lang.String"/>
-	<field name="lblecheance" class="java.lang.String"/>
-	<field name="cdeComClient" class="java.lang.String"/>
+	<field name="dateemission" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="preclettre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lblecheance" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cdeComClient" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -92,7 +128,7 @@
 				<textElement>
 					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
 				</textElement>
-				<text><![CDATA[S.A Capital de 150.000 €]]></text>
+				<text><![CDATA[S.A.S Capital de 150.000 €]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="staticText-7" x="0" y="67" width="242" height="14" uuid="b89e15f5-c127-4b97-bb3c-e1c9859be825"/>
@@ -184,42 +220,42 @@
 			<staticText>
 				<reportElement key="staticText-11" x="430" y="421" width="32" height="25" uuid="2148946d-b622-4656-8c60-eab35629a998"/>
 				<textElement textAlignment="Center">
-					<font pdfFontName="Courier"/>
+					<font size="12" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Eur]]></text>
 			</staticText>
 			<textField pattern="###0.00" isBlankWhenNull="false">
 				<reportElement key="textField-21" x="318" y="421" width="112" height="25" uuid="c6850229-9c5c-48be-b1f9-36c7aea130f3"/>
 				<textElement textAlignment="Right">
-					<font pdfFontName="Courier"/>
+					<font size="12" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ttc} * -1]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="staticText-12" x="430" y="396" width="32" height="25" uuid="41879c36-e3c0-41c6-9ff1-89594f79085c"/>
 				<textElement textAlignment="Center">
-					<font pdfFontName="Courier"/>
+					<font size="12" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Eur]]></text>
 			</staticText>
 			<textField pattern="###0.00" isBlankWhenNull="false">
 				<reportElement key="textField-22" x="318" y="396" width="112" height="25" uuid="2016f06b-4ae7-49af-9d64-c167ef0c775e"/>
 				<textElement textAlignment="Right">
-					<font pdfFontName="Courier"/>
+					<font size="12" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{montanttaxe} * -1]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="staticText-13" x="430" y="374" width="32" height="22" uuid="c7f40a44-4393-447c-a5b4-58b96669ec70"/>
 				<textElement textAlignment="Center">
-					<font pdfFontName="Courier"/>
+					<font size="12" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Eur]]></text>
 			</staticText>
 			<textField pattern="###0.00" isBlankWhenNull="false">
 				<reportElement key="textField-23" x="318" y="374" width="112" height="22" uuid="9c748af8-2b53-43d9-8a1b-6d3ca828f8b8"/>
 				<textElement textAlignment="Right">
-					<font pdfFontName="Courier"/>
+					<font size="12" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ht} * -1]]></textFieldExpression>
 			</textField>

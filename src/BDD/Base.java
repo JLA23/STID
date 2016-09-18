@@ -7,6 +7,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
+
 public class Base  {
 	protected String url, mdp, nom, pseudo, typeCompte, adresse, base;
 	protected Connection con;
@@ -30,7 +32,7 @@ public class Base  {
 				message = "Connexion ètablie";
 			}
 			catch(Exception e){
-				message = e.getMessage();
+				return e.getMessage();
 			}
 		return message;	
 	}
@@ -85,7 +87,7 @@ public class Base  {
 		try {
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return rs;
 	}
@@ -97,8 +99,7 @@ public class Base  {
 			stmt.executeUpdate(query); 
 			message = "Ajout effectué avec succée !";
 		}
-		catch(Exception e){message = "Error : " + e.getMessage();}
-		System.out.println(message);
+		catch(Exception e){	error(e.getMessage());}
 		return message;
 	}
 	
@@ -112,7 +113,7 @@ public class Base  {
 			stmt.executeUpdate(query); 
 			message = "Modification effectué avec succée !";
 		}
-		catch(Exception e){System.out.println("Error : " + e.getMessage());}
+		catch(Exception e){	error(e.getMessage());}
 		
 		return message;
 	}
@@ -124,7 +125,7 @@ public class Base  {
 			stmt.executeUpdate(query); 
 			message = "Suppression effectué avec succée !";
 		}
-		catch(Exception e){message = "Error : " + e.getMessage();}
+		catch(Exception e){	error(e.getMessage());}
 		
 		return message;
 	}
@@ -136,7 +137,7 @@ public class Base  {
 			stmt.executeUpdate(query); 
 			message = "Mot de passe modifié avec succés !";
 		}
-		catch(Exception e){message = "Error : " + e.getMessage();}
+		catch(Exception e){	error(e.getMessage());}
 		
 		return message;
 	}
@@ -158,7 +159,7 @@ public class Base  {
 				stmt.executeUpdate(query2);
 				message = "Utilisateur ajouté avec succés !";
 		}
-		catch(Exception e){message = "Error : " + e.getMessage(); System.out.println(e.getMessage());}
+		catch(Exception e){	error(e.getMessage());}
 		
 		return message;
 	}
@@ -178,7 +179,7 @@ public class Base  {
 			}
 			
 		}
-		catch(Exception e){message = "Error : " + e.getMessage();}
+		catch(Exception e){	error(e.getMessage());}
 		
 		return message;
 	}
@@ -196,7 +197,7 @@ public class Base  {
 				message = "Error : modification compte échoué";
 			}
 		}
-		catch(Exception e){message = "Error : " + e.getMessage();}
+		catch(Exception e){	error(e.getMessage());}
 		
 		return message;
 	}
@@ -229,7 +230,7 @@ public class Base  {
 			}
 			
 		}
-		catch(Exception e){message = "Error : " + e.getMessage();}
+		catch(Exception e){	error(e.getMessage());}
 		return message;
 	}
 	
@@ -276,5 +277,12 @@ public class Base  {
 
 	public void setPseudo(String pseudo) {
 		this.pseudo = pseudo;
+	}
+	
+
+	private void error(String message){
+		JOptionPane.showMessageDialog(null, message + "\n Le programe va quitter", "ATTENTION",JOptionPane.ERROR_MESSAGE);
+		this.close();
+		System.exit(1);
 	}
 }

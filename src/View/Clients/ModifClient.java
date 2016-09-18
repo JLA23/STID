@@ -93,10 +93,12 @@ public class ModifClient extends Client{
 	
 	private LinkedHashMap<String, Object[]> verifPaiement(LinkedHashMap<String, Object[]> val, String numero){
 		String [] result = donnees.modeClient(numero);
-		for (Entry<String, Object[]> entry : val.entrySet()) {
-			for(int i = 0; i < result.length; i++){
-				if(result[i].equals((String)entry.getValue()[0])){
-					val.get(entry.getKey())[1] = true;
+		if(result != null){
+			for (Entry<String, Object[]> entry : val.entrySet()) {
+				for(int i = 0; i < result.length; i++){
+					if(result[i].equals((String)entry.getValue()[0])){
+						val.get(entry.getKey())[1] = true;
+					}
 				}
 			}
 		}

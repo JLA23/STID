@@ -195,4 +195,14 @@ public class SelectDevis extends JFrame {
 		this.base = base;
 	}
 
+	public Commandes getCommande() {
+		return commande;
+	}
+
+	public void setCommande(Commandes commande) {
+		this.commande = commande;
+	}
+	
+	
+
 }

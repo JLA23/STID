@@ -74,7 +74,7 @@ public class ValiderModif implements ActionListener {
 					devis.getBase().update("devis",
 							"numClient = " + devis.getNumClient().getText() + ", DateDevis = '"
 									+ new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate())
-									+ "', LblDevis = '" + devis.getjLibelle().getText() + "', MntFour = "
+									+ "', LblDevis = '" + apostrophe(devis.getjLibelle().getText()) + "', MntFour = "
 									+ devis.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
 									+ devis.getjCout().getText().replaceAll(",", "\\.") + ", HeureSite = "
 									+ devis.getjHeureSite().getText().replaceAll(",", "\\.") + ", HeureAtelier = "
@@ -117,9 +117,9 @@ public class ValiderModif implements ActionListener {
 										&& !client.getjAdresses()[2].getText().isEmpty()) {
 									String[] re = client.getValeurTaux().get(client.getBoxTva().getSelectedItem());
 									String query = "numClient = " + client.getjNumClient().getText() + ", NomClient = '"
-											+ client.getjName().getText() + "', ";
+											+ apostrophe(client.getjName().getText()) + "', ";
 									for (int i = 0; i < client.getjAdresses().length; i++) {
-										query += "Adresse" + (i + 1) + " = '" + client.getjAdresses()[i].getText()
+										query += "Adresse" + (i + 1) + " = '" + apostrophe(client.getjAdresses()[i].getText())
 												+ "', ";
 									}
 									query += "Mail = '" + client.getjMail().getText() + "', DelaiPaiement = "
@@ -192,8 +192,8 @@ public class ValiderModif implements ActionListener {
 				String[] re = commandes.getValeurDevises().get(commandes.getDevises().getSelectedItem());
 				commandes.getBase().update("commandes",
 						"numClient = " + commandes.getNumClient().getText() + ", CdeComClient = '"
-								+ commandes.getjNumCommandeClient().getText() + "', Lblcommande = '"
-								+ commandes.getjLibelle().getText() + "', MntFour = "
+								+ apostrophe(commandes.getjNumCommandeClient().getText()) + "', Lblcommande = '"
+								+ apostrophe(commandes.getjLibelle().getText()) + "', MntFour = "
 								+ commandes.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
 								+ commandes.getjCout().getText().replaceAll(",", "\\.") + ", HeureSite = "
 								+ commandes.getjHeureSite().getText().replaceAll(",", "\\.") + ", HeureAtelier = "
@@ -233,7 +233,7 @@ public class ValiderModif implements ActionListener {
 			if (termes.getDonnees().exist("commandes", "NumCommande", "NumCommande = " + termes.getNumeroCommande())) {
 				if (termes.getNumFacture() == null) {
 					termes.getBase().update("termes",
-							"Lblterme = '" + termes.getjLibelle().getText() + "', MntFour = "
+							"Lblterme = '" + apostrophe(termes.getjLibelle().getText()) + "', MntFour = "
 									+ termes.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
 									+ termes.getjCout().getText().replaceAll(",", "\\.") + ", Prefabrication = "
 									+ termes.getjPrefabrication().getText().replaceAll(",", "\\."),
@@ -241,7 +241,7 @@ public class ValiderModif implements ActionListener {
 									+ termes.getNumeroIndice() + " AND numFacture is null");
 				} else {
 					termes.getBase().update("termes",
-							"Lblterme = '" + termes.getjLibelle().getText() + "', MntFour = "
+							"Lblterme = '" + apostrophe(termes.getjLibelle().getText()) + "', MntFour = "
 									+ termes.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
 									+ termes.getjCout().getText().replaceAll(",", "\\.") + ", Prefabrication = "
 									+ termes.getjPrefabrication().getText().replaceAll(",", "\\."),
@@ -271,11 +271,13 @@ public class ValiderModif implements ActionListener {
 				"numfacture = " + factures.getjNumFacture().getText())) {
 			String[] re = factures.getValeurDevises().get(factures.getDevises().getSelectedItem());
 			String[] valeursInit = factures.getDonnees().fiche(
-					"f.montanttaxe, f.valeur, f.modepaiement, f.preclettre, f.dateEmission, f.dateEcheance, f.anneeValeur, f.CodeDevise",
+					"Round(f.montanttaxe, 2), f.valeur, f.modepaiement, f.preclettre, f.dateEmission, f.dateEcheance, f.anneeValeur, f.CodeDevise",
 					"factures as f", "f.numfacture = " + factures.getjNumFacture().getText());
 			String[] valeursModifie = new String[8];
+			//System.out.println(factures.getRecupTVA() + " - " + valeursInit[0]);
 			valeursModifie[0] = factures.getRecupTVA() + "";
 			valeursModifie[1] = factures.getjValeur().getText();
+			System.out.println(factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem()).length);
 			valeursModifie[2] = factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem())[0];
 			valeursModifie[3] = factures.getjPrecision().getText();
 			valeursModifie[4] = new SimpleDateFormat("yyyy-MM-dd").format(factures.getjDateEmission().getDate());
@@ -284,10 +286,10 @@ public class ValiderModif implements ActionListener {
 			valeursModifie[7] = re[0];
 			if (!ModifieOuIdentique(valeursInit, valeursModifie)) {
 				factures.getBase().update("factures",
-						"MontantTaxe = " + factures.getRecupTVA() + ", valeur = " + factures.getjValeur().getText()
+						"MontantTaxe = " + valeursModifie[0] + " , valeur = " + factures.getjValeur().getText()
 								+ ", ModePaiement = "
 								+ factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem())[0]
-								+ ", PrecLettre = '" + factures.getjPrecision().getText() + "', DateEmission = '"
+								+ ", PrecLettre = '" + apostrophe(factures.getjPrecision().getText()) + "', DateEmission = '"
 								+ new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEmission().getDate())
 								+ "', DateEcheance = '"
 								+ new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEcheance().getDate())
@@ -344,14 +346,38 @@ public class ValiderModif implements ActionListener {
 	private boolean ModifieOuIdentique(String[] valeursInit, String[] valeursMaintenant) {
 		boolean verifie = true;
 		for (int i = 0; i < valeursInit.length; i++) {
-			// System.out.println(i + " : " + valeursInit[i] + " - " +
-			// valeursMaintenant[i]);
-			if (!valeursInit[i].equals(valeursMaintenant[i])) {
-				verifie = false;
-				break;
+			System.out.println(valeursInit[i] + " - " + valeursMaintenant[i]);
+			try{
+				Double num1 = Double.parseDouble(valeursInit[i]);
+				Double num2 = Double.parseDouble(valeursMaintenant[i]);
+				int retval = Double.compare(num1, num2);
+				if(retval != 0){
+					System.out.println("ok2");
+					verifie = false;
+					break;
+				}
+			}
+			catch(Exception e){
+				if (!valeursInit[i].equals(valeursMaintenant[i])) {
+					verifie = false;
+					break;
+				}
 			}
 		}
-		// System.out.println(verifie);
+
 		return verifie;
 	}
+	
+	 public String apostrophe(String message){
+		 String mes = message;
+		 if(message != null && message.contains("'")){
+				String[] separer = message.split("'");
+				mes = separer[0];
+				for(int j = 1; j < separer.length; j++){
+					mes += "\\'" + separer[j];
+				}
+				
+		 }
+		 return mes;
+	 }
 }

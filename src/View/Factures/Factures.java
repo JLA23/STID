@@ -95,11 +95,12 @@ public class Factures extends JFrame{
         fournitures = new JLabel("Fournitures");
         coutMO = new JLabel("Coût MO");
         prefabrication = new JLabel("Préfabrication");
-        euro1 = new JLabel("EUR");
-        euro2 = new JLabel("EUR");
-        euro3 = new JLabel("EUR");
-        euro4 = new JLabel("EUR");
-        euro5 = new JLabel("EUR");
+        String [] symbole =  donnees.fiche("Symbole", "devises", "Pardefaut = 1");
+        euro1 = new JLabel(symbole[0]);
+        euro2 = new JLabel(symbole[0]);
+        euro3 = new JLabel(symbole[0]);
+        euro4 = new JLabel(symbole[0]);
+        euro5 = new JLabel(symbole[0]);
         totalHT = new JLabel("Montant HT");
         totalTTC = new JLabel("Montant TTC");
         totalDevise = new JLabel("Total (Devise)");

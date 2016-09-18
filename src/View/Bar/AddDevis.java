@@ -9,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import BDD.Base;
 import View.Devis.NewDevis;
+import View.Impression.Devis.EtatsDevis;
 import View.SearchDevis.SearchDevis;
 
 
@@ -82,7 +83,7 @@ public class AddDevis{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new DevisEnCours();
+				new EtatsDevis(bdd, fenetre, 0);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Liste des devis en cours");
@@ -93,7 +94,7 @@ public class AddDevis{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new ListDevis();
+				new EtatsDevis(bdd, fenetre, 1);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Liste Devis");

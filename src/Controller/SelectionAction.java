@@ -24,12 +24,17 @@ import View.Factures.LookFacture;
 import View.Factures.ModifFacture;
 import View.Factures.NewFacture;
 import View.Factures.SupprFacture;
+import View.Impression.Clients.EtatsClients;
+import View.Impression.Commandes.EtatsCommandes;
+import View.Impression.Devis.EtatsDevis;
+import View.Impression.Factures.EtatsFactures;
+import View.Parameters.Categorie;
 import View.Parameters.Salarie;
 import View.Pointage.SaisiePointage;
 import View.SearchClients.SearchClientList;
 import View.SearchCommandes.SearchCommandeList;
 import View.SearchDevis.SearchDevisList;
-import View.SearchDevis.SearchDevisPointage;
+import View.SearchDevis.SearchDevisPointagePrint;
 import View.SearchFactures.SearchFactureList;
 import View.SearchParameters.SearchSalarieList;
 import View.SearchTerme.SearchTermeList;
@@ -52,12 +57,16 @@ public class SelectionAction implements ActionListener, MouseListener {
 	private AutoComplete autos;
 	private SelectDevis select;
 	private SaisiePointage saisie;
-	
+	private EtatsDevis etats;
+	private EtatsCommandes etatsc;
+	private EtatsClients etatscl;
+	private EtatsFactures etatsf;
 
 	public SelectionAction(Object frame, String classe, String fonction) {
 		this.f = fonction;
 		this.type = classe;
 		this.clas = frame;
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -65,12 +74,13 @@ public class SelectionAction implements ActionListener, MouseListener {
 	}
 	
 	public void action(){
+		System.out.println(f);
 		initVerif();
 		int ligne = tables.getSelectedRow();
 		if (ligne != -1) {
 			String numero = datas[tables.convertRowIndexToModel(ligne)][0].toString();
 			String numero2 = null;
-			if(datas[tables.convertRowIndexToModel(ligne)][2] != null){
+			if(datas[tables.convertRowIndexToModel(ligne)].length >= 3 && datas[tables.convertRowIndexToModel(ligne)][2] != null){
 				numero2 = datas[tables.convertRowIndexToModel(ligne)][2].toString();
 			}
 			dialog.dispose();
@@ -136,6 +146,30 @@ public class SelectionAction implements ActionListener, MouseListener {
 					dialog.dispose();
 					new FocusJText(saisie, "Pointage").name();
 				}
+				 else if (f.equals("EtatsDevis")){
+						autos.getZoneTexte().setText(numero);
+						dialog.dispose();
+						new FocusJText(etats, "EtatsDevis").name();
+				}
+				 else if (f.equals("EtatsCommandes")){
+						autos.getZoneTexte().setText(numero);
+						dialog.dispose();
+						new FocusJText(etatsc, "EtatsCommandes").name();
+				}
+				 else if (f.equals("EtatsClients")){
+						autos.getZoneTexte().setText(numero);
+						dialog.dispose();
+						new FocusJText(etatscl, "EtatsClients").name();
+				}
+				 else if (f.equals("EtatsFactures")){
+						autos.getZoneTexte().setText(numero);
+						dialog.dispose();
+						new FocusJText(etatsf, "EtatsFactures").name();
+				}
+				 else if (f.equals("EHSP")){
+						autos.getZoneTexte().setText(numero);
+						dialog.dispose();
+				}
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -178,14 +212,124 @@ public class SelectionAction implements ActionListener, MouseListener {
 			fenetre = search.getFrame();
 		}
 		else if(f.equals("Pointage")){
-			SearchDevisPointage search = (SearchDevisPointage)clas;
+			SearchDevisPointagePrint search = (SearchDevisPointagePrint)clas;
 			dialog = search;
 			autos = search.getAuto();
 			datas = search.getData();
 			bdd = search.getBdd();
 			tables = search.getLayerTable();
 			fenetre = search.getFrame();
-			saisie = search.getSaisie();
+			saisie = (SaisiePointage)search.getSaisie();
+		}
+		
+		else if(f.equals("EtatsDevis")){
+			if(type == null){
+				SearchDevisPointagePrint search = (SearchDevisPointagePrint)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+				etats = (EtatsDevis)search.getSaisie();
+			}
+			else if(type.equals("Client")){
+				SearchClientList search = (SearchClientList)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+				etats = (EtatsDevis)search.getFenetre();
+			}
+		}
+		else if(f.equals("EtatsCommandes")){
+			if(type.equals("Commandes")){
+				SearchCommandeList search = (SearchCommandeList)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+				etatsc = (EtatsCommandes)search.getSaisie();
+			}
+			else if(type.equals("Client")){
+				SearchClientList search = (SearchClientList)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+				etatsc = (EtatsCommandes)search.getFenetre();
+			}
+		}
+		
+		else if(f.equals("EtatsClients")){
+			 if(type.equals("Client")){
+				SearchClientList search = (SearchClientList)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+				etatscl = (EtatsClients)search.getFenetre();
+			}
+		}
+		
+		else if(f.equals("EtatsFactures")){
+			 if(type.equals("Client")){
+				SearchClientList search = (SearchClientList)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+				etatsf = (EtatsFactures)search.getFenetre();
+			}
+		}
+		else if(f.equals("EHSP")){
+			if(type == null){
+				SearchDevisPointagePrint search = (SearchDevisPointagePrint)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+			}
+			else if(type == "Salarie"){
+				SearchSalarieList search = (SearchSalarieList)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+			}
+			else if(type.equals("Categorie")){
+				Categorie search = (Categorie)clas;
+				dialog = search;
+				autos = search.getAuto();
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+			}
+	
+			else if(type.equals("Commandes")){
+				SearchCommandeList search = (SearchCommandeList)clas;
+				dialog = search;
+				datas = search.getData();
+				bdd = search.getBdd();
+				tables = search.getLayerTable();
+				fenetre = search.getFrame();
+				autos = search.getAuto();
+			}
 		}
 		
 		else if(f.equals("Pointage Code")){
@@ -196,7 +340,7 @@ public class SelectionAction implements ActionListener, MouseListener {
 			bdd = search.getBdd();
 			tables = search.getLayerTable();
 			fenetre = search.getFrame();
-			saisie = search.getSaisie();
+			saisie = (SaisiePointage)search.getSaisie();
 		}
 		
 		else if(f.equals("Modif") || f.equals("Suppr") || f.equals("Recherche")){
@@ -249,7 +393,6 @@ public class SelectionAction implements ActionListener, MouseListener {
 				tables = search.getLayerTable();
 				fenetre = search.getFrame();
 			}
-			
 		}
 	}
 

@@ -1,593 +1,382 @@
-<?xml version="1.0" encoding="UTF-8"  ?>
-<!-- Created with iReport - A designer for JasperReports -->
-<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-<jasperReport
-		 name="STID"
-		 columnCount="1"
-		 printOrder="Vertical"
-		 orientation="Portrait"
-		 pageWidth="595"
-		 pageHeight="842"
-		 columnWidth="535"
-		 columnSpacing="0"
-		 leftMargin="30"
-		 rightMargin="30"
-		 topMargin="20"
-		 bottomMargin="20"
-		 whenNoDataType="NoPages"
-		 isTitleNewPage="false"
-		 isSummaryNewPage="false">
-	<property name="ireport.scriptlethandling" value="0" />
-	<property name="ireport.encoding" value="UTF-8" />
-	<import value="java.util.*" />
-	<import value="net.sf.jasperreports.engine.*" />
-	<import value="net.sf.jasperreports.engine.data.*" />
-
-	<parameter name="NumClient" isForPrompting="false" class="java.lang.Integer"/>
-	<parameter name="NumFacture" isForPrompting="false" class="java.lang.Integer"/>
-	<parameter name="ValeurText" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="Logo" isForPrompting="false" class="java.lang.String"/>
-	<queryString><![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, t.numcommande, t.coutmo, t.mntfour, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, Round(Sum(t.prefabrication + t.coutMo + t.mntfour + f.montanttaxe), 3) as ttc, f.tva,  DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, f.preclettre, f.lblecheance, co.cdeComClient from clients as c, factures as f, termes as t, commandes as co where f.NumFacture = $P{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient;]]></queryString>
-
-	<field name="NumClient" class="java.lang.Integer"/>
-	<field name="Adresse1" class="java.lang.String"/>
-	<field name="Adresse2" class="java.lang.String"/>
-	<field name="Adresse3" class="java.lang.String"/>
-	<field name="Adresse4" class="java.lang.String"/>
-	<field name="Adresse5" class="java.lang.String"/>
-	<field name="Adresse6" class="java.lang.String"/>
-	<field name="Adresse7" class="java.lang.String"/>
-	<field name="prefabrication" class="java.lang.Float"/>
-	<field name="numtva" class="java.lang.String"/>
-	<field name="numcommande" class="java.lang.Integer"/>
-	<field name="coutmo" class="java.lang.Float"/>
-	<field name="mntfour" class="java.lang.Float"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="STID" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="eb95bbef-5eab-41d3-8c8e-4d8a1d3e59aa">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="689"/>
+	<property name="ireport.y" value="816"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="NumFacture" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="ValeurText" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="Logo" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[Select c.NumClient, c.Adresse1, c.Adresse2, c.Adresse3, c.Adresse4, c.Adresse5, c.Adresse6, c.Adresse7, t.prefabrication, c.numtva, t.numcommande, t.coutmo, t.mntfour, Round(Sum(t.prefabrication + t.coutMo + t.mntfour), 3) as ht, f.numfacture, f.montanttaxe, Round(Sum(t.prefabrication + t.coutMo + t.mntfour + f.montanttaxe), 3) as ttc, f.tva,  DATE_FORMAT(f.dateecheance, '%d/%m/%Y')as dateechance, DATE_FORMAT(f.dateemission, '%d/%m/%Y')as dateemission, de.symbole, f.preclettre, t.lblterme, co.cdeComClient from clients as c, factures as f, termes as t, commandes as co, devises as de where f.NumFacture = $P!{NumFacture} and t.numfacture = f.numfacture and t.numcommande = co.numcommande and co.numclient = c.numclient and de.pardefaut = 1;]]>
+	</queryString>
+	<field name="NumClient" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse3" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse4" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse5" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse6" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Adresse7" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prefabrication" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numtva" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numcommande" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="coutmo" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mntfour" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="ht" class="java.lang.Double"/>
-	<field name="numfacture" class="java.lang.Integer"/>
-	<field name="montanttaxe" class="java.lang.Float"/>
+	<field name="numfacture" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="montanttaxe" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="ttc" class="java.lang.Double"/>
-	<field name="tva" class="java.lang.Integer"/>
+	<field name="tva" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="dateechance" class="java.lang.String"/>
-	<field name="dateemission" class="java.lang.String"/>
-	<field name="preclettre" class="java.lang.String"/>
-	<field name="lblecheance" class="java.lang.String"/>
-	<field name="cdeComClient" class="java.lang.String"/>
-
-		<background>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</background>
-		<title>
-			<band height="571"  isSplitAllowed="true" >
-				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="256"
-						y="1"
-						width="279"
-						height="87"
-						key="image-1"/>
-					<box>					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+	<field name="dateemission" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="symbole" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="preclettre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lblterme" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cdeComClient" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="259" splitType="Stretch">
+			<image>
+				<reportElement key="image-1" x="256" y="1" width="279" height="87" uuid="ffcb8509-983f-49b3-baf7-8be197ff8162"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
-</box>
-					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA[$P{Logo}]]></imageExpression>
-				</image>
-				<staticText>
-					<reportElement
-						x="0"
-						y="0"
-						width="242"
-						height="14"
-						key="staticText-1"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+				</box>
+				<imageExpression><![CDATA[$P{Logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-1" x="0" y="0" width="242" height="14" uuid="239a7737-62cc-4bb2-bb51-5e8c3435cb24"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[Sté De Tuyauterie Industrielle Douaisienne]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="0"
-						y="13"
-						width="242"
-						height="14"
-						key="staticText-2"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="0" y="13" width="242" height="14" uuid="e565e9ca-bd65-44c6-99e0-3618b1bad2b8"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[80, rue des Colombes]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="0"
-						y="27"
-						width="242"
-						height="14"
-						key="staticText-3"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="0" y="27" width="242" height="14" uuid="d0d7b006-10ac-485f-8313-ae2c3625eef5"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[Z.I D'EMPLOI - 62710 COURRIERES]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="1"
-						y="40"
-						width="242"
-						height="14"
-						key="staticText-4"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="1" y="40" width="242" height="14" uuid="274c5c04-0cf5-44dc-a2d5-a7e6cbbc2170"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[TEL. 03.21.49.44.66      FAX. 03.21.49.91.00]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="266"
-						y="108"
-						width="253"
-						height="19"
-						key="textField"
-						stretchType="RelativeToBandHeight"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Adresse2} != null ? (($F{Adresse3} != null) ? (($F{Adresse4} != null) ? (($F{Adresse5} != null) ? (($F{Adresse6} != null) ? (($F{Adresse7} != null) ? $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6} + '\n' + $F{Adresse7} : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3}) : $F{Adresse1} + '\n' + $F{Adresse2}) : $F{Adresse1} ;]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="1"
-						y="54"
-						width="242"
-						height="14"
-						key="staticText-6"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[S.A Capital de 150.000 €]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="0"
-						y="67"
-						width="242"
-						height="14"
-						key="staticText-7"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToBandHeight" x="266" y="108" width="253" height="19" uuid="56d24373-76c9-47f9-a781-f77fc4c00bdc"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Adresse2} != null ? (($F{Adresse3} != null) ? (($F{Adresse4} != null) ? (($F{Adresse5} != null) ? (($F{Adresse6} != null) ? (($F{Adresse7} != null) ? $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6} + '\n' + $F{Adresse7} : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4} + '\n' + $F{Adresse5} + '\n' + $F{Adresse6}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3} + '\n' + $F{Adresse4}) : $F{Adresse1} + '\n' + $F{Adresse2} + '\n' + $F{Adresse3}) : $F{Adresse1} + '\n' + $F{Adresse2}) : $F{Adresse1} ;]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" x="1" y="54" width="242" height="14" uuid="be9142b9-0e62-4300-8c78-4393145cc5b7"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[S.A.S Capital de 150.000 €]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" x="0" y="67" width="242" height="14" uuid="59e75bde-0881-48b6-bdec-770398b29d1f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[R.C.B BETHUNE 315 668 772]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="0"
-						y="95"
-						width="242"
-						height="14"
-						key="staticText-8"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="0" y="95" width="242" height="14" uuid="05392769-c7ab-4801-af07-e46335452948"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[TVA FR 81 315 668 772]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="0"
-						y="80"
-						width="242"
-						height="14"
-						key="staticText-9"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="0" y="80" width="242" height="14" uuid="15400ddf-9e9f-4c01-a0fc-0c27c8a55538"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[Siret 315 668 772 00033 - APE 3320A]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="0"
-						y="108"
-						width="242"
-						height="14"
-						key="staticText-10"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Bold" size="10" isBold="true"/>
-					</textElement>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="0" y="108" width="242" height="14" uuid="35519955-7e57-4c39-848d-7c70adb01db1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
 				<text><![CDATA[RIV 30076 04209 00130700200 38]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="144"
-						width="242"
-						height="14"
-						key="textField-1"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Objet : FACTURE N° " + $F{numfacture}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="158"
-						width="242"
-						height="14"
-						key="textField-2"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["N/Ref : C " + $F{numcommande}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="172"
-						width="242"
-						height="14"
-						key="textField-3"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["V/Ref : Cde N° " + $F{cdeComClient}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="185"
-						width="242"
-						height="14"
-						key="textField-4"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["ECHEANCE : " + $F{dateechance}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						mode="Transparent"
-						x="32"
-						y="264"
-						width="470"
-						height="79"
-						key="textField-5"/>
-					<box></box>
-					<textElement textAlignment="Justified" verticalAlignment="Middle">
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{preclettre}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="32"
-						y="237"
-						width="470"
-						height="16"
-						key="textField-6"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{lblecheance}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="266"
-						y="199"
-						width="242"
-						height="17"
-						key="textField-7"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["COURRIERES, le " + $F{dateemission}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="199"
-						width="242"
-						height="14"
-						key="textField-20"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Roman" size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["N° TVA : " + $F{numtva}]]></textFieldExpression>
-				</textField>
-				<line direction="TopDown">
-					<reportElement
-						x="318"
-						y="471"
-						width="144"
-						height="0"
-						key="line-1"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="318"
-						y="422"
-						width="144"
-						height="0"
-						key="line-2"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<staticText>
-					<reportElement
-						x="430"
-						y="471"
-						width="32"
-						height="25"
-						key="staticText-11"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="318"
-						y="471"
-						width="112"
-						height="25"
-						key="textField-21"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ttc}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="430"
-						y="446"
-						width="32"
-						height="25"
-						key="staticText-12"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="318"
-						y="446"
-						width="112"
-						height="25"
-						key="textField-22"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{montanttaxe}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="430"
-						y="424"
-						width="32"
-						height="22"
-						key="staticText-13"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="318"
-						y="424"
-						width="112"
-						height="22"
-						key="textField-23"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ht}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="430"
-						y="398"
-						width="32"
-						height="26"
-						key="staticText-14"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="318"
-						y="398"
-						width="112"
-						height="26"
-						key="textField-24"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{coutmo}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="430"
-						y="374"
-						width="32"
-						height="24"
-						key="staticText-15"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<text><![CDATA[Eur]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="###0.00;-###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="318"
-						y="374"
-						width="112"
-						height="24"
-						key="textField-25"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Courier"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mntfour}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="70"
-						y="471"
-						width="248"
-						height="25"
-						key="textField-26"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["MONTANT T.T.C. .................."]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="70"
-						y="446"
-						width="53"
-						height="25"
-						key="textField-27"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["T.V.A. "]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="70"
-						y="422"
-						width="248"
-						height="25"
-						key="textField-28"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["MONTANT H.T. ...................."]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="70"
-						y="398"
-						width="248"
-						height="25"
-						key="textField-29"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["MAIN D'OEUVRE SUR SITE .........."]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="70"
-						y="374"
-						width="248"
-						height="25"
-						key="textField-30"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["FOURNITURE ......................"]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="123"
-						y="446"
-						width="38"
-						height="25"
-						key="textField-31"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{tva}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="###0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="161"
-						y="446"
-						width="157"
-						height="25"
-						key="textField-32"/>
-					<box></box>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[" % .................."]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="69"
-						y="509"
-						width="393"
-						height="23"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font fontName="Times New Roman" pdfFontName="Times-Italic" size="12" isItalic="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{ValeurText}]]></textFieldExpression>
-				</textField>
-			</band>
-		</title>
-		<pageHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageHeader>
-		<columnHeader>
-			<band height="0"  isSplitAllowed="false" >
-				<printWhenExpression><![CDATA[$F{preclettre}!=null]]></printWhenExpression>
-			</band>
-		</columnHeader>
-		<detail>
-			<band height="0"  isSplitAllowed="false" >
-			</band>
-		</detail>
-		<columnFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</columnFooter>
-		<pageFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageFooter>
-		<summary>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</summary>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="0" y="144" width="242" height="14" uuid="48dfd15d-80a3-4303-80c7-124e99c5571f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Objet : FACTURE N° " + $F{numfacture}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="0" y="158" width="242" height="14" uuid="8d557f5c-8e68-44a8-8821-e7a122de5134"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N/Ref : C " + $F{numcommande}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-3" x="0" y="172" width="242" height="14" uuid="3ab0e6b4-65e4-4745-abd8-10bb44294ab3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["V/Ref : Cde N° " + $F{cdeComClient}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-4" x="0" y="185" width="242" height="14" uuid="44e70698-f161-49ff-bb03-c4488e3fd125"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ECHEANCE : " + $F{dateechance}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-6" x="38" y="242" width="470" height="16" uuid="a14d6257-efca-4bf1-b086-dbaf9df947ba"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lblterme}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-7" x="266" y="199" width="242" height="17" uuid="22984a42-7d1d-48c4-b758-217f177c2b5d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["COURRIERES, le " + $F{dateemission}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-20" x="0" y="199" width="242" height="14" uuid="d6e879df-e948-4543-91ee-2cd833e387f3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° TVA : " + $F{numtva}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{preclettre}!=null]]></printWhenExpression>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{preclettre} != null]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-5" stretchType="RelativeToBandHeight" mode="Transparent" x="38" y="9" width="470" height="20" uuid="378c812c-ee50-401a-93eb-e5e2fcaa3bd5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{preclettre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="176" splitType="Stretch">
+			<line>
+				<reportElement key="line-1" x="329" y="109" width="144" height="1" uuid="a0a1789f-aa32-4f88-9e3f-980b49f01718"/>
+			</line>
+			<line>
+				<reportElement key="line-2" x="329" y="60" width="144" height="1" uuid="5f88b948-fbeb-4394-acdf-e96aaffb85c4"/>
+			</line>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-21" x="329" y="109" width="112" height="25" uuid="22ebcfe1-a691-44e6-a52e-5b8da4393319"/>
+				<textElement textAlignment="Right">
+					<font size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ttc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-22" x="329" y="84" width="112" height="25" uuid="315e661c-5454-403a-91fd-c7cdc6e71e63"/>
+				<textElement textAlignment="Right">
+					<font size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{montanttaxe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-23" x="329" y="62" width="112" height="22" uuid="c0b397f1-19be-4792-aaa7-83c2f57276a3"/>
+				<textElement textAlignment="Right">
+					<font size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ht}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-24" x="329" y="36" width="112" height="26" uuid="bb76804f-dd63-4988-9333-a49e3eee4e26"/>
+				<textElement textAlignment="Right">
+					<font size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{coutmo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-25" x="329" y="12" width="112" height="24" uuid="73cd8618-0697-4a6e-8870-ab107441cede"/>
+				<textElement textAlignment="Right">
+					<font size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mntfour}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-26" x="81" y="109" width="248" height="25" uuid="4821d54d-b1f1-4120-a9c0-a52a990f1f49"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MONTANT T.T.C. .................."]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-27" x="81" y="84" width="53" height="25" uuid="8bddb2af-9af9-41ac-8407-1f1904394faa"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["T.V.A. "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-28" x="81" y="60" width="248" height="25" uuid="3348b6ac-7d14-44e4-ad7c-79ec86fbaf80"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MONTANT H.T. ...................."]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-29" x="81" y="36" width="248" height="25" uuid="32d4b2ce-f220-4c1a-80c7-3f3fd28d45c3"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MAIN D'OEUVRE SUR SITE .........."]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-30" x="81" y="12" width="248" height="25" uuid="83ca923e-6a60-470e-b5a5-412306a1687a"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FOURNITURE ......................"]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-31" x="134" y="84" width="38" height="25" uuid="e64bce01-0ea1-4b53-8c83-b769673c9e04"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement key="textField-32" x="172" y="84" width="157" height="25" uuid="54f1c7ca-c023-4faa-8c45-b1fc9f69fd9b"/>
+				<textElement>
+					<font fontName="Courier New" size="12" pdfFontName="Courier"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" % .................."]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="80" y="147" width="393" height="23" uuid="832b6dba-10bb-44a0-a5c5-c5aa016bf5d4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isItalic="true" pdfFontName="Times-Italic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ValeurText}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="12" width="32" height="24" uuid="a3ed665d-d5f0-4102-bfbd-a3c5926b222b"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{symbole}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="84" width="32" height="25" uuid="2bcc8c10-b318-413c-bb4b-7ec6c1774b6a"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{symbole}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="109" width="32" height="25" uuid="3a7952fb-8d51-41a8-8426-98225785a3d5"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{symbole}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="62" width="32" height="22" uuid="f2d00c06-6276-4f28-8117-33f485c0ea92"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{symbole}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="36" width="32" height="24" uuid="20088bd1-1867-4966-b021-a89a688f459f"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{symbole}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

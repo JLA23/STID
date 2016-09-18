@@ -1,0 +1,1006 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Rapport_sans titre_1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="828" leftMargin="7" rightMargin="7" topMargin="18" bottomMargin="18" uuid="a58ce564-197c-490b-9354-aab6a891fc51">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="25"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="STID"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="style1" mode="Opaque" forecolor="#000000">
+		<box>
+			<topPen lineWidth="2.0"/>
+			<leftPen lineWidth="2.0"/>
+			<bottomPen lineWidth="2.0"/>
+			<rightPen lineWidth="2.0"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{TotalSolde} <= 0]]></conditionExpression>
+			<style forecolor="#FF0033" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+				<box>
+					<pen lineWidth="0.0" lineColor="#000000"/>
+					<topPen lineWidth="2.0" lineColor="#000000"/>
+					<leftPen lineWidth="2.0" lineColor="#000000"/>
+					<bottomPen lineWidth="2.0" lineColor="#000000"/>
+					<rightPen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+			</style>
+		</conditionalStyle>
+	</style>
+	<style name="style2" mode="Transparent" forecolor="#000000" fill="Solid" isBlankWhenNull="false" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<pen lineWidth="0.0"/>
+		<box>
+			<leftPen lineWidth="1.25" lineColor="#000000"/>
+			<rightPen lineWidth="1.25" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{solde} < 0]]></conditionExpression>
+			<style mode="Transparent" forecolor="#FF0033" fill="Solid" isBlankWhenNull="false" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252">
+				<pen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#000000"/>
+					<topPen lineWidth="0.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+				</box>
+			</style>
+		</conditionalStyle>
+	</style>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#73E6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFE6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="New Dataset 1" uuid="1fd2a364-0f69-4867-aae4-bd46c925eeee">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="STID"/>
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<parameter name="Devis" class="java.lang.Boolean"/>
+		<parameter name="Commandes" class="java.lang.Boolean"/>
+		<parameter name="Annee" class="java.lang.String"/>
+		<parameter name="ConditionsPersonnel" class="java.lang.String"/>
+		<parameter name="ConditionsOrder" class="java.lang.String"/>
+		<parameter name="Semaine" class="java.lang.String"/>
+		<parameter name="AnneeBoolean" class="java.lang.Boolean">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="NomPersonnel" class="java.lang.String"/>
+		<parameter name="NumPersonnel" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT 	p.annee,
+	p.numsem,
+	c.numclient,
+	c.nomclient,
+	d.numdevis,
+	d.numcommande,
+	Sum(DISTINCT p.hrpassnormal) AS hrnormal,
+	Sum(DISTINCT p.hrpassSup125) AS hrpasssup,
+	Sum(DISTINCT p.hrpassSup150) AS hrpassSupr25,
+	Sum(DISTINCT p.hrpasssup200) AS hrsupp50,
+	Sum(DISTINCT p.HrPassNormal + p.HrPassSup125*1.25 + p.HrPassSup150 *1.5 + p.HrPassSup200 * 2) AS total,
+	case
+	when  $P!{Commandes} = true && d.numcommande is not null then (Select Round(co.HeureSite + co.HeureAtelier, 2) from commandes as co where co.numcommande = d.numcommande)
+	when $P!{Commandes} = false || d.numcommande is null then Round(d.HeureSite + d.HeureAtelier, 2)
+	end AS estimation
+FROM personne AS pe,
+	clients AS c,
+	devis AS d,
+	pointage AS p
+where pe.numpersonnel = $P!{NumPersonnel}
+and pe.numpersonnel = p.numpersonnel
+and $P!{Semaine}
+and p.annee = $P!{Annee}
+and p.numdevis = d.numdevis
+and c.numclient = d.numclient
+and $P!{ConditionsOrder}
+group by p.annee, p.numsem, d.numdevis order by p.annee, p.numsem, d.numdevis]]>
+		</queryString>
+		<field name="annee" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="numsem" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="numclient" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="nomclient" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="numdevis" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="numcommande" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="hrnormal" class="java.lang.Double"/>
+		<field name="hrpasssup" class="java.lang.Double"/>
+		<field name="hrpassSupr25" class="java.lang.Double"/>
+		<field name="hrsupp50" class="java.lang.Double"/>
+		<field name="total" class="java.lang.Double"/>
+		<field name="estimation" class="java.lang.Double"/>
+		<variable name="MontantTotal" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="New Dataset 2" uuid="6c5f9db8-1de1-48f1-a2bb-ed0d0ca24e34">
+		<parameter name="ConditionsPersonnel" class="java.lang.String"/>
+		<parameter name="ConditionsCommandes" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="ConditionsSemaine" class="java.lang.String"/>
+		<parameter name="ConditionsAnnee" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT
+	Round(Sum(p.HrPassNormal + p.HrPassSup125*1.25 + p.HrPassSup150 *1.5 + p.HrPassSup200 * 2) , 2) AS total
+FROM personne AS pe,
+	clients AS c,
+	devis AS d,
+	pointage AS p
+where pe.numpersonnel = p.numpersonnel
+and $P!{ConditionsSemaine} and $P!{ConditionsAnnee}
+and $P!{ConditionsPersonnel}
+and p.numdevis = d.numdevis
+and c.numclient = d.numclient
+and $P!{ConditionsCommandes}]]>
+		</queryString>
+		<field name="total" class="java.lang.Double"/>
+	</subDataset>
+	<parameter name="Devis" class="java.lang.Boolean"/>
+	<parameter name="Commandes" class="java.lang.Boolean"/>
+	<parameter name="ConditionsPersonnel" class="java.lang.String"/>
+	<parameter name="ConditionsOrder" class="java.lang.String"/>
+	<parameter name="ConditionsSem" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ConditionsAnnee" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="text" class="java.lang.String"/>
+	<parameter name="Annee" class="java.lang.Boolean"/>
+	<queryString>
+		<![CDATA[SELECT
+p.annee, pe.numpersonnel, pe.nom
+FROM personne AS pe,
+	clients AS c,
+	devis AS d,
+	pointage AS p
+where pe.numpersonnel = p.numpersonnel
+and $P!{ConditionsSem} and $P!{ConditionsAnnee}
+and $P!{ConditionsPersonnel}
+and p.numdevis = d.numdevis
+and c.numclient = d.numclient
+and $P!{ConditionsOrder}
+group by p.annee, pe.numpersonnel order by p.annee]]>
+	</queryString>
+	<field name="annee" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numpersonnel" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nom" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText" x="247" y="0" width="300" height="34" uuid="9c78f0a3-a4cb-4378-b922-14464e8df0dc"/>
+				<box>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Liste des Pointages]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="706" y="0" width="80" height="20" uuid="ef8d2180-387a-4956-b330-ecee9b7101e4"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" sur"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField" x="786" y="0" width="40" height="20" uuid="10e80151-73a8-44dd-bf91-72151190b4ae"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField" x="2" y="0" width="100" height="20" uuid="ef09393a-602a-4845-b9f0-65c926b1d9a5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="4" y="34" width="824" height="20" uuid="b5f713f3-4aab-4248-8fd4-25ce1c6f702e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{text}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="11" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="2" y="0" width="100" height="11" uuid="15c54126-72d3-4056-b6ac-9cef4e1af8e1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="708" y="0" width="80" height="11" uuid="1e63140a-08cd-4873-bcff-33cd27f3d8b4"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" sur"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="788" y="0" width="40" height="11" uuid="13398f5b-8364-4489-b61f-3b73397b9368"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="48" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="788" height="48" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="21d85874-370d-432e-8eb9-81d62875258b">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 1" uuid="09d73c34-9e0b-4054-bc19-4429a4f12b12">
+						<datasetParameter name="Devis">
+							<datasetParameterExpression><![CDATA[$P{Devis}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Commandes">
+							<datasetParameterExpression><![CDATA[$P{Commandes}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Annee">
+							<datasetParameterExpression><![CDATA[$F{annee}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Semaine">
+							<datasetParameterExpression><![CDATA[$P{ConditionsSem}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsPersonnel">
+							<datasetParameterExpression><![CDATA[$P{ConditionsPersonnel}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsOrder">
+							<datasetParameterExpression><![CDATA[$P{ConditionsOrder}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="NomPersonnel">
+							<datasetParameterExpression><![CDATA[$F{nom}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="NumPersonnel">
+							<datasetParameterExpression><![CDATA[$F{numpersonnel}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="AnneeBoolean">
+							<datasetParameterExpression><![CDATA[$P{Annee}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="46" uuid="f9b4ec00-4b9c-43d2-9c5e-34ae2bae6725">
+						<printWhenExpression><![CDATA[$P{Annee} == true]]></printWhenExpression>
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement key="staticText-1" mode="Opaque" x="0" y="11" width="46" height="11" backcolor="#999999" uuid="b4f53dc1-bb5c-4b79-9d44-5d4c012bc7fb"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<text><![CDATA[Année]]></text>
+							</staticText>
+							<textField>
+								<reportElement x="0" y="0" width="46" height="11" uuid="4c852bda-bbda-4448-a600-3dffc7dcd946"/>
+								<textElement textAlignment="Right">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Pers : " + $P{NumPersonnel}]]></textFieldExpression>
+							</textField>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="46" height="11" uuid="cce80688-dfee-48cd-bf27-57ee7ffe910b"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{annee}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="213" uuid="a4fed024-d38a-4d3f-8a2e-567c2674e7f7">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement key="staticText-1" mode="Opaque" x="30" y="11" width="35" height="11" backcolor="#999999" uuid="99ae1cd2-ab3d-444d-ab8e-de6910b6ce1d"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<text><![CDATA[Client]]></text>
+							</staticText>
+							<staticText>
+								<reportElement key="staticText-1" mode="Opaque" x="0" y="11" width="30" height="11" backcolor="#999999" uuid="30428669-d6d8-41c9-a064-a2a4d8a58c87"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<text><![CDATA[Sem]]></text>
+							</staticText>
+							<staticText>
+								<reportElement key="staticText-2" mode="Opaque" x="65" y="11" width="148" height="11" backcolor="#999999" uuid="a7888131-1dd7-4c26-95ab-774124e4ee28"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<text><![CDATA[NomClient]]></text>
+							</staticText>
+							<textField>
+								<reportElement x="0" y="0" width="213" height="11" uuid="bc60ac97-24ee-4ae6-8197-237709919b00"/>
+								<textElement>
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$P{AnneeBoolean} == false ? "Pers : " + $P{NumPersonnel} + "  Nom : " + $P{NomPersonnel} : "  Nom : " + $P{NomPersonnel}]]></textFieldExpression>
+							</textField>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField>
+								<reportElement x="30" y="0" width="35" height="11" uuid="e2656b58-be0c-49df-92d6-4350367a958a"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{numclient}]]></textFieldExpression>
+							</textField>
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="30" height="11" uuid="50b0e315-f73c-4b6f-86c8-c30e36cd9005"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{numsem}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="65" y="0" width="148" height="11" uuid="dfc3383d-2b1d-49bb-a75c-edc1e3e3ccc3"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{nomclient}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="40" uuid="b31811f1-d35d-4325-b6a1-b5748b3444af">
+						<printWhenExpression><![CDATA[$P{Devis} == true]]></printWhenExpression>
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="40" height="11" backcolor="#999999" uuid="e313913a-9dee-47cd-82de-8a0cf6fa95f9"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Devis]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="40" height="11" uuid="8ae43aa5-f05b-441e-b964-bbf4316303bc"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{numdevis}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="40" uuid="0500b176-75f2-45bf-bc72-0d36b770ad52">
+						<printWhenExpression><![CDATA[$P{Commandes} == true]]></printWhenExpression>
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="40" height="11" backcolor="#999999" uuid="aa7a0b43-d889-4990-891d-cb0a9794c162"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Comm]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="40" height="11" uuid="62f7f5a5-6f0b-4f74-8ed6-18325a849462"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{numcommande}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="938c96ae-9eea-4df8-b666-ddaf1f2548e8">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="60" height="11" backcolor="#999999" uuid="a40d3c30-16d6-4f30-b254-95427e38c90a"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[H Norm.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="60" height="11" uuid="a25d26e4-2e94-4479-81d9-b3c1910f3a09"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{hrnormal} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="d53a83d5-7c0a-44a1-8391-44eff0fe17be">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="60" height="11" backcolor="#999999" uuid="14744180-7c82-4db2-b024-d271b9fb6ba4"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[H 1.25]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="60" height="11" uuid="4487b333-f933-44af-a115-a6de7332776c"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{hrpasssup}+ 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="1e18c5d3-3c4d-4069-b815-5bd7964a8516">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="60" height="11" backcolor="#999999" uuid="d853c31f-6c79-4924-b840-68035c4db8e4"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[H 1.50]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="60" height="11" uuid="07be9f89-12fa-4057-8f97-2046619a7c9a"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{hrsupp50} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="bbfacfe1-4cdb-4a33-9c6e-763bb5183eb7">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="11" uuid="4f3c0530-c2a6-48b4-a86e-cc95c2ff145a"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Sous Total ]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="60" height="11" backcolor="#999999" uuid="2de26e24-379d-48df-a779-8fc3f825de67"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[H 2.00]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="60" height="11" uuid="6b573a62-e4ce-48ae-bdcc-2d9bfcaf631a"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{hrpassSupr25} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="86ffc7d7-5f3e-4663-b133-4fcf1dff2a82">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement mode="Opaque" x="0" y="0" width="60" height="11" backcolor="#999999" uuid="3e95ddb5-95e3-441c-b19b-c4cf94d158e3"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{MontantTotal} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="60" height="11" backcolor="#999999" uuid="1640971a-b31e-4744-96e0-dd79935eef60"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="60" height="11" uuid="ef5cd3d7-1e04-4113-8917-9fe3d1e84c0c"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{total} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="50" uuid="e2387550-51ea-4e4e-80ab-54bb188bde5a">
+						<jr:tableHeader height="0" rowSpan="1"/>
+						<jr:tableFooter height="12" rowSpan="1"/>
+						<jr:columnHeader height="22" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="11" width="50" height="11" backcolor="#999999" uuid="511facfd-4980-4a6c-b2ba-c29908f92fe7"/>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Estimation]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="11" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="50" height="11" uuid="ad6c0dd4-8305-4401-9344-def2992fc210"/>
+								<box>
+									<leftPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{estimation} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band height="23" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<componentElement>
+				<reportElement key="table" positionType="Float" stretchType="RelativeToBandHeight" x="509" y="3" width="160" height="20" isRemoveLineWhenBlank="true" uuid="c464d86d-fdc3-4d0e-a9a5-cc2bd77b05fe">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
+					<printWhenExpression><![CDATA[$P{Annee} == true && $P{Devis} == true && $P{Commandes} == true]]></printWhenExpression>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 2" uuid="cab7891f-a985-41b6-bd65-48b79e56bfe9">
+						<datasetParameter name="ConditionsPersonnel">
+							<datasetParameterExpression><![CDATA[$P{ConditionsPersonnel}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsCommandes">
+							<datasetParameterExpression><![CDATA[$P{ConditionsOrder}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsSemaine">
+							<datasetParameterExpression><![CDATA[$P{ConditionsSem}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsAnnee">
+							<datasetParameterExpression><![CDATA[$P{ConditionsAnnee}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="71" uuid="161caba4-25d7-4124-b4ba-6281d097f497">
+						<jr:tableHeader height="11" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="11" uuid="c45ae9a0-d607-4390-85fc-cca24a6ca5e6"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total Général ]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="60" uuid="61c008ff-e7ed-41d0-b82f-56665200bc2c">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<jr:tableHeader height="11" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<textField>
+								<reportElement key="" mode="Opaque" x="0" y="0" width="60" height="11" backcolor="#999999" uuid="01a65dd2-ecde-43b4-9dc3-859cce497878">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+								</reportElement>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{total} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="table" x="469" y="3" width="160" height="20" isRemoveLineWhenBlank="true" uuid="82fcc705-e064-4bc0-aed0-09c55fe9a9ce">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+					<printWhenExpression><![CDATA[$P{Annee} == true && ($P{Devis} == false || $P{Commandes} == false)]]></printWhenExpression>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 2" uuid="68145581-a649-425d-abcf-31c23c274773">
+						<datasetParameter name="ConditionsPersonnel">
+							<datasetParameterExpression><![CDATA[$P{ConditionsPersonnel}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsCommandes">
+							<datasetParameterExpression><![CDATA[$P{ConditionsOrder}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsSemaine">
+							<datasetParameterExpression><![CDATA[$P{ConditionsSem}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsAnnee">
+							<datasetParameterExpression><![CDATA[$P{ConditionsAnnee}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="71" uuid="ff4d789c-9b75-4307-81b3-8e6ca9e52a5c">
+						<jr:tableHeader height="11" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="11" uuid="d514df9b-2347-4558-a538-0eaf36e03b38"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total Général ]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="60" uuid="8d7161ca-c468-44b0-b513-66d50081f696">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<jr:tableHeader height="11" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<textField>
+								<reportElement key="" mode="Opaque" x="0" y="0" width="60" height="11" backcolor="#999999" uuid="18f03fd1-1437-4057-8b2b-f80b37fcc041">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+								</reportElement>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{total} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="table" positionType="Float" stretchType="RelativeToBandHeight" x="463" y="3" width="160" height="20" isRemoveLineWhenBlank="true" uuid="e9406c38-d29c-4964-b563-62676619451e">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
+					<printWhenExpression><![CDATA[$P{Annee} == false &&  $P{Devis} == true && $P{Commandes} == true]]></printWhenExpression>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 2" uuid="2b8f5ba3-1b78-4bda-87cd-4210e3fb38f8">
+						<datasetParameter name="ConditionsPersonnel">
+							<datasetParameterExpression><![CDATA[$P{ConditionsPersonnel}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsCommandes">
+							<datasetParameterExpression><![CDATA[$P{ConditionsOrder}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsSemaine">
+							<datasetParameterExpression><![CDATA[$P{ConditionsSem}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsAnnee">
+							<datasetParameterExpression><![CDATA[$P{ConditionsAnnee}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="71" uuid="c012464a-51f3-43ba-bc85-2c725bc31a55">
+						<jr:tableHeader height="11" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="11" uuid="9410ceee-3243-44c1-9c7c-4d9a3e4ffd4b"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total Général ]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="60" uuid="727a4982-cbbc-42ce-9b7f-a62ccf5774e2">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<jr:tableHeader height="11" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<textField>
+								<reportElement key="" mode="Opaque" x="0" y="0" width="60" height="11" backcolor="#999999" uuid="953198f2-da64-48b6-9d60-1c36638809ac">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+								</reportElement>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{total} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="table" x="423" y="3" width="160" height="20" isRemoveLineWhenBlank="true" uuid="decb8f60-9c19-4706-8f35-acee76544502">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+					<printWhenExpression><![CDATA[$P{Annee} == false && ($P{Devis} == false || $P{Commandes} == false)]]></printWhenExpression>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 2" uuid="40b0cf8b-34fa-41ed-a93f-fcc6862ae507">
+						<datasetParameter name="ConditionsPersonnel">
+							<datasetParameterExpression><![CDATA[$P{ConditionsPersonnel}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsCommandes">
+							<datasetParameterExpression><![CDATA[$P{ConditionsOrder}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsSemaine">
+							<datasetParameterExpression><![CDATA[$P{ConditionsSem}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ConditionsAnnee">
+							<datasetParameterExpression><![CDATA[$P{ConditionsAnnee}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:column width="71" uuid="c0f337e2-3313-4f5f-ade5-5fd810e41dc4">
+						<jr:tableHeader height="11" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="11" uuid="002035bb-f2ed-400a-9188-bc8049177a35"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total Général ]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="60" uuid="c16959dd-1ce0-4d6c-9bbb-93adb4275949">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<jr:tableHeader height="11" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<textField>
+								<reportElement key="" mode="Opaque" x="0" y="0" width="60" height="11" backcolor="#999999" uuid="5cd8a7af-b210-421f-82a6-acc2f599678d">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+								</reportElement>
+								<box>
+									<topPen lineWidth="1.25"/>
+									<leftPen lineWidth="1.25"/>
+									<bottomPen lineWidth="1.25"/>
+									<rightPen lineWidth="1.25"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{total} + 0.001)]]></textFieldExpression>
+							</textField>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell height="0" rowSpan="1"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

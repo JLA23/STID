@@ -60,6 +60,7 @@ public class SearchFacture extends JDialog{
 	    JLabel label = new JLabel("Numéro de Commande");
 	    pane.add(label);
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
+	    num.setGroupingUsed(false);
 	    numCom = new JFormattedTextField(num);
 	    numCom.addKeyListener(new EcouteAction(numCom, false));
 	    numCom.setPreferredSize(new Dimension(100, 25));
@@ -76,7 +77,7 @@ public class SearchFacture extends JDialog{
 	    pane.add(numIndice);
 	    JLabel labelFacture = new JLabel("Numéro Facture");
 	    pane2.add(labelFacture);
-	    numFacture = new JFormattedTextField();
+	    numFacture = new JFormattedTextField(num);
 	    numFacture.addKeyListener(new EcouteAction(numFacture, false));
 	    numFacture.setPreferredSize(new Dimension(100, 25));
 	    numFacture.addKeyListener(new KeyEntrerSearch(this, "Factures"));

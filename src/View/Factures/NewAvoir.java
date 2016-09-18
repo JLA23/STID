@@ -3,6 +3,8 @@ package View.Factures;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.Date;
+
+import Controller.VerifNum;
 import Controller.Factures.NewAvoir.ActionValiderAvoir;
 import Model.Calcul;
 
@@ -16,6 +18,7 @@ public class NewAvoir {
 		int nbFacture = factures.getDonnees().newNum("factures","NumFacture", null);
 		factures.getjNumFacture().setText(nbFacture + "");
 		factures.getjNumFacture().setEditable(true);
+		factures.getjNumFacture().addFocusListener(new VerifNum(factures.getjNumFacture(), factures.getDonnees(), "factures"));
 		factures.getjNumFacture().setBackground(Color.white);
 		factures.getjTVA().setEditable(true);
 		factures.getjTVA().setBackground(Color.white);

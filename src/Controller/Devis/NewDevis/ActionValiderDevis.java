@@ -21,7 +21,7 @@ public class ActionValiderDevis implements ActionListener {
 		if(!devis.getDonnees().exist("devis", "NumDevis", "numDevis = " + devis.getjNumDevis().getText())){
 			if(!devis.getNumClient().getText().equals("") && devis.getDonnees().exist("clients", "NumClient", "NumClient = " + devis.getNumClient().getText())){
 				String [] re = devis.getValeurDevises().get(devis.getDevises().getSelectedItem());
-				devis.getBase().insert("devis", devis.getjNumDevis().getText() + ", " + devis.getNumClient().getText() + ", null, '" +new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate()) + "', '" + devis.getjLibelle().getText()
+				devis.getBase().insert("devis", devis.getjNumDevis().getText() + ", " + devis.getNumClient().getText() + ", null, '" +new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate()) + "', '" + apostrophe(devis.getjLibelle().getText())
 				+  "', " + devis.getjFournitures().getText().replaceAll(",", "\\.")
 				+ ", " + devis.getjCout().getText().replaceAll(",", "\\.")
 				+ ", " + devis.getjHeureAtelier().getText().replaceAll(",", "\\.")
@@ -43,4 +43,17 @@ public class ActionValiderDevis implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Numéro de Devis existant", "ATTENTION", JOptionPane.WARNING_MESSAGE);
 		}	
     }
+	
+	 public String apostrophe(String message){
+		 String mes = message;
+		 if(message != null && message.contains("'")){
+				String[] separer = message.split("'");
+				mes = separer[0];
+				for(int j = 1; j < separer.length; j++){
+					mes += "\\'" + separer[j];
+				}
+				
+		 }
+		 return mes;
+	 }
 }

@@ -8,13 +8,13 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.KeyEntrerSearchList;
+import Controller.PositionComparator;
 import Controller.RetourAction;
 import Controller.RowListener;
 import Controller.Search;
@@ -56,8 +56,12 @@ public class SearchFactureList extends SearchList {
     	for(int m = 0; m < data.length ; m++){
 			model.addRow(data[m]);
 		}
-    	RowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-       
+    	sorter = new TableRowSorter<>(model);
+    	sorter.setComparator(0, new PositionComparator("int"));
+    	sorter.setComparator(1, new PositionComparator("int"));
+    	sorter.setComparator(2, new PositionComparator("int"));
+    	sorter.setComparator(3, new PositionComparator("double"));
+    	sorter.setComparator(4, new PositionComparator("int"));
         // Construct our table to hold our list of layers
         layerTable = new JTable(model){
 			private static final long serialVersionUID = 1L;
@@ -92,7 +96,8 @@ public class SearchFactureList extends SearchList {
 		valider.addActionListener(new SelectionAction(this, "Factures", fonction));
 		retour.addActionListener(new RetourAction(this, "Factures", fonction));
 		annuler.addActionListener(new ActionFermer(this));
-        search.addKeyListener(new Search(this, 0));
+		actionSearch = new Search(this, 0);
+        search.addKeyListener(actionSearch);
         sorter.addRowSorterListener(new RowListener(this));
 		this.add(layerPanel);
 		this.pack();

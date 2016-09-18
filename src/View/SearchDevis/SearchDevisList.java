@@ -8,12 +8,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.KeyEntrerSearchList;
+import Controller.PositionComparator;
 import Controller.Search;
 import Controller.SelectionAction;
 import Controller.RetourAction;
@@ -55,8 +55,9 @@ public class SearchDevisList extends SearchList {
 	    	for(int m = 0; m< data.length ; m++){
 				model.addRow(data[m]);
 			}
-	    	RowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-	       
+	    	sorter = new TableRowSorter<>(model);
+	    	sorter.setComparator(0, new PositionComparator("int"));
+	    	sorter.setComparator(1, new PositionComparator("int"));
 	        // Construct our table to hold our list of layers
 	        layerTable = new JTable(model){
 				private static final long serialVersionUID = 1L;
@@ -86,7 +87,8 @@ public class SearchDevisList extends SearchList {
 			valider.addActionListener(new SelectionAction(this, "Devis", fonction));
 		 	annuler.addActionListener(new ActionFermer(this));
 	        retour.addActionListener(new RetourAction(this, "Devis", fonction));
-	        search.addKeyListener(new Search(this, 0));
+	        actionSearch = new Search(this, 0);
+	        search.addKeyListener(actionSearch);
 	        sorter.addRowSorterListener(new RowListener(this));
 	        layerTable.addMouseListener(new SelectionAction(this, "Devis", fonction));
 	        layerTable.addKeyListener(new KeyEntrerSearchList(this, "Devis", fonction));

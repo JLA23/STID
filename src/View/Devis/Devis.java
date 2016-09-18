@@ -37,6 +37,7 @@ import Controller.FocusJText;
 import Controller.ActionSearch;
 import Controller.FocusPosition;
 import Controller.ItemChange;
+import Controller.KeyAutocomplete;
 import Controller.TestContenu;
 import Model.Donnees;
 import View.Commandes.LookCommande;
@@ -84,8 +85,9 @@ public class Devis extends JFrame {
 
 		NumberFormat num = NumberFormat.getIntegerInstance();
 		DecimalFormat nf = new DecimalFormat("#0.00");
+		num.setGroupingUsed(false);
 		nf.setGroupingUsed(false);
-
+		
 		jPanel1 = new JPanel();
 		jPanel2 = new JPanel();
 		JPanelTemps = new JPanel();
@@ -97,7 +99,9 @@ public class Devis extends JFrame {
 		AutoCompleteModel model = new AutoCompleteModel();
 		model.addAll(listClient());
 		numClient = new AutoComplete(model);
-
+		numClient.getZoneTexte().addKeyListener(new EcouteAction(numClient.getZoneTexte(), false));
+		numClient.getZoneTexte().addKeyListener(new KeyAutocomplete(this, "Devis"));
+		numClient.getZoneTexte().addFocusListener(new FocusJText(this, "Devis"));
 		numero = new JLabel("Numéro");
 		dateLabel = new JLabel("Date");
 		deviselabel = new JLabel("Devise");
@@ -112,13 +116,14 @@ public class Devis extends JFrame {
 		fournitures = new JLabel("Fournitures");
 		coutMO = new JLabel("Coût MO");
 		prefabrication = new JLabel("Préfabrication");
-		euro1 = new JLabel("EUR");
-		euro2 = new JLabel("EUR");
-		euro3 = new JLabel("EUR");
-		euro4 = new JLabel("EUR");
-		euro5 = new JLabel("EUR");
-		euro6 = new JLabel("EUR");
-		euro7 = new JLabel("EUR");
+		String [] symbole =  donnees.fiche("Symbole", "devises", "Pardefaut = 1");
+		euro1 = new JLabel(symbole[0]);
+		euro2 = new JLabel(symbole[0]);
+		euro3 = new JLabel(symbole[0]);
+		euro4 = new JLabel(symbole[0]);
+		euro5 = new JLabel(symbole[0]);
+		euro6 = new JLabel(symbole[0]);
+		euro7 = new JLabel(symbole[0]);
 		totalDevis = new JLabel("Total Devis");
 		prevu = new JLabel("Prévu");
 		commande = new JLabel("Commandé");
@@ -367,7 +372,6 @@ public class Devis extends JFrame {
 		calcul5.addActionListener(new ActionCalculatrice(this, jHeureSite, 2, "Devis"));
 		calcul6.addActionListener(new ActionCalculatrice(this, jPrevu, 3, "Devis"));
 		calcul7.addActionListener(new ActionCalculatrice(this, jCommande, 3, "Devis"));
-		numClient.getZoneTexte().addFocusListener(new FocusJText(this, "Devis"));
 		this.addWindowListener(new ActionFermer(this, frame));
 		if(fenetre != null){
 			fenetre.setEnabled(false);
@@ -636,17 +640,17 @@ public class Devis extends JFrame {
 		new TestContenu(this, jTotalHeure, 0, "Devis");
 		new TestContenu(this, jResteCommande, 0, "Devis");
 		new FocusJText(this, "Devis").name();
-		if(viewCommande == null && !res[2].equals("null")){
+		if(viewCommande == null && res[2] != null){
 			viewCommande = new JButton("Voir la commande n°" + res[2]);
 			viewCommande.setBounds(320, 510, viewCommande.getPreferredSize().width, viewCommande.getPreferredSize().height);
 			viewCommande.addActionListener(new ViewCommande(this, res[2]));
 			this.add(viewCommande);
 		}
 		else{
-		if(res[2].equals("null") && viewCommande.isVisible()){
+		if(res[2] == null && viewCommande != null && viewCommande.isVisible()){
 			viewCommande.setVisible(false);
 		}
-		else if(!res[2].equals("null") && viewCommande.isVisible()){
+		else if(res[2] != null && viewCommande != null && viewCommande.isVisible()){
 			  for( ActionListener al : viewCommande.getActionListeners() ) {
 			        viewCommande.removeActionListener( al );
 			    }
@@ -654,7 +658,7 @@ public class Devis extends JFrame {
 			  viewCommande.setBounds(320, 510, viewCommande.getPreferredSize().width, viewCommande.getPreferredSize().height);
 			  viewCommande.addActionListener(new ViewCommande(this, res[2]));
 		}
-		else if(!res[2].equals("null") && !viewCommande.isVisible()){
+		else if(res[2] != null && viewCommande != null && !viewCommande.isVisible()){
 			for( ActionListener al : viewCommande.getActionListeners() ) {
 		        viewCommande.removeActionListener( al );
 		    }

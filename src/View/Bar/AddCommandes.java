@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 
 import BDD.Base;
 import View.Commandes.NewCommande;
+import View.Impression.Commandes.EtatsCommandes;
 import View.SearchCommandes.SearchCommande;
 
 public class AddCommandes{
@@ -85,7 +86,7 @@ public class AddCommandes{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new DevisEnCours();
+				new EtatsCommandes(base, fenetre, 0);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Temp");
@@ -96,7 +97,7 @@ public class AddCommandes{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new ListDevis();
+				new EtatsCommandes(base, fenetre, 1);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Cahier");
@@ -107,7 +108,7 @@ public class AddCommandes{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new ListDevis();
+				new EtatsCommandes(base, fenetre, 2);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Listing des affaires COREM");

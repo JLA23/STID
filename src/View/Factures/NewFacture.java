@@ -1,11 +1,14 @@
 package View.Factures;
 
+import java.util.Calendar;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.ActionNouveau;
+import Controller.VerifNum;
 import Controller.Factures.NewFacture.ActionValiderFacture;
 import Model.Calcul;
 import View.Options.ClickDroit;
@@ -21,8 +24,9 @@ public class NewFacture extends Factures{
 		numeroIndice = indice;
 		int nbFacture = donnees.newNum("factures","NumFacture", null);
 		jNumFacture.setText(nbFacture + "");
+		jNumFacture.addFocusListener(new VerifNum(jNumFacture, donnees, "factures"));
 		String [] res = null;
-		res = donnees.fiche("t.lblterme, cl.nomclient, Round(t.MntFour, 2), Round(t.CoutMo, 2), Round(t.Prefabrication, 2), c.CodeDevise, c.CdeComClient, Round(c.tva,2), cl.numClient", "commandes as c, clients as cl, termes as t", "c.numCommande = " + num + " and t.numindice = " + indice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
+		res = donnees.fiche("t.lblterme, cl.nomclient, Round(t.MntFour, 2), Round(t.CoutMo, 2), Round(t.Prefabrication, 2), c.CodeDevise, c.CdeComClient, Round(c.tva,2), cl.numClient, cl.delaipaiement", "commandes as c, clients as cl, termes as t", "c.numCommande = " + num + " and t.numindice = " + indice + " and t.numcommande = c.numCommande and c.numclient = cl.numclient");
 		libelle2.setText(res[0]);
 		client.setText(res[1]);
 		numCommandeClient.setText(res[6]);
@@ -51,6 +55,10 @@ public class NewFacture extends Factures{
         new Calcul().calculerMontantTTC(jFournitures, jCout, jPrefabrication, jTotalHT, jTotalTTC, jTotalDevise, valeurDevise, valeurTVA, this);
         System.out.println(recupTVA);
         InsertModesPaiements(res[8]);
+        Calendar c = Calendar.getInstance(); 
+        c.setTime(jDateEcheance.getDate()); 
+        c.add(Calendar.DATE, Integer.parseInt(res[9]));
+        jDateEcheance.setDate(c.getTime());
         new ClickDroit(jNumFacture, true, true);
         new ClickDroit(jFournitures, true, true);
         new ClickDroit(jCout, true, true);

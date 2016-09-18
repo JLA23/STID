@@ -4,8 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
-import View.Impression;
+
 import View.Factures.Factures;
+import View.Impression.Impression;
 
 public class ActionValiderFacture implements ActionListener {
 
@@ -26,10 +27,10 @@ public class ActionValiderFacture implements ActionListener {
 						facture.getBase().insert("factures",
 							facture.getjNumFacture().getText() + ", " + facture.getRecupTVA() + ", " + facture.getjValeur().getText() + ", "
 									+ facture.getModespaiements().get(facture.getBoxModePaiement().getSelectedItem())[0] + ", '"
-									+ facture.getjPrecision().getText() + "', '"
+									+ apostrophe(facture.getjPrecision().getText()) + "', '"
 									+ new SimpleDateFormat("yyyy/MM/dd").format(facture.getjDateEmission().getDate()) + "', '"
 									+ new SimpleDateFormat("yyyy/MM/dd").format(facture.getjDateEcheance().getDate()) + "', '"
-									+ facture.getLibelle2().getText() + "', "
+									+ apostrophe(facture.getLibelle2().getText()) + "', "
 									+ facture.getjAnneeValeur().getText() + ", "
 									+ facture.getValeurDevises().get(facture.getDevises().getSelectedItem())[0] + ", " + facture.getjTVA().getText().replaceAll(",", "\\."));
 					if(!facture.getjFournitures().getText().equals(facture.getValeursTerme()[2].replaceAll("\\.", ",")) || !facture.getjCout().getText().equals(facture.getValeursTerme()[3].replaceAll("\\.", ",")) || !facture.getjPrefabrication().getText().equals(facture.getValeursTerme()[4].replaceAll("\\.", ","))){
@@ -67,4 +68,17 @@ public class ActionValiderFacture implements ActionListener {
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
+	
+	 public String apostrophe(String message){
+		 String mes = message;
+		 if(message != null && message.contains("'")){
+				String[] separer = message.split("'");
+				mes = separer[0];
+				for(int j = 1; j < separer.length; j++){
+					mes += "\\'" + separer[j];
+				}
+				
+		 }
+		 return mes;
+	 }
 }

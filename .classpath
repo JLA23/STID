@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/AutoCompletion.jar"/>
 	<classpathentry kind="lib" path="lib/ConfigurationFichier.jar"/>
-	<classpathentry kind="lib" path="lib/Crypte.jar"/>
 	<classpathentry kind="lib" path="lib/icu4j-56_1.jar"/>
 	<classpathentry kind="lib" path="lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-jdbc.jar"/>
@@ -75,6 +74,8 @@
 	<classpathentry kind="lib" path="lib/ireport/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/ireport/xmlbeans-2.5.0.jar"/>
 	<classpathentry kind="lib" path="lib/ireport/xmpcore-5.1.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_91"/>
+	<classpathentry kind="lib" path="lib/CryptageDecryptage.jar"/>
+	<classpathentry kind="lib" path="lib/javax.mail-1.5.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

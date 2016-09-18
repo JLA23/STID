@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Rapport_sans titre_1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="828" leftMargin="7" rightMargin="7" topMargin="20" bottomMargin="20" uuid="a58ce564-197c-490b-9354-aab6a891fc51">
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="style1" mode="Opaque" forecolor="#000000">
+		<box>
+			<topPen lineWidth="2.0"/>
+			<leftPen lineWidth="2.0"/>
+			<bottomPen lineWidth="2.0"/>
+			<rightPen lineWidth="2.0"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{TotalSolde} <= 0]]></conditionExpression>
+			<style forecolor="#FF0033" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+				<box>
+					<pen lineWidth="0.0" lineColor="#000000"/>
+					<topPen lineWidth="2.0" lineColor="#000000"/>
+					<leftPen lineWidth="2.0" lineColor="#000000"/>
+					<bottomPen lineWidth="2.0" lineColor="#000000"/>
+					<rightPen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+			</style>
+		</conditionalStyle>
+	</style>
+	<style name="style2" mode="Transparent" forecolor="#000000" fill="Solid" isBlankWhenNull="false" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<pen lineWidth="0.0"/>
+		<box>
+			<leftPen lineWidth="1.25" lineColor="#000000"/>
+			<rightPen lineWidth="1.25" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{solde} < 0]]></conditionExpression>
+			<style mode="Transparent" forecolor="#FF0033" fill="Solid" isBlankWhenNull="false" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252">
+				<pen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#000000"/>
+					<topPen lineWidth="0.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+				</box>
+			</style>
+		</conditionalStyle>
+	</style>
+	<parameter name="Annee" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[Select p.numheurespe, p.lblheurespeciale, Round(p.hrprev ,2) as hrprev, Round(p.hrpass, 2) as hrpass, round(p.hrprev - p.hrpass) as solde from heurespe as p where p.annee = $P!{Annee} group by p.numheurespe order by p.numheurespe]]>
+	</queryString>
+	<field name="numheurespe" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lblheurespeciale" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hrprev" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hrpass" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="solde" class="java.lang.Double"/>
+	<variable name="TotalSolde" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{solde}]]></variableExpression>
+	</variable>
+	<variable name="TotalEstim" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{hrpass}]]></variableExpression>
+	</variable>
+	<variable name="TotalHr" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{hrprev}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="55" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="706" y="0" width="80" height="20" uuid="ef8d2180-387a-4956-b330-ecee9b7101e4"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" sur"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField" x="786" y="0" width="40" height="20" uuid="10e80151-73a8-44dd-bf91-72151190b4ae"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText" x="263" y="0" width="338" height="34" uuid="9c78f0a3-a4cb-4378-b922-14464e8df0dc"/>
+				<box>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Liste des Heures Spéciales]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="34" width="601" height="20" uuid="cdaca66a-0a21-4047-8900-b18f786032f2"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pour l'année " + $P{Annee}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="0" width="100" height="20" uuid="9c173f10-418f-41c8-a396-0cbcb5eb405e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="11" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="748" y="0" width="80" height="11" uuid="ced9829b-1110-43db-a8aa-efe9a2e2ce11"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER} > 1 ? "Page "+$V{PAGE_NUMBER}: null]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="11" uuid="2bd6ca2b-d989-4e74-a540-633638af8f1c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER} > 1 ? new java.util.Date() : null]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-1" mode="Opaque" x="0" y="0" width="26" height="14" backcolor="#999999" uuid="e64f02e8-4dca-42a2-b87b-68f561d049a7"/>
+				<box>
+					<topPen lineWidth="1.25"/>
+					<leftPen lineWidth="1.25"/>
+					<bottomPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[N°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" mode="Opaque" x="26" y="0" width="357" height="14" backcolor="#999999" uuid="10a99490-75fd-4b52-857b-ecdc06159aac"/>
+				<box>
+					<topPen lineWidth="1.25"/>
+					<leftPen lineWidth="1.25"/>
+					<bottomPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Libellé heures spéciales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" mode="Opaque" x="383" y="0" width="69" height="14" backcolor="#999999" uuid="085dddd6-4251-45af-bbc1-2f32c7e2f780"/>
+				<box>
+					<topPen lineWidth="1.25"/>
+					<leftPen lineWidth="1.25"/>
+					<bottomPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Hrs Recup]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" mode="Opaque" x="452" y="0" width="69" height="14" backcolor="#999999" uuid="1d0e29b2-8259-48e1-a4fd-df58d318644f"/>
+				<box>
+					<topPen lineWidth="1.25"/>
+					<leftPen lineWidth="1.25"/>
+					<bottomPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Hr Supp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" mode="Opaque" x="521" y="0" width="69" height="14" backcolor="#999999" uuid="f49f02d7-b311-4f11-b8cb-1ddd7c1e1eaf"/>
+				<box>
+					<topPen lineWidth="1.25"/>
+					<leftPen lineWidth="1.25"/>
+					<bottomPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Solde]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" style="style2" x="0" y="0" width="26" height="11" uuid="ed08b213-66d9-4b79-a7aa-63d90c201e6b"/>
+				<box>
+					<leftPen lineWidth="1.25" lineStyle="Solid"/>
+					<rightPen lineWidth="1.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numheurespe}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" style="style2" x="26" y="0" width="357" height="11" uuid="56ac5df7-034f-4216-9bcf-860d6dbd57b4"/>
+				<box>
+					<leftPen lineWidth="1.25" lineStyle="Solid"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lblheurespeciale}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" style="style2" x="383" y="0" width="69" height="11" uuid="326dc708-cbd4-4033-8447-d14dfa56a614"/>
+				<box>
+					<leftPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hrprev}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" style="style2" x="452" y="0" width="69" height="11" uuid="65e9c773-1ce5-415b-b032-202d6e75bd4b"/>
+				<box>
+					<leftPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hrpass}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" style="style2" x="521" y="0" width="69" height="11" uuid="6773262e-4128-42be-b901-ce6634974365"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="1.25" lineStyle="Solid"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solde}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band height="11" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" style="style1" mode="Opaque" x="383" y="0" width="69" height="11" backcolor="#999999" uuid="c44df755-dd4e-4799-b39b-93baaa1b8556"/>
+				<box>
+					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0" lineStyle="Solid"/>
+					<leftPen lineWidth="2.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+					<rightPen lineWidth="2.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalHr}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText" x="311" y="0" width="72" height="11" uuid="831f5c01-ebf9-4eb2-b5af-f4b04602756b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Général]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-3" style="style1" mode="Opaque" x="521" y="0" width="69" height="11" backcolor="#999999" uuid="c730ec0d-3628-43bc-a2d0-989baee94650"/>
+				<box>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<topPen lineWidth="2.0" lineStyle="Solid"/>
+					<leftPen lineWidth="2.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+					<rightPen lineWidth="2.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Math.round(($V{TotalSolde}) * Math.pow(10, 2)) / Math.pow(10, 2)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" style="style1" mode="Opaque" x="452" y="0" width="69" height="11" backcolor="#999999" uuid="ab1c26eb-ef2b-41ed-b89c-064f7f1a0ffd"/>
+				<box>
+					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0" lineStyle="Solid"/>
+					<leftPen lineWidth="2.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+					<rightPen lineWidth="2.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalEstim}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import javax.swing.JOptionPane;
+
 import BDD.Base;
 
 public class Donnees {
@@ -72,7 +74,7 @@ public class Donnees {
 				i = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return i + 1;
 	}
@@ -95,7 +97,7 @@ public class Donnees {
 				i++;
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return list;
 		
@@ -115,14 +117,13 @@ public class Donnees {
 				resultat.put(cle, valeur);
 			}
 		} catch (SQLException e) {
-			resultat = new HashMap<String, String[]>();
-			resultat.put("Error", new String[] { e.getMessage() });
+			error(e.getMessage());
 		}
 		return resultat;
 	}
 	
 	public HashMap<String, String[]> modesPaiements(String numClient) {
-		ResultSet rs = base.Select("m.id, m.mode", "modepaiement as m, paiementclient as p", "p.numClient = " + numClient + " and p.modePaiement = m.id");
+		ResultSet rs = base.Select("m.id, m.mode", "modepaiement as m, paiementclient as p", "p.numClient = " + numClient + " and p.modePaiement = m.id group by m.id");
 		HashMap<String, String[]> resultat = null;
 		try {
 			resultat = new HashMap<String, String[]>();
@@ -133,8 +134,7 @@ public class Donnees {
 				resultat.put(cle, valeur);
 			}
 		} catch (SQLException e) {
-			resultat = new HashMap<String, String[]>();
-			resultat.put("Error", new String[] { e.getMessage() });
+			error(e.getMessage());
 		}
 		return resultat;
 	}
@@ -148,6 +148,7 @@ public class Donnees {
 				resultat.add(rs.getString(1));
 			}
 		} catch (SQLException e) {
+			error(e.getMessage());
 		}
 		return resultat;
 	}
@@ -173,7 +174,7 @@ public class Donnees {
 				resultat = rs.getString(1);
 			}
 		} catch (SQLException e) {
-			resultat = e.getMessage();
+			error(e.getMessage());
 		}
 		return resultat;
 	}
@@ -193,7 +194,7 @@ public class Donnees {
 			}
 			rs.close();
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return resultat;
 	}
@@ -269,8 +270,7 @@ public class Donnees {
 				modes.put(titre, ob);
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			modes = null;
+			error(e.getMessage());
 		}
 		return modes;
 	}
@@ -288,8 +288,7 @@ public class Donnees {
 				resultat.put(cle, valeur);
 			}
 		} catch (SQLException e) {
-			resultat = new LinkedHashMap<String, String[]>();
-			resultat.put("Error", new String[] { e.getMessage() });
+			error(e.getMessage());
 		}
 		return resultat;
 	}
@@ -306,14 +305,13 @@ public class Donnees {
 				resultat.put(cle, valeur);
 			}
 		} catch (SQLException e) {
-			resultat = new LinkedHashMap<String, String[]>();
-			resultat.put("Error", new String[] { e.getMessage() });
+			error(e.getMessage());
 		}
 		return resultat;
 	}
 
 	public String[] modeClient(String numero) {
-		String[] resultat;
+		String[] resultat = null;
 		ResultSet rs = base.Select("ModePaiement", "paiementclient", "numClient = " + numero);
 
 		try {
@@ -328,8 +326,7 @@ public class Donnees {
 			}
 			rs.close();
 		} catch (SQLException e) {
-			resultat = new String[] { e.getMessage() };
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return resultat;
 	}
@@ -362,7 +359,7 @@ public class Donnees {
 				i = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return i + "";
 	}
@@ -375,7 +372,7 @@ public class Donnees {
 				i = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return i + "";
 	}
@@ -388,7 +385,7 @@ public class Donnees {
 				i = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return i ;
 	}
@@ -401,9 +398,24 @@ public class Donnees {
 				i = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			error(e.getMessage());
 		}
 		return i ;
 	}
+	
+	public boolean nombre(String text){
+		try{
+			Integer.parseInt(text);
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+	}
 
+	private void error(String message){
+		JOptionPane.showMessageDialog(null, message + "\n Le programe va quitter", "ATTENTION",JOptionPane.ERROR_MESSAGE);
+		base.close();
+		System.exit(1);
+	}
 }

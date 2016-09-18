@@ -140,7 +140,7 @@ public class ActionGauche implements ActionListener {
 						devis.getBase().update("devis",
 								"numClient = " + devis.getNumClient().getText() + ", DateDevis = '"
 										+ new SimpleDateFormat("yyyy/MM/dd").format(devis.getjDate().getDate())
-										+ "', LblDevis = '" + devis.getjLibelle().getText() + "', MntFour = "
+										+ "', LblDevis = '" + apostrophe(devis.getjLibelle().getText()) + "', MntFour = "
 										+ devis.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
 										+ devis.getjCout().getText().replaceAll(",", "\\.") + ", HeureSite = "
 										+ devis.getjHeureSite().getText().replaceAll(",", "\\.") + ", HeureAtelier = "
@@ -194,15 +194,26 @@ public class ActionGauche implements ActionListener {
 					valeursModifie[5] = termes.getjPrefabrication().getText().replaceAll(",", "\\.");
 					valeursModifie[6] = re[0];
 					if (!ModifieOuIdentique(valeursInit, valeursModifie)) {
-						termes.getBase().update("termes",
-								 "LblTerme = '" + termes.getjLibelle().getText() + "', MntFour = "
-										+ termes.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
-										+ termes.getjCout().getText().replaceAll(",", "\\.") + ", Prefabrication = "
-										+ termes.getjPrefabrication().getText().replaceAll(",", "\\."),
-								"numcommande = " + termes.getNumeroCommande() + " and numindice = " + termes.getNumeroIndice());
-						termes.getBase().update("commandes", "CodeDevise = " + re[0], "numcommande = " + termes.getNumeroCommande());
-						JOptionPane.showMessageDialog(null, "Termes validé !");
-
+						if (termes.getNumFacture() == null) {
+							termes.getBase().update("termes",
+									 "LblTerme = '" + apostrophe(termes.getjLibelle().getText()) + "', MntFour = "
+											+ termes.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
+											+ termes.getjCout().getText().replaceAll(",", "\\.") + ", Prefabrication = "
+											+ termes.getjPrefabrication().getText().replaceAll(",", "\\."),
+									"numcommande = " + termes.getNumeroCommande() + " and numindice = " + termes.getNumeroIndice() + " and numfacture is null");
+							termes.getBase().update("commandes", "CodeDevise = " + re[0], "numcommande = " + termes.getNumeroCommande());
+							JOptionPane.showMessageDialog(null, "Termes validé !");
+							}
+							else{
+								termes.getBase().update("termes",
+										 "LblTerme = '" + apostrophe(termes.getjLibelle().getText()) + "', MntFour = "
+												+ termes.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
+												+ termes.getjCout().getText().replaceAll(",", "\\.") + ", Prefabrication = "
+												+ termes.getjPrefabrication().getText().replaceAll(",", "\\."),
+										"numcommande = " + termes.getNumeroCommande() + " and numindice = " + termes.getNumeroIndice() + " and numfacture = " + termes.getNumFacture());
+								termes.getBase().update("commandes", "CodeDevise = " + re[0], "numcommande = " + termes.getNumeroCommande());
+								JOptionPane.showMessageDialog(null, "Termes validé !");
+							}
 					}
 			}
 			int numero = Integer.parseInt(termes.getNumeroCommande()) - 1;
@@ -243,7 +254,7 @@ public class ActionGauche implements ActionListener {
 						factures.getBase().update("factures", "MontantTaxe = " + factures.getRecupTVA()
 						+  ", valeur = " + factures.getjValeur().getText()
 						+ ", ModePaiement = " + factures.getModespaiements().get(factures.getBoxModePaiement().getSelectedItem())[0]
-						+ ", PrecLettre = '" + factures.getjPrecision().getText() + "', DateEmission = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEmission().getDate()) + "', DateEcheance = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEcheance().getDate()) + "', AnneeValeur = " + factures.getjAnneeValeur().getText() + ", CodeDevise = " + re[0]  
+						+ ", PrecLettre = '" + apostrophe(factures.getjPrecision().getText()) + "', DateEmission = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEmission().getDate()) + "', DateEcheance = '" + new SimpleDateFormat("yyyy/MM/dd").format(factures.getjDateEcheance().getDate()) + "', AnneeValeur = " + factures.getjAnneeValeur().getText() + ", CodeDevise = " + re[0]  
 						, "numFacture = " + factures.getjNumFacture().getText());
 						JOptionPane.showMessageDialog(null, "Facture modifié !");
 
@@ -281,7 +292,7 @@ public class ActionGauche implements ActionListener {
 				valeursModifie[3] = re[0];
 				if (!ModifieOuIdentique(valeursInit, valeursModifie)) {
 					salarie.getBdd().update("personne",
-							"Nom = '" + salarie.getNom().getText() + "', Prenom = '" + salarie.getPrenom().getText()
+							"Nom = '" + apostrophe(salarie.getNom().getText()) + "', Prenom = '" + apostrophe(salarie.getPrenom().getText())
 									+ "', CodeTypePersonne = " + re[0],
 							"NumPersonnel = " + salarie.getCode().getText());
 					JOptionPane.showMessageDialog(null, "salarie validé !");
@@ -335,8 +346,8 @@ public class ActionGauche implements ActionListener {
 				valeursModifie[11] = re[0];
 				if (!ModifieOuIdentique(valeursInit, valeursModifie)) {
 					commandes.getBase().update("commandes", "numClient = " + commandes.getNumClient().getText()
-							+ ", CdeComClient = '" + commandes.getjNumCommandeClient().getText() + "', Lblcommande = '"
-							+ commandes.getjLibelle().getText() + "', MntFour = "
+							+ ", CdeComClient = '" + apostrophe(commandes.getjNumCommandeClient().getText()) + "', Lblcommande = '"
+							+ apostrophe(commandes.getjLibelle().getText()) + "', MntFour = "
 							+ commandes.getjFournitures().getText().replaceAll(",", "\\.") + ", CoutMO = "
 							+ commandes.getjCout().getText().replaceAll(",", "\\.") + ", HeureSite = "
 							+ commandes.getjHeureSite().getText().replaceAll(",", "\\.") + ", HeureAtelier = "
@@ -401,15 +412,26 @@ public class ActionGauche implements ActionListener {
 	private boolean ModifieOuIdentique(String[] valeursInit, String[] valeursMaintenant) {
 		boolean verifie = true;
 		for (int i = 0; i < valeursInit.length; i++) {
-			System.out.println(i + " : " + valeursInit[i] + " - " +
-					 valeursMaintenant[i]);
-			if (!valeursInit[i].equals(valeursMaintenant[i])) {
-				verifie = false;
-				break;
+			System.out.println(valeursInit[i] + " - " + valeursMaintenant[i]);
+			try{
+				Double num1 = Double.parseDouble(valeursInit[i]);
+				Double num2 = Double.parseDouble(valeursMaintenant[i]);
+				int retval = Double.compare(num1, num2);
+				if(retval != 0){
+					System.out.println("ok2");
+					verifie = false;
+					break;
+				}
+			}
+			catch(Exception e){
+				if (!valeursInit[i].equals(valeursMaintenant[i])) {
+					verifie = false;
+					break;
+				}
 			}
 		}
-		return verifie;
 
+		return verifie;
 	}
 
 	private void actionClient() throws ParseException {
@@ -445,19 +467,16 @@ public class ActionGauche implements ActionListener {
 			}
 			if (!ModifieOuIdentique(valeursInit, valeursModifie)) {
 				client.getBase().update("clients",
-						"Nomclient = '" + client.getjName().getText() + "', Adresse1 = '" + valeursModifie[2]
-								+ "', Adresse2 = '" + valeursModifie[3] + "', Adresse3 = '" + valeursModifie[4]
-								+ "', Adresse4 = '" + valeursModifie[5] + "', Adresse5 = '" + valeursModifie[6]
-								+ "', Adresse6 = '" + valeursModifie[7] + "', Adresse7 = '" + valeursModifie[8]
+						"Nomclient = '" + client.getjName().getText() + "', Adresse1 = '" + apostrophe(valeursModifie[2])
+								+ "', Adresse2 = '" + apostrophe(valeursModifie[3]) + "', Adresse3 = '" + apostrophe(valeursModifie[4])
+								+ "', Adresse4 = '" + apostrophe(valeursModifie[5]) + "', Adresse5 = '" + apostrophe(valeursModifie[6])
+								+ "', Adresse6 = '" + apostrophe(valeursModifie[7]) + "', Adresse7 = '" + apostrophe(valeursModifie[8])
 								+ "', Mail = '" + client.getjMail().getText() + "', DelaiPaiement = "
 								+ valeursModifie[10] + ", DebFinMois = " + valeursModifie[11] + ", NbEx = "
 								+ valeursModifie[12] + ", JourDansMois = " + valeursModifie[13] + ", TypeTVA = "
 								+ valeursModifie[14] + ", NumTVA = '" + valeursModifie[15] + "', Actif = "
 								+ valeursModifie[16],
 						"NumClient = " + client.getjNumClient().getText());
-				// client.dispose();
-				// client.getFenetre().setEnabled(true);
-				// client.getFenetre().setVisible(true);
 			}
 			ArrayList<String> valeur = client.getModes().modesSelect();
 			for (Entry<String, Object[]> entry : client.getVal().entrySet()) {
@@ -487,5 +506,18 @@ public class ActionGauche implements ActionListener {
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
+	
+	 public String apostrophe(String message){
+		 String mes = message;
+		 if(message != null && message.contains("'")){
+				String[] separer = message.split("'");
+				mes = separer[0];
+				for(int j = 1; j < separer.length; j++){
+					mes += "\\'" + separer[j];
+				}
+				
+		 }
+		 return mes;
+	 }
 
 }

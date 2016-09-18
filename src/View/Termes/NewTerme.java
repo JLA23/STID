@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import BDD.Base;
 import Controller.ActionFermer;
 import Controller.ActionNouveau;
+import Controller.VerifNum;
 import Controller.Termes.NewTerme.ActionValiderTerme;
 import Model.Calcul;
 import View.Options.ClickDroit;
@@ -39,7 +40,7 @@ public class NewTerme extends Termes{
         valeurDevise = Double.parseDouble((valeurDevises.get(devises.getSelectedItem().toString()))[2]);
         new Calcul().calculerMontant(jFournitures, jCout, jPrefabrication, jTotalDevis, jTotalDevisDevise, valeurDevise);
         jNumIndice.requestFocus();
-        
+        jNumIndice.addFocusListener(new VerifNum(jNumIndice, numeroCommande,donnees,"termes"));
         valider.addActionListener(new ActionValiderTerme(this));
 		fermer.addActionListener(new ActionFermer(this, frame));
 		nouveau.addActionListener(new ActionNouveau(this, "Termes"));

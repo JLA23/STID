@@ -52,6 +52,7 @@ public class ConfigurationConnexion extends JFrame{
 	    this.setLocationRelativeTo(null);
 	    JButton bouton = new JButton("Valider");
 	    bouton.setMnemonic(KeyEvent.VK_ENTER);
+	    this.getRootPane().setDefaultButton(bouton); 
 	    pane3.add(bouton);
 	    
 	    bouton.addActionListener(new ActionValider(adresse, bdd, this));
@@ -101,14 +102,15 @@ public class ConfigurationConnexion extends JFrame{
 				String message = bdd.connect();
 				if(message.equals("Connexion ètablie")){
 					bdd.close();
+					JOptionPane.showMessageDialog(null, "Connexion ètablie", "Succées",JOptionPane.INFORMATION_MESSAGE);
 					new Identification(line[0],line[1]);
 				}
         		else if (message.contains("Communications link failure")){
-        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Communications link failure");
+        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Communications link failure", "Erreur",JOptionPane.ERROR_MESSAGE);
         			new ConfigurationConnexion();
         		}
         		else if(message.contains("Unknown database")){
-        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Unknown database");
+        			JOptionPane.showMessageDialog(null, "Impossible de se connecter à la base de données\n" + "Unknown database", "Erreur",JOptionPane.ERROR_MESSAGE);
         			new ConfigurationConnexion();
         		}
 			}

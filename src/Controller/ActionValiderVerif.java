@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import BDD.Base;
@@ -295,8 +296,13 @@ public class ActionValiderVerif implements ActionListener {
 					}
 				}
 			} else {
+				if(((SearchTerme) fr).getF().equals("NewFacture")){
+					createTerme(bdd, ((SearchTerme) fr).getNumCom().getText(), null);
+				}
+				else{
 				JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
 						JOptionPane.WARNING_MESSAGE);
+				}
 			}
 			
 			
@@ -337,9 +343,15 @@ public class ActionValiderVerif implements ActionListener {
 				}
 
 			} else {
-				JOptionPane.showMessageDialog(null, "Aucune commande avec ces numéros !", "ATTENTION",
+				if(((SearchTerme) fr).getF().equals("NewFacture")){
+					createTerme(bdd, ((SearchTerme) fr).getNumCom().getText(), ((SearchTerme) fr).getNumIndice().getText());
+				}
+				else{
+				JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
 						JOptionPane.WARNING_MESSAGE);
+				}
 			}
+			
 		} else if (((SearchTerme) fr).getNumCom().getText().isEmpty()
 				&& ((SearchTerme) fr).getNumIndice().getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Les champs sont vides !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
@@ -450,6 +462,73 @@ public class ActionValiderVerif implements ActionListener {
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Le champs est vide !", "ATTENTION", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	}
+	
+	private void createTerme(Base bdd, String numcommande, String numindice){
+		Donnees donnees = new Donnees(bdd);
+		((SearchTerme)fr).dispose();
+		if(numindice == null){
+			if(donnees.exist("commandes", "numcommande", "numcommande = " + numcommande)){
+				if(donnees.exist("termes", "numcommande, numindice", "numcommande = " + numcommande)){
+					int newnum = donnees.newNum("termes", "indice", "numcommande = " + numcommande);
+					String[] fiche = donnees.fiche("c.lblcommande, Round(c.MntFour - Sum(t.MntFour), 2), Round(c.CoutMo - Sum(t.CoutMo), 2), Round(c.Prefabrication - Sum(t.Prefabrication),2)", "commandes as c, termes as t", "c.numCommande = " + numcommande + " and t.numcommande = c.numCommande");
+					bdd.insert("termes", numcommande + ", " + newnum + ", null, '" + fiche[0] + "', " + fiche[1] + ", " + fiche[2] + ", " + fiche[3]);
+					new NewFacture(bdd, ((SearchTerme) fr).getFr(), numcommande,
+							newnum + "");
+				}
+				else{
+					int newnum = 1;
+					String[] fiche = donnees.fiche("c.lblcommande, c.MntFour, c.CoutMo, c.Prefabrication, c.CodeDevise", "commandes as c", "c.numCommande = " + numcommande);
+					bdd.insert("termes",  numcommande + ", " + newnum + ", null, '" + fiche[0] + "', " + fiche[1] + ", " + fiche[2] + ", " + fiche[3]);
+					new NewFacture(bdd, ((SearchTerme) fr).getFr(), numcommande,
+							newnum + "");
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		if(numindice != null){
+			if(donnees.exist("commandes", "numcommande", "numcommande = " + numcommande)){
+				if(!donnees.exist("termes", "numcommande, numindice", "numcommande = " + numcommande + " and numindice = " + numindice + " and numfacture = null")){
+					int newnum = 0;
+					if(numindice.equals("1")){
+						newnum = Integer.parseInt(numindice);
+					}
+					else{
+						int numind = donnees.newNum("termes", "indice", "numcommande = " + numcommande);
+						if(numind != Integer.parseInt(numindice)){
+							int option = JOptionPane.showConfirmDialog(null, new JLabel("<html><center>Le numéro d'indice est différent<br/>Numéro logique : " + numind + " %<br/> Votre numéro : " + numindice + " %<br/>Voulez garder votre numéro ?</center></html>", JLabel.CENTER), "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				        	if (option == JOptionPane.YES_OPTION) {
+				        		newnum = Integer.parseInt(numindice);
+							}
+							else if (option == JOptionPane.NO_OPTION) {
+								newnum = numind;
+							}
+						}
+					}
+					String[] fiche; 
+					if(newnum == 1){
+						fiche = donnees.fiche("c.lblcommande, c.MntFour, c.CoutMo, c.Prefabrication, c.CodeDevise", "commandes as c", "c.numCommande = " + numcommande);
+					}
+					else{
+						fiche = donnees.fiche("c.lblcommande, Round(c.MntFour - Sum(t.MntFour), 2), Round(c.CoutMo - Sum(t.CoutMo), 2), Round(c.Prefabrication - Sum(t.Prefabrication),2)", "commandes as c, termes as t", "c.numCommande = " + numcommande + " and t.numcommande = c.numCommande");
+					}
+					bdd.insert("termes", numcommande + ", " + newnum + ", null, '" + fiche[0] + "', " + fiche[1] + ", " + fiche[2] + ", " + fiche[3]);
+					new NewFacture(bdd, ((SearchTerme) fr).getFr(), numcommande,
+							newnum + "");
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Numéro déjà facturé !", "ATTENTION",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Aucune commande avec ce numéro !", "ATTENTION",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}

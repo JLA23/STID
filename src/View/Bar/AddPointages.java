@@ -10,7 +10,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import BDD.Base;
+import View.Impression.Pointage.EtatsHeureSpePointage;
 import View.Pointage.HeureSpe;
+import View.Pointage.HeuresProductives;
 import View.Pointage.SaisiePointage;
 
 public class AddPointages{
@@ -45,7 +47,7 @@ public class AddPointages{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//new ModifDevis();
+					new EtatsHeureSpePointage(base, fenetre, 0);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Etat Hrs Spéciales");
@@ -70,7 +72,7 @@ public class AddPointages{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new DevisEnCours();
+				new EtatsHeureSpePointage(base, fenetre, 1);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Etat pointage");
@@ -83,7 +85,7 @@ public class AddPointages{
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new ListDevis();
+				new HeuresProductives(base, fenetre);
 			}
 		});
 		menuItem.getAccessibleContext().setAccessibleDescription("Heures productives");

@@ -42,6 +42,7 @@ public class SearchCommande extends JDialog{
 	    JLabel label = new JLabel("Numéro de Commande");
 	    pane.add(label);
 	    NumberFormat num =  NumberFormat.getIntegerInstance();
+	    num.setGroupingUsed(false);
 	    numCom = new JFormattedTextField(num);
 	    numCom.setPreferredSize(new Dimension(100, 25));
 	    numCom.addKeyListener(new EcouteAction(numCom, false));

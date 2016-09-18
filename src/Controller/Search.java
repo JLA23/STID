@@ -1,8 +1,8 @@
 package Controller;
 
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import View.Pointage.HeureSpe;
 import View.SearchList.SearchList;
 
@@ -41,6 +41,9 @@ public class Search implements KeyListener {
 					if (search.getSearch().getText().equals(((String) search.getLayerTable().getValueAt(j, col))
 							.substring(0, search.getSearch().getText().length()))) {
 						search.getLayerTable().setRowSelectionInterval(j, j);
+				        Rectangle rect = search.getLayerTable().getCellRect(j, j, true);
+				        rect.setLocation(rect.x, rect.y);
+				        search.getLayerTable().scrollRectToVisible(rect);
 						break;
 					}
 				}
@@ -54,6 +57,9 @@ public class Search implements KeyListener {
 					if (spe.getSearch().getText().equals(((String) spe.getLayerTable().getValueAt(j, col))
 							.substring(0, spe.getSearch().getText().length()))) {
 						spe.getLayerTable().setRowSelectionInterval(j, j);
+				        Rectangle rect = spe.getLayerTable().getCellRect(j, j, true);
+				        rect.setLocation(rect.x, rect.y);
+				        spe.getLayerTable().scrollRectToVisible(rect);
 						break;
 					}
 				}

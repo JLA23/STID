@@ -21,7 +21,7 @@ import View.Bar.AddTermes;
 			this.add(new AddSTID(bdd, frame).getMenu());
 			this.add(new AddDevis(bdd, typeCompte, frame).getMenu());
 			this.add(new AddCommandes(bdd, typeCompte,frame).getMenu());
-			this.add(new AddClients(bdd, typeCompte).getMenu());
+			this.add(new AddClients(bdd, frame, typeCompte).getMenu());
 			this.add(new AddTermes(bdd, typeCompte, frame).getMenu());
 			this.add(new AddFacturation(bdd, typeCompte, frame).getMenu());
 			if(typeCompte.equals("Admin")){

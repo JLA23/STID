@@ -1,0 +1,9 @@
+Objet:Facture N° ${NumFacture}
+Message:
+Bonjour,
+
+Veuillez trouver en pièce jointe notre facture n° ${NumFacture} pour un montant de ${Montant} ${Devise}
+
+Cordialement,
+
+Estelle BLONDIAU
